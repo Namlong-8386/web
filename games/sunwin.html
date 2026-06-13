@@ -740,7 +740,7 @@
             const latest = data[0];
             const pred   = predict(data);
 
-            document.getElementById('next-phien').innerText = latest.Phien + 1;
+            document.getElementById('next-phien').innerText = parseInt(latest.Phien) + 1;
             const badge = document.getElementById('pred-badge');
             badge.innerText   = pred.text;
             badge.className   = 'predict-badge ' + (pred.text === 'Tài' ? 'tai-badge' : 'xiu-badge');
