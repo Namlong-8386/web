@@ -785,7 +785,7 @@
             btn.style.opacity = '0.4'; btn.disabled = true;
 
             try {
-                const res  = await fetch('api/games/sunwin.php?action=history', {
+                const res  = await fetch('/api/games/sunwin.php?action=history', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const json = await res.json();
