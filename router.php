@@ -6,7 +6,6 @@ $routes = [
     '/login'                 => 'login.html',
     '/register'              => 'register.html',
     '/packages'              => 'packages.html',
-    '/game'                  => 'game.html',
     '/game/sunwin'           => 'games/sunwin.html',
     '/giftcode'              => 'giftcode.html',
     '/account'               => 'account.html',
