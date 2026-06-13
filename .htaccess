@@ -1,0 +1,31 @@
+Options +FollowSymLinks -Indexes
+RewriteEngine On
+RewriteBase /
+
+# Cho phép truy cập trực tiếp vào file và thư mục thực sự tồn tại
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# API - giữ nguyên
+RewriteRule ^api/ - [L]
+
+# ─── Trang Admin ────────────────────────────────────────────────────────────
+RewriteRule ^admin/?$                   admin/index.html [L]
+RewriteRule ^admin/login/?$             admin/login.html [L]
+RewriteRule ^admin/transactions/?$      admin/transactions.html [L]
+RewriteRule ^admin/packages/?$          admin/packages.html [L]
+RewriteRule ^admin/package-history/?$   admin/package_history.html [L]
+RewriteRule ^admin/giftcodes/?$         admin/giftcodes.html [L]
+
+# ─── Trang Người Dùng ────────────────────────────────────────────────────────
+RewriteRule ^login/?$       login.html [L]
+RewriteRule ^register/?$    register.html [L]
+RewriteRule ^packages/?$    packages.html [L]
+RewriteRule ^game/sunwin/?$     games/sunwin.html [L]
+RewriteRule ^game/?$            game.html [L]
+RewriteRule ^giftcode/?$    giftcode.html [L]
+RewriteRule ^account/?$     account.html [L]
+RewriteRule ^deposit/?$     deposit.html [L]
+RewriteRule ^history/?$     history.html [L]
+RewriteRule ^support/?$     support.html [L]
