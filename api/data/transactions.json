@@ -1,0 +1,515 @@
+[
+    {
+        "id": "TX1781176180114",
+        "username": "Nam1411",
+        "type": "out",
+        "title": "Mua VIP 1 ngày",
+        "amount": 10000,
+        "time": "18:09 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "TX1781176960888",
+        "username": "Nam1411",
+        "type": "in",
+        "title": "Được điều chỉnh số dư bởi Admin",
+        "amount": 20000,
+        "time": "18:22 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781177330834",
+        "username": "Nam1411",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "18:28 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781177376263",
+        "username": "trumhknam",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "18:29 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781177808790",
+        "username": "quanggphu",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "18:36 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781177910160",
+        "username": "in301201",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "18:38 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781177916145",
+        "username": "minh",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "18:38 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781178060419",
+        "username": "Vinh",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "18:41 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781178167506",
+        "username": "Sonpham99",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "18:42 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "TX1781178180369",
+        "username": "minh",
+        "type": "in",
+        "title": "Được điều chỉnh số dư bởi Admin",
+        "amount": 1864712049423024128,
+        "time": "18:43 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781178335860",
+        "username": "okvip",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "18:45 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781178516379",
+        "username": "ndm300410",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "18:48 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781178599704",
+        "username": "hlam28",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "18:49 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "TX1781178637506",
+        "username": "minh",
+        "type": "out",
+        "title": "Bị Admin trừ số dư",
+        "amount": 1864712048423024129,
+        "time": "18:50 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781178646998",
+        "username": "datkeoyeuem",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "18:50 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781178683340",
+        "username": "Duyanhnee",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "18:51 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781178721399",
+        "username": "phuoc296",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "18:52 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781178824985",
+        "username": "huyhihi",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "18:53 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781179132633",
+        "username": "tu1502",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "18:58 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781179252770",
+        "username": "hieunek2010",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "19:00 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781179267191",
+        "username": "nnhatdz",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "19:01 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781179528483",
+        "username": "Vanhdan66",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "19:05 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781179556813",
+        "username": "wkmslc",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "19:05 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781179936878",
+        "username": "F8c778",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "19:12 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781179948246",
+        "username": "buivananh00",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "19:12 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781179989334",
+        "username": "Ntruong03",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "19:13 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781180344618",
+        "username": "ngchien212",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "19:19 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "TX1781180380339",
+        "username": "Nhan3108",
+        "type": "in",
+        "title": "Nạp tiền vào ví (Bank)",
+        "amount": 50000000,
+        "time": "19:19 - 11\/06\/2026",
+        "status": "Chờ duyệt"
+    },
+    {
+        "id": "GC1781180397691",
+        "username": "Nhan3108",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "19:19 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781180882335",
+        "username": "admin",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "19:28 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781180936284",
+        "username": "onana114",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "19:28 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781181120949",
+        "username": "thientai",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "19:32 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781181608224",
+        "username": "phandinhkiet",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "19:40 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781182790435",
+        "username": "bin4005",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "19:59 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781182932132",
+        "username": "nguyefong01@gmail.com",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "20:02 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781183687684",
+        "username": "Tkhoi1250k",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "20:14 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781184336859",
+        "username": "giathiennguyen6",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "20:25 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781186479984",
+        "username": "dungnecon",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "21:01 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "TX1781188900727",
+        "username": "minh",
+        "type": "in",
+        "title": "Được điều chỉnh số dư bởi Admin",
+        "amount": 200376419512301057,
+        "time": "21:41 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "TX1781188978270",
+        "username": "minh",
+        "type": "in",
+        "title": "Nạp tiền vào ví (Bank)",
+        "amount": 500000,
+        "time": "21:42 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "TX1781189294438",
+        "username": "minh",
+        "type": "out",
+        "title": "Mua VIP 1 tháng",
+        "amount": 150000,
+        "time": "21:48 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "TX1781189298701",
+        "username": "minh",
+        "type": "out",
+        "title": "Mua VIP 1 tháng",
+        "amount": 150000,
+        "time": "21:48 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "TX1781189300635",
+        "username": "minh",
+        "type": "out",
+        "title": "Mua VIP 1 tháng",
+        "amount": 150000,
+        "time": "21:48 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "TX1781190992300",
+        "username": "Nam1411",
+        "type": "in",
+        "title": "Nạp tiền vào ví (Momo)",
+        "amount": 50000,
+        "time": "22:16 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781191136409",
+        "username": "trongbu1b",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "22:18 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "TX1781191340580",
+        "username": "AnhPhong2906",
+        "type": "in",
+        "title": "Nạp tiền vào ví (Bank)",
+        "amount": 50000,
+        "time": "22:22 - 11\/06\/2026",
+        "status": "Chờ duyệt"
+    },
+    {
+        "id": "GC1781191364626",
+        "username": "AnhPhong2906",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "22:22 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781192530250",
+        "username": "danglatao111",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "22:42 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781196613962",
+        "username": "qpqp0000",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "23:50 - 11\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "TX1781196732563",
+        "username": "qpqp0000",
+        "type": "in",
+        "title": "Nạp tiền vào ví (Bank)",
+        "amount": 500000,
+        "time": "23:52 - 11\/06\/2026",
+        "status": "Chờ duyệt"
+    },
+    {
+        "id": "TX1781196738117",
+        "username": "qpqp0000",
+        "type": "in",
+        "title": "Nạp tiền vào ví (Momo)",
+        "amount": 500000,
+        "time": "23:52 - 11\/06\/2026",
+        "status": "Chờ duyệt"
+    },
+    {
+        "id": "GC1781199915964",
+        "username": "duongzz123",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "00:45 - 12\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781229297928",
+        "username": "hoangbalang",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "08:54 - 12\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781233725517",
+        "username": "Minh0902",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "10:08 - 12\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781240201107",
+        "username": "Phuch888",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "11:56 - 12\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "GC1781254498392",
+        "username": "thientan567",
+        "type": "in",
+        "title": "Giftcode VIP 3 ngày",
+        "amount": 0,
+        "time": "15:54 - 12\/06\/2026",
+        "status": "Thành công"
+    },
+    {
+        "id": "TX1781310875119",
+        "username": "huyhacho",
+        "type": "in",
+        "title": "Được điều chỉnh số dư bởi Admin",
+        "amount": 20000000000,
+        "time": "07:34 - 13\/06\/2026",
+        "status": "Thành công"
+    }
+]

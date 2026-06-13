@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tài Khoản - TOOLTX2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>tailwind.config = { theme: { extend: { colors: { primary: '#3b82f6' } } } }</script>
+    <style>
+        body { -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+        ::-webkit-scrollbar { display: none; }
+        .fade-in { animation: fadeIn 0.2s ease-in-out forwards; }
+        .fade-out { animation: fadeOut 0.2s ease-in-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+        .slide-up { animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .slide-down { animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        @keyframes slideDown { from { transform: translateY(0); } to { transform: translateY(100%); } }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col relative overflow-x-hidden">
+
+    <header class="bg-white shadow-sm sticky top-0 z-40 border-b border-slate-100">
+        <div class="flex items-center justify-center h-14 px-4">
+            <h1 class="text-xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-800">
+                TOOLTX2026
+            </h1>
+        </div>
+    </header>
+
+    <!-- Copy toast -->
+    <div id="copy-toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[100] bg-slate-800 text-white text-xs font-semibold px-4 py-2 rounded-full shadow-lg opacity-0 pointer-events-none transition-opacity duration-200">Đã sao chép!</div>
+
+    <main class="flex-grow p-4 pb-32 max-w-3xl mx-auto w-full">
+        <h2 class="text-xl font-bold text-slate-800 mb-4">Tài khoản</h2>
+
+        <!-- TRẠNG THÁI: ĐÃ ĐĂNG NHẬP -->
+        <div id="logged-in-view" class="hidden">
+            <div class="bg-white rounded-3xl p-4 flex items-center gap-4 shadow-sm border border-slate-100 mb-4 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-full -mr-12 -mt-12 opacity-50 pointer-events-none"></div>
+                <div class="relative z-10">
+                    <img src="https://via.placeholder.com/150" alt="Avatar" class="w-16 h-16 rounded-full object-cover border-2 border-blue-100 shadow-sm">
+                    <div class="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-white rounded-full shadow-sm"></div>
+                </div>
+                <div class="flex-1 z-10">
+                    <h3 id="user-username" class="text-lg font-bold text-slate-800 leading-tight">Đang tải...</h3>
+                    <p class="text-sm text-slate-500 mt-0.5 flex items-center gap-1.5 flex-wrap">
+                        <span class="font-semibold text-slate-400">ID:</span> <span id="user-id" class="font-medium text-slate-700">Đang tải...</span>
+                        <button id="copy-id-btn" onclick="copyUserId()" title="Sao chép ID" class="inline-flex items-center justify-center w-6 h-6 bg-slate-100 hover:bg-blue-50 hover:text-primary text-slate-400 rounded-md active:scale-90 transition-all">
+                            <i data-lucide="copy" class="w-3 h-3"></i>
+                        </button>
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-primary to-blue-700 rounded-3xl p-5 shadow-lg shadow-blue-500/30 text-white mb-6 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-10 -mt-10 blur-xl"></div>
+                <div class="absolute bottom-0 left-0 w-24 h-24 bg-blue-400/20 rounded-full -ml-8 -mb-8 blur-lg"></div>
+                <div class="relative z-10 flex justify-between items-center">
+                    <div>
+                        <p class="text-blue-100 text-sm mb-1 font-medium flex items-center gap-1">
+                            <i data-lucide="wallet-2" class="w-4 h-4"></i> Số dư khả dụng
+                        </p>
+                        <h2 class="text-3xl font-bold tracking-tight"><span id="user-balance">0</span> <span class="text-lg font-medium opacity-80">VNĐ</span></h2>
+                    </div>
+                    <a href="/deposit" class="bg-white text-primary font-bold py-2.5 px-4 rounded-xl shadow-md hover:bg-blue-50 active:scale-95 transition-transform flex items-center gap-1">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Nạp
+                    </a>
+                </div>
+            </div>
+
+            <h3 class="font-semibold text-slate-700 mb-3 text-sm uppercase tracking-wide px-1">Chức năng</h3>
+            <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden mb-6">
+                <div id="admin-feature-container"></div>
+                <a href="/giftcode" class="flex items-center justify-between p-4 border-b border-slate-50 hover:bg-slate-50 active:bg-slate-100 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-500"><i data-lucide="ticket" class="w-5 h-5"></i></div>
+                        <span class="font-medium text-slate-700">Nhập Giftcode</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300"></i>
+                </a>
+                <a href="/history" class="flex items-center justify-between p-4 border-b border-slate-50 hover:bg-slate-50 active:bg-slate-100 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-orange-500"><i data-lucide="clock-3" class="w-5 h-5"></i></div>
+                        <span class="font-medium text-slate-700">Lịch sử giao dịch</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300"></i>
+                </a>
+                <a href="#" class="flex items-center justify-between p-4 border-b border-slate-50 hover:bg-slate-50 active:bg-slate-100 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-green-500"><i data-lucide="shield-check" class="w-5 h-5"></i></div>
+                        <span class="font-medium text-slate-700">Bảo mật tài khoản</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300"></i>
+                </a>
+                <a href="/support" class="flex items-center justify-between p-4 border-b border-slate-50 hover:bg-slate-50 active:bg-slate-100 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center text-purple-500"><i data-lucide="headphones" class="w-5 h-5"></i></div>
+                        <span class="font-medium text-slate-700">Trung tâm hỗ trợ</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300"></i>
+                </a>
+            </div>
+
+            <button onclick="showLogoutModal()" class="w-full bg-red-50 border border-red-100 text-red-600 font-bold py-4 rounded-2xl flex items-center justify-center gap-2 active:scale-[0.98] transition-transform">
+                <i data-lucide="log-out" class="w-5 h-5"></i> Đăng xuất
+            </button>
+        </div>
+
+        <!-- TRẠNG THÁI: CHƯA ĐĂNG NHẬP -->
+        <div id="logged-out-view" class="hidden flex-col items-center justify-center py-12 text-center h-full">
+            <div class="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mb-6 relative">
+                <i data-lucide="user-x" class="w-12 h-12 text-primary opacity-60"></i>
+                <div class="absolute inset-0 border-4 border-white rounded-full"></div>
+                <div class="absolute inset-0 border-4 border-blue-100 rounded-full scale-110 opacity-50"></div>
+            </div>
+            <h3 class="text-xl font-bold text-slate-800 mb-2">Chưa đăng nhập</h3>
+            <p class="text-slate-500 mb-8 max-w-xs text-sm">Đăng nhập ngay để quản lý số dư và lịch sử nạp.</p>
+            
+            <a href="/login" class="w-full max-w-xs bg-gradient-to-r from-primary to-blue-600 text-white font-bold py-4 rounded-2xl shadow-lg shadow-blue-500/30 active:scale-[0.98] transition-transform flex items-center justify-center gap-2">
+                <i data-lucide="log-in" class="w-5 h-5"></i> Đăng nhập ngay
+            </a>
+            <div class="mt-6 flex items-center justify-center gap-2 text-sm">
+                <span class="text-slate-400">Chưa có tài khoản?</span>
+                <a href="/register" class="font-bold text-primary hover:underline">Đăng ký</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Thanh Điều Hướng Dưới Cùng -->
+    <div class="fixed bottom-6 left-0 w-full z-30 px-4 flex justify-center pointer-events-none">
+        <nav class="w-full max-w-sm bg-white/90 backdrop-blur-lg border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.08)] rounded-3xl px-2 py-2 pointer-events-auto flex justify-between items-center relative transition-all">
+            <a href="/" class="flex-1 flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 hover:text-slate-600 transition-all duration-300">
+                <i data-lucide="home" class="w-5 h-5 mb-1 active:scale-75 transition-transform"></i>
+                <span class="text-[10px] font-medium">Trang chủ</span>
+            </a>
+            <a href="/packages" class="flex-1 flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 hover:text-slate-600 transition-all duration-300">
+                <i data-lucide="package" class="w-5 h-5 mb-1 active:scale-75 transition-transform"></i>
+                <span class="text-[10px] font-medium">Mua gói</span>
+            </a>
+            <a href="/deposit" class="flex-1 flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 hover:text-slate-600 transition-all duration-300">
+                <i data-lucide="wallet" class="w-5 h-5 mb-1 active:scale-75 transition-transform"></i>
+                <span class="text-[10px] font-medium">Nạp tiền</span>
+            </a>
+            <a href="/account" class="flex-1 flex flex-col items-center justify-center py-2 rounded-2xl text-primary bg-blue-50/80 transition-all duration-300">
+                <i data-lucide="user" class="w-5 h-5 mb-1 active:scale-75 transition-transform"></i>
+                <span class="text-[10px] font-semibold">Tài khoản</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Modal Đăng xuất -->
+    <div id="logout-modal" class="fixed inset-0 z-[60] hidden">
+        <div id="modal-backdrop" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="hideLogoutModal()"></div>
+        <div class="absolute bottom-0 left-0 w-full flex justify-center pb-0 sm:pb-6 pointer-events-none">
+            <div id="modal-content" class="w-full max-w-sm bg-white rounded-t-[2rem] sm:rounded-3xl p-6 pointer-events-auto shadow-2xl relative">
+                <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6"></div>
+                <div class="flex flex-col items-center text-center mb-8">
+                    <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-4 text-red-500 relative">
+                        <i data-lucide="log-out" class="w-7 h-7"></i>
+                        <span class="absolute inset-0 rounded-full bg-red-400 opacity-20 animate-ping"></span>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">Đăng xuất tài khoản?</h3>
+                    <p class="text-slate-500 text-sm px-4">Bạn sẽ cần sử dụng ID và mật khẩu để đăng nhập lại.</p>
+                </div>
+                <div class="flex flex-col gap-3 pb-safe">
+                    <button onclick="confirmLogout()" class="w-full py-3.5 rounded-xl font-bold text-white bg-red-500 active:bg-red-600 active:scale-[0.98] transition-all shadow-lg shadow-red-500/20">
+                        Đồng ý đăng xuất
+                    </button>
+                    <button onclick="hideLogoutModal()" class="w-full py-3.5 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition-colors">
+                        Giữ tôi đăng nhập
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        const loggedInView = document.getElementById('logged-in-view');
+        const loggedOutView = document.getElementById('logged-out-view');
+        const modal = document.getElementById('logout-modal');
+        const modalBackdrop = document.getElementById('modal-backdrop');
+        const modalContent = document.getElementById('modal-content');
+
+        const token = localStorage.getItem('token');
+
+        let currentUserId = '';
+
+        function showCopyToast() {
+            const t = document.getElementById('copy-toast');
+            t.style.opacity = '1';
+            setTimeout(() => { t.style.opacity = '0'; }, 1600);
+        }
+
+        function copyUserId() {
+            if (!currentUserId) return;
+            navigator.clipboard.writeText(currentUserId).then(showCopyToast).catch(() => {
+                const el = document.createElement('textarea');
+                el.value = currentUserId; document.body.appendChild(el); el.select();
+                document.execCommand('copy'); document.body.removeChild(el);
+                showCopyToast();
+            });
+        }
+
+        async function initAccountPage() {
+            if (!token) {
+                loggedInView.classList.add('hidden'); loggedInView.classList.remove('block');
+                loggedOutView.classList.remove('hidden'); loggedOutView.classList.add('flex');
+                return;
+            }
+
+            try {
+                const response = await fetch('api/user.php', { headers: { 'Authorization': `Bearer ${token}` } });
+                const result = await response.json();
+                if (result.success) {
+                    const now = Math.floor(Date.now() / 1000);
+                    const isVip = result.vip_expire && result.vip_expire > now;
+                    
+                    let nameHtml = result.username;
+                    if (isVip) {
+                        nameHtml += ` <span class="inline-flex items-center gap-0.5 px-2 py-0.5 bg-amber-500 text-white text-[10px] font-black rounded-full shadow-sm ml-1 uppercase"><i data-lucide="crown" class="w-3 h-3"></i> VIP</span>`;
+                    }
+                    document.getElementById('user-username').innerHTML = nameHtml;
+
+                    currentUserId = result.user_id;
+                    let idHtml = result.user_id;
+                    if (isVip) {
+                        const expDate = new Date(result.vip_expire * 1000).toLocaleDateString('vi-VN');
+                        idHtml += ` | <span class="text-amber-600 font-semibold">Hạn VIP: ${expDate}</span>`;
+                    }
+                    document.getElementById('user-id').innerHTML = idHtml;
+
+                    document.getElementById('user-balance').innerText = formatMoney(result.balance);
+
+                    if (result.role === 'admin') {
+                        document.getElementById('admin-feature-container').innerHTML = `
+                            <a href="/admin" class="flex items-center justify-between p-4 border-b border-slate-50 hover:bg-slate-50 active:bg-slate-100 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center text-red-500"><i data-lucide="shield" class="w-5 h-5"></i></div>
+                                    <span class="font-bold text-red-600">Trang quản trị (Admin)</span>
+                                </div>
+                                <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300"></i>
+                            </a>
+                        `;
+                    }
+                    lucide.createIcons();
+
+                    loggedInView.classList.remove('hidden'); loggedInView.classList.add('block');
+                    loggedOutView.classList.add('hidden'); loggedOutView.classList.remove('flex');
+                } else {
+                    localStorage.clear();
+                    loggedInView.classList.add('hidden'); loggedInView.classList.remove('block');
+                    loggedOutView.classList.remove('hidden'); loggedOutView.classList.add('flex');
+                }
+            } catch (error) {
+                console.error(error);
+                localStorage.clear();
+                loggedInView.classList.add('hidden'); loggedInView.classList.remove('block');
+                loggedOutView.classList.remove('hidden'); loggedOutView.classList.add('flex');
+            }
+        }
+
+        function formatMoney(n) {
+            return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function showLogoutModal() {
+            modal.classList.remove('hidden');
+            modalBackdrop.classList.remove('fade-out'); modalBackdrop.classList.add('fade-in');
+            modalContent.classList.remove('slide-down'); modalContent.classList.add('slide-up');
+        }
+        
+        function hideLogoutModal() {
+            modalBackdrop.classList.remove('fade-in'); modalBackdrop.classList.add('fade-out');
+            modalContent.classList.remove('slide-up'); modalContent.classList.add('slide-down');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+        
+        function confirmLogout() {
+            hideLogoutModal();
+            localStorage.clear(); // Xóa sạch token & role phiên đăng nhập
+            setTimeout(() => {
+                loggedInView.classList.add('hidden'); loggedInView.classList.remove('block');
+                loggedOutView.classList.remove('hidden'); loggedOutView.classList.add('flex');
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            }, 300);
+        }
+
+        initAccountPage();
+    </script>
+</body>
+</html>
+
+

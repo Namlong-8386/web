@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lịch Sử Mua Gói VIP - TOOLTX2026 ADMIN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        success: '#10b981',
+                        danger: '#ef4444',
+                        warning: '#f59e0b'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-slate-900 text-white shadow-md sticky top-0 z-40">
+        <div class="max-w-6xl mx-auto flex items-center justify-between h-16 px-4">
+            <div class="flex items-center gap-3">
+                <a href="/" class="w-8 h-8 flex items-center justify-center bg-white/10 rounded-lg hover:bg-white/20 active:scale-95 transition-all text-white">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </a>
+                <h1 class="text-xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-200">
+                    TOOLTX2026 ADMIN
+                </h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="text-right hidden sm:block">
+                    <p class="text-xs text-slate-400">Đang đăng nhập</p>
+                    <p class="text-sm font-bold" id="admin-name">Admin</p>
+                </div>
+                <button onclick="logoutAdmin()" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 font-semibold py-2 px-3.5 rounded-xl text-xs flex items-center gap-1.5 active:scale-95 transition-all">
+                    <i data-lucide="log-out" class="w-4 h-4"></i> Đăng xuất
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Nội dung -->
+    <main class="flex-grow max-w-6xl w-full mx-auto p-4 pb-20">
+        <!-- Navigation Tabs -->
+        <div class="flex border-b border-slate-200 mb-6 gap-1 overflow-x-auto">
+            <a href="/admin" class="whitespace-nowrap px-4 py-3 font-semibold text-sm text-slate-500 transition-all border-b-2 border-transparent hover:text-slate-700 flex items-center gap-2">
+                <i data-lucide="users" class="w-4 h-4"></i> Người dùng
+            </a>
+            <a href="/admin/transactions" class="whitespace-nowrap px-4 py-3 font-semibold text-sm text-slate-500 transition-all border-b-2 border-transparent hover:text-slate-700 flex items-center gap-2">
+                <i data-lucide="wallet" class="w-4 h-4"></i> Nạp tiền
+            </a>
+            <a href="/admin/packages" class="whitespace-nowrap px-4 py-3 font-semibold text-sm text-slate-500 transition-all border-b-2 border-transparent hover:text-slate-700 flex items-center gap-2">
+                <i data-lucide="package" class="w-4 h-4"></i> Trạng thái VIP
+            </a>
+            <a href="/admin/package-history" class="whitespace-nowrap px-4 py-3 font-bold text-sm transition-all border-b-2 border-primary text-primary flex items-center gap-2">
+                <i data-lucide="history" class="w-4 h-4"></i> Lịch sử Mua gói
+            </a>
+            <a href="/admin/giftcodes" class="whitespace-nowrap px-4 py-3 font-semibold text-sm text-slate-500 transition-all border-b-2 border-transparent hover:text-slate-700 flex items-center gap-2">
+                <i data-lucide="ticket" class="w-4 h-4"></i> Giftcode
+            </a>
+        </div>
+
+        <!-- Tab 4: Package History -->
+        <div id="tab-package-history" class="space-y-4">
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 overflow-x-auto">
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-6 gap-4 min-w-[600px]">
+                    <div>
+                        <h3 class="font-bold text-lg text-slate-800">Lịch sử mua gói VIP</h3>
+                        <p class="text-xs text-slate-400 mt-1">Danh sách tất cả các giao dịch mua gói VIP từ người dùng</p>
+                    </div>
+                    <div class="relative w-64">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i data-lucide="search" class="w-4 h-4 text-slate-400"></i>
+                        </span>
+                        <input type="text" id="search-history-input" oninput="filterHistoryTable()" class="block w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-primary focus:bg-white" placeholder="Tìm username, tên gói...">
+                    </div>
+                </div>
+                <table class="w-full text-left border-collapse min-w-[700px]">
+                    <thead>
+                        <tr class="border-b border-slate-100 text-slate-400 text-xs font-bold uppercase tracking-wider">
+                            <th class="pb-3 pt-2">Mã GD</th>
+                            <th class="pb-3 pt-2">Thành viên</th>
+                            <th class="pb-3 pt-2">Tên gói VIP</th>
+                            <th class="pb-3 pt-2 text-right pr-6">Chi phí</th>
+                            <th class="pb-3 pt-2 pl-6">Thời gian</th>
+                            <th class="pb-3 pt-2">Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody id="package-history-table-body" class="divide-y divide-slate-50 text-sm">
+                        <tr>
+                            <td colspan="6" class="py-6 text-center text-slate-400">Đang tải dữ liệu...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <!-- Custom Alert Modal -->
+    <div id="alert-modal" class="fixed inset-0 z-[60] hidden">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeAlertModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+            <div class="w-full max-w-sm bg-white rounded-3xl p-6 pointer-events-auto shadow-2xl relative">
+                <div class="text-center mb-6">
+                    <div id="alert-modal-icon" class="w-12 h-12 rounded-full bg-blue-50 text-primary flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="info" class="w-6 h-6"></i>
+                    </div>
+                    <h3 id="alert-modal-title" class="text-lg font-bold text-slate-800 mb-2">Thông báo</h3>
+                    <p id="alert-modal-message" class="text-sm text-slate-500 px-2">...</p>
+                </div>
+                <button onclick="closeAlertModal()" class="w-full py-3 bg-primary hover:bg-blue-600 active:scale-95 text-white font-bold rounded-2xl shadow-lg transition-all">
+                    Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        let alertPromiseResolver = null;
+        function alert(message, type = 'info') {
+            document.getElementById('alert-modal-message').innerText = message;
+            
+            const iconDiv = document.getElementById('alert-modal-icon');
+            if (type === 'success' || message.includes('thành công') || message.includes('Thành công')) {
+                iconDiv.className = "w-12 h-12 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center mx-auto mb-4";
+                iconDiv.innerHTML = '<i data-lucide="check-circle" class="w-6 h-6"></i>';
+                document.getElementById('alert-modal-title').innerText = 'Thành công';
+            } else if (type === 'error' || message.includes('Lỗi') || message.includes('không') || message.includes('thất bại')) {
+                iconDiv.className = "w-12 h-12 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center mx-auto mb-4";
+                iconDiv.innerHTML = '<i data-lucide="x-circle" class="w-6 h-6"></i>';
+                document.getElementById('alert-modal-title').innerText = 'Lỗi';
+            } else {
+                iconDiv.className = "w-12 h-12 rounded-full bg-blue-50 text-primary flex items-center justify-center mx-auto mb-4";
+                iconDiv.innerHTML = '<i data-lucide="info" class="w-6 h-6"></i>';
+                document.getElementById('alert-modal-title').innerText = 'Thông báo';
+            }
+            lucide.createIcons();
+            document.getElementById('alert-modal').classList.remove('hidden');
+            
+            return new Promise((resolve) => {
+                alertPromiseResolver = resolve;
+            });
+        }
+
+        function closeAlertModal() {
+            document.getElementById('alert-modal').classList.add('hidden');
+            if (alertPromiseResolver) {
+                alertPromiseResolver();
+                alertPromiseResolver = null;
+            }
+        }
+
+        const token = localStorage.getItem('token');
+        const adminRole = localStorage.getItem('role');
+
+        if (!token || adminRole !== 'admin') {
+            alert('Bạn không có quyền truy cập trang này.');
+            window.location.href = '/admin/login';
+        }
+
+        let allPackageTxs = [];
+
+        function logoutAdmin() {
+            localStorage.clear();
+            window.location.href = '/admin/login';
+        }
+
+        async function fetchPackageHistory() {
+            try {
+                const txRes = await fetch('../api/admin_transactions.php', { headers: { 'Authorization': `Bearer ${token}` } });
+                const txResult = await txRes.json();
+                if (txResult.success) {
+                    // Lọc ra các giao dịch mua gói VIP (type = out, title chứa chữ "Mua" hoặc "VIP")
+                    allPackageTxs = txResult.transactions.filter(tx => 
+                        tx.type === 'out' && 
+                        (tx.title.toLowerCase().includes('mua') || tx.title.toLowerCase().includes('vip'))
+                    );
+                    renderPackageHistoryTable(allPackageTxs);
+                } else {
+                    alert(txResult.message);
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Không thể tải lịch sử mua gói VIP.');
+            }
+        }
+
+        function formatMoney(n) {
+            return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function renderPackageHistoryTable(txs) {
+            const tbody = document.getElementById('package-history-table-body');
+            tbody.innerHTML = '';
+            if (txs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="py-6 text-center text-slate-400">Chưa có giao dịch mua gói VIP nào.</td></tr>';
+                return;
+            }
+
+            txs.forEach(tx => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50/50";
+                tr.innerHTML = `
+                    <td class="py-4 font-mono font-semibold text-slate-500 text-xs">${tx.id}</td>
+                    <td class="py-4 font-bold text-slate-800">${tx.username}</td>
+                    <td class="py-4 font-medium text-slate-700">${tx.title}</td>
+                    <td class="py-4 text-right text-base font-bold text-danger pr-6">-${formatMoney(tx.amount)}đ</td>
+                    <td class="py-4 text-slate-500 text-xs pl-6">${tx.time}</td>
+                    <td class="py-4">
+                        <span class="px-2 py-1 bg-success/10 text-success rounded-md font-bold text-[10px] uppercase">${tx.status}</span>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterHistoryTable() {
+            const query = document.getElementById('search-history-input').value.toLowerCase().trim();
+            const filtered = allPackageTxs.filter(tx => 
+                tx.username.toLowerCase().includes(query) || 
+                tx.title.toLowerCase().includes(query) || 
+                tx.id.toLowerCase().includes(query)
+            );
+            renderPackageHistoryTable(filtered);
+        }
+
+        fetchPackageHistory();
+    </script>
+</body>
+</html>

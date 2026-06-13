@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Quản Lý Giftcode - TOOLTX2026 ADMIN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        success: '#10b981',
+                        danger: '#ef4444',
+                        warning: '#f59e0b'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .copy-toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 8px 20px; border-radius: 99px; font-size: 13px; font-weight: 600; z-index: 9999; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+        .copy-toast.show { opacity: 1; }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <div class="copy-toast" id="copy-toast">Đã sao chép!</div>
+
+    <!-- Header -->
+    <header class="bg-slate-900 text-white shadow-md sticky top-0 z-40">
+        <div class="max-w-6xl mx-auto flex items-center justify-between h-16 px-4">
+            <div class="flex items-center gap-3">
+                <a href="/" class="w-8 h-8 flex items-center justify-center bg-white/10 rounded-lg hover:bg-white/20 active:scale-95 transition-all text-white">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </a>
+                <h1 class="text-xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-200">
+                    TOOLTX2026 ADMIN
+                </h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="text-right hidden sm:block">
+                    <p class="text-xs text-slate-400">Đang đăng nhập</p>
+                    <p class="text-sm font-bold" id="admin-name">Admin</p>
+                </div>
+                <button onclick="logoutAdmin()" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 font-semibold py-2 px-3.5 rounded-xl text-xs flex items-center gap-1.5 active:scale-95 transition-all">
+                    <i data-lucide="log-out" class="w-4 h-4"></i> Đăng xuất
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Nội dung -->
+    <main class="flex-grow max-w-6xl w-full mx-auto p-4 pb-20">
+        <!-- Navigation Tabs -->
+        <div class="flex border-b border-slate-200 mb-6 gap-1 overflow-x-auto">
+            <a href="/admin" class="whitespace-nowrap px-4 py-3 font-semibold text-sm text-slate-500 transition-all border-b-2 border-transparent hover:text-slate-700 flex items-center gap-2">
+                <i data-lucide="users" class="w-4 h-4"></i> Người dùng
+            </a>
+            <a href="/admin/transactions" class="whitespace-nowrap px-4 py-3 font-semibold text-sm text-slate-500 transition-all border-b-2 border-transparent hover:text-slate-700 flex items-center gap-2">
+                <i data-lucide="wallet" class="w-4 h-4"></i> Nạp tiền
+            </a>
+            <a href="/admin/packages" class="whitespace-nowrap px-4 py-3 font-semibold text-sm text-slate-500 transition-all border-b-2 border-transparent hover:text-slate-700 flex items-center gap-2">
+                <i data-lucide="package" class="w-4 h-4"></i> Trạng thái VIP
+            </a>
+            <a href="/admin/package-history" class="whitespace-nowrap px-4 py-3 font-semibold text-sm text-slate-500 transition-all border-b-2 border-transparent hover:text-slate-700 flex items-center gap-2">
+                <i data-lucide="history" class="w-4 h-4"></i> Lịch sử Mua gói
+            </a>
+            <a href="/admin/giftcodes" class="whitespace-nowrap px-4 py-3 font-bold text-sm transition-all border-b-2 border-amber-500 text-amber-600 flex items-center gap-2">
+                <i data-lucide="ticket" class="w-4 h-4"></i> Giftcode
+            </a>
+        </div>
+
+        <!-- Tạo giftcode -->
+        <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 mb-6">
+            <h3 class="font-bold text-lg text-slate-800 mb-1 flex items-center gap-2">
+                <i data-lucide="plus-circle" class="w-5 h-5 text-amber-500"></i> Tạo Giftcode Mới
+            </h3>
+            <p class="text-xs text-slate-400 mb-5">Tạo mã giftcode cho phép người dùng nhận VIP miễn phí.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1.5">Số ngày VIP</label>
+                    <input type="number" id="create-days" min="1" max="365" placeholder="Ví dụ: 7" class="block w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1.5">Số lượt / mã</label>
+                    <input type="number" id="create-quantity" min="1" placeholder="Ví dụ: 1" class="block w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1.5">Prefix mã (tùy chọn)</label>
+                    <input type="text" id="create-prefix" placeholder="Mặc định: GIFT" maxlength="10" class="block w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary transition-all uppercase">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1.5">Số mã cần tạo</label>
+                    <input type="number" id="create-count" min="1" max="50" value="1" class="block w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary transition-all">
+                </div>
+            </div>
+            <button onclick="createGiftcodes()" id="create-btn" class="bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white font-bold py-2.5 px-6 rounded-xl shadow-md shadow-orange-500/20 flex items-center gap-2 active:scale-95 transition-all">
+                <i data-lucide="zap" class="w-4 h-4"></i> Tạo Giftcode
+            </button>
+        </div>
+
+        <!-- Danh sách giftcode -->
+        <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 overflow-x-auto">
+            <div class="flex justify-between items-center mb-4 min-w-[600px]">
+                <div>
+                    <h3 class="font-bold text-lg text-slate-800">Danh sách Giftcode</h3>
+                    <p class="text-xs text-slate-400">Tổng: <span id="total-count">0</span> mã</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <select id="filter-status" onchange="filterTable()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary">
+                        <option value="all">Tất cả</option>
+                        <option value="active">Còn hiệu lực</option>
+                        <option value="expired">Hết lượt</option>
+                    </select>
+                    <button onclick="fetchCodes()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 py-2 px-3 rounded-xl text-sm font-semibold flex items-center gap-1.5 active:scale-95 transition-all">
+                        <i data-lucide="refresh-cw" class="w-4 h-4"></i> Tải lại
+                    </button>
+                </div>
+            </div>
+            <table class="w-full text-left border-collapse min-w-[700px]">
+                <thead>
+                    <tr class="border-b border-slate-100 text-slate-400 text-xs font-bold uppercase tracking-wider">
+                        <th class="pb-3 pt-2">Mã Giftcode</th>
+                        <th class="pb-3 pt-2 text-center">Số ngày VIP</th>
+                        <th class="pb-3 pt-2 text-center">Đã dùng / Tổng</th>
+                        <th class="pb-3 pt-2">Trạng thái</th>
+                        <th class="pb-3 pt-2">Ngày tạo</th>
+                        <th class="pb-3 pt-2 text-center">Xử lý</th>
+                    </tr>
+                </thead>
+                <tbody id="codes-table-body" class="divide-y divide-slate-50 text-sm">
+                    <tr>
+                        <td colspan="6" class="py-6 text-center text-slate-400">Đang tải dữ liệu...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Custom Alert Modal -->
+    <div id="alert-modal" class="fixed inset-0 z-[60] hidden">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeAlertModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+            <div class="w-full max-w-sm bg-white rounded-3xl p-6 pointer-events-auto shadow-2xl relative">
+                <div class="text-center mb-6">
+                    <div id="alert-modal-icon" class="w-12 h-12 rounded-full bg-blue-50 text-primary flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="info" class="w-6 h-6"></i>
+                    </div>
+                    <h3 id="alert-modal-title" class="text-lg font-bold text-slate-800 mb-2">Thông báo</h3>
+                    <p id="alert-modal-message" class="text-sm text-slate-500 px-2">...</p>
+                </div>
+                <button onclick="closeAlertModal()" class="w-full py-3 bg-primary hover:bg-blue-600 active:scale-95 text-white font-bold rounded-2xl shadow-lg transition-all">
+                    Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Confirm Modal -->
+    <div id="confirm-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeConfirmModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+            <div class="w-full max-w-sm bg-white rounded-3xl p-6 pointer-events-auto shadow-2xl relative">
+                <div class="text-center mb-6">
+                    <div class="w-12 h-12 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="help-circle" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-800 mb-2">Xác nhận thao tác</h3>
+                    <p id="confirm-modal-message" class="text-sm text-slate-500 px-2">Bạn chắc chắn muốn thực hiện thao tác này?</p>
+                </div>
+                <div class="flex gap-2">
+                    <button id="confirm-modal-yes-btn" class="flex-1 py-3 bg-primary hover:bg-blue-600 active:scale-95 text-white font-bold rounded-2xl shadow-lg transition-all">Đồng ý</button>
+                    <button onclick="closeConfirmModal()" class="py-3 px-5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold rounded-2xl transition-colors">Hủy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        let confirmPromiseResolver = null;
+        function showConfirmModal(message) {
+            document.getElementById('confirm-modal-message').innerText = message;
+            document.getElementById('confirm-modal').classList.remove('hidden');
+            lucide.createIcons();
+            return new Promise((resolve) => { confirmPromiseResolver = resolve; });
+        }
+        function closeConfirmModal() {
+            document.getElementById('confirm-modal').classList.add('hidden');
+            if (confirmPromiseResolver) { confirmPromiseResolver(false); confirmPromiseResolver = null; }
+        }
+        document.getElementById('confirm-modal-yes-btn').addEventListener('click', () => {
+            document.getElementById('confirm-modal').classList.add('hidden');
+            if (confirmPromiseResolver) { confirmPromiseResolver(true); confirmPromiseResolver = null; }
+        });
+
+        let alertPromiseResolver = null;
+        function alert(message, type = 'info') {
+            document.getElementById('alert-modal-message').innerText = message;
+            const iconDiv = document.getElementById('alert-modal-icon');
+            if (type === 'success' || message.includes('thành công') || message.includes('Thành công')) {
+                iconDiv.className = "w-12 h-12 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center mx-auto mb-4";
+                iconDiv.innerHTML = '<i data-lucide="check-circle" class="w-6 h-6"></i>';
+                document.getElementById('alert-modal-title').innerText = 'Thành công';
+            } else if (type === 'error' || message.includes('Lỗi') || message.includes('không')) {
+                iconDiv.className = "w-12 h-12 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center mx-auto mb-4";
+                iconDiv.innerHTML = '<i data-lucide="x-circle" class="w-6 h-6"></i>';
+                document.getElementById('alert-modal-title').innerText = 'Lỗi';
+            } else {
+                iconDiv.className = "w-12 h-12 rounded-full bg-blue-50 text-primary flex items-center justify-center mx-auto mb-4";
+                iconDiv.innerHTML = '<i data-lucide="info" class="w-6 h-6"></i>';
+                document.getElementById('alert-modal-title').innerText = 'Thông báo';
+            }
+            lucide.createIcons();
+            document.getElementById('alert-modal').classList.remove('hidden');
+            return new Promise((resolve) => { alertPromiseResolver = resolve; });
+        }
+        function closeAlertModal() {
+            document.getElementById('alert-modal').classList.add('hidden');
+            if (alertPromiseResolver) { alertPromiseResolver(); alertPromiseResolver = null; }
+        }
+
+        const token = localStorage.getItem('token');
+        const adminRole = localStorage.getItem('role');
+        if (!token || adminRole !== 'admin') {
+            alert('Bạn không có quyền truy cập trang này.');
+            window.location.href = '/admin/login';
+        }
+
+        function logoutAdmin() {
+            localStorage.clear();
+            window.location.href = '/admin/login';
+        }
+
+        function showCopyToast() {
+            const t = document.getElementById('copy-toast');
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 1800);
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => showCopyToast()).catch(() => {
+                const el = document.createElement('textarea');
+                el.value = text; document.body.appendChild(el); el.select();
+                document.execCommand('copy'); document.body.removeChild(el);
+                showCopyToast();
+            });
+        }
+
+        let allCodes = [];
+
+        async function fetchCodes() {
+            try {
+                const response = await fetch('../api/giftcode.php?action=admin_list', { headers: { 'Authorization': `Bearer ${token}` } });
+                const result = await response.json();
+                if (result.success) {
+                    allCodes = result.codes.slice().reverse();
+                    document.getElementById('total-count').innerText = allCodes.length;
+                    filterTable();
+                } else {
+                    alert(result.message);
+                }
+            } catch(e) {
+                alert('Không thể tải dữ liệu giftcode.');
+            }
+        }
+
+        function filterTable() {
+            const statusFilter = document.getElementById('filter-status').value;
+            const filtered = statusFilter === 'all' ? allCodes : allCodes.filter(c => c.status === statusFilter);
+            renderTable(filtered);
+        }
+
+        function renderTable(codes) {
+            const tbody = document.getElementById('codes-table-body');
+            tbody.innerHTML = '';
+            if (codes.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="py-8 text-center text-slate-400">Chưa có giftcode nào.</td></tr>';
+                return;
+            }
+            codes.forEach(c => {
+                const isActive = c.status === 'active';
+                const statusBadge = isActive
+                    ? '<span class="px-2 py-1 bg-emerald-50 text-emerald-600 rounded-md font-bold text-[10px] uppercase">Còn hiệu lực</span>'
+                    : '<span class="px-2 py-1 bg-slate-100 text-slate-500 rounded-md font-bold text-[10px] uppercase">Hết lượt</span>';
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50/50";
+                tr.innerHTML = `
+                    <td class="py-4">
+                        <div class="flex items-center gap-2">
+                            <span class="font-mono font-bold text-slate-800 text-sm bg-amber-50 text-amber-700 px-2 py-1 rounded-lg border border-amber-100">${c.code}</span>
+                            <button onclick="copyToClipboard('${c.code}')" title="Sao chép mã" class="w-7 h-7 flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-primary rounded-lg active:scale-90 transition-all">
+                                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td class="py-4 text-center">
+                        <span class="inline-flex items-center gap-1 font-bold text-primary">
+                            <i data-lucide="crown" class="w-4 h-4 text-amber-500"></i> ${c.days} ngày
+                        </span>
+                    </td>
+                    <td class="py-4 text-center">
+                        <span class="${c.quantity_used >= c.quantity ? 'text-slate-400' : 'text-slate-700'} font-semibold">${c.quantity_used}/${c.quantity}</span>
+                    </td>
+                    <td class="py-4">${statusBadge}</td>
+                    <td class="py-4 text-slate-500 text-xs">${c.created_at || '-'}</td>
+                    <td class="py-4 text-center">
+                        <button onclick="deleteCode('${c.code}')" class="bg-red-50 hover:bg-red-100 text-danger py-1.5 px-3 rounded-lg text-xs font-bold flex items-center gap-1 mx-auto active:scale-95 transition-all">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Xóa
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+            lucide.createIcons();
+        }
+
+        async function createGiftcodes() {
+            const days = parseInt(document.getElementById('create-days').value);
+            const quantity = parseInt(document.getElementById('create-quantity').value);
+            const prefix = document.getElementById('create-prefix').value.trim().toUpperCase() || 'GIFT';
+            const count = parseInt(document.getElementById('create-count').value) || 1;
+
+            if (!days || days <= 0) { await alert('Vui lòng nhập số ngày VIP hợp lệ.', 'error'); return; }
+            if (!quantity || quantity <= 0) { await alert('Vui lòng nhập số lượt sử dụng hợp lệ.', 'error'); return; }
+
+            const btn = document.getElementById('create-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="animate-spin inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full"></span> Đang tạo...';
+
+            try {
+                const response = await fetch('../api/giftcode.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ action: 'admin_create', days, quantity, prefix, count })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    await alert(result.message, 'success');
+                    document.getElementById('create-days').value = '';
+                    document.getElementById('create-quantity').value = '';
+                    document.getElementById('create-prefix').value = '';
+                    document.getElementById('create-count').value = '1';
+                    fetchCodes();
+                } else {
+                    await alert(result.message, 'error');
+                }
+            } catch(e) {
+                await alert('Lỗi kết nối.', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i data-lucide="zap" class="w-4 h-4"></i> Tạo Giftcode';
+                lucide.createIcons();
+            }
+        }
+
+        async function deleteCode(code) {
+            const confirmed = await showConfirmModal(`Bạn có chắc muốn xóa mã giftcode ${code}?`);
+            if (!confirmed) return;
+
+            try {
+                const response = await fetch('../api/giftcode.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ action: 'admin_delete', code })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    await alert(result.message, 'success');
+                    fetchCodes();
+                } else {
+                    await alert(result.message, 'error');
+                }
+            } catch(e) {
+                await alert('Lỗi kết nối.', 'error');
+            }
+        }
+
+        fetchCodes();
+    </script>
+</body>
+</html>

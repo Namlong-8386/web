@@ -1,0 +1,494 @@
+[
+    {
+        "username": "Nam1411",
+        "password": "$2y$10$Z21fxGjUJODW4vRpknRe..oDiTCxhMntPrvZutTCR1ESUb5eUHmHC",
+        "full_name": "Quản trị viên",
+        "user_id": "999999",
+        "balance": 1049999,
+        "role": "admin",
+        "token": "d8949444155aca43de65fe8f131d283c",
+        "vip_expire": 1781436530
+    },
+    {
+        "username": "trumhknam",
+        "password": "$2y$10$8KTWhtjdf3pIg5opAeHIp.mzJqUWQqjsIRsYuik\/HybiXJfKLpyPC",
+        "full_name": "trumhknam",
+        "user_id": "112704",
+        "balance": 0,
+        "role": "user",
+        "token": "fb36738e12f87afb600d37e7c45e87b2",
+        "vip_expire": 1781436576
+    },
+    {
+        "username": "quanggphu",
+        "password": "$2y$10$uJM831erNpg4hO4x0\/Z.YuTWLCA9TkEQublSitFhDoFjUAjjDDbs6",
+        "full_name": "quanggphu",
+        "user_id": "819362",
+        "balance": 0,
+        "role": "user",
+        "token": "28cd40ae394f3b196267cef1f9e9405d",
+        "vip_expire": 1781437008
+    },
+    {
+        "username": "in301201",
+        "password": "$2y$10$nlB68CqcMxZK2lkbcNJrJOs6J2CJhbeEtLw6VcaOhBn84rE9uDpx.",
+        "full_name": "in301201",
+        "user_id": "425546",
+        "balance": 0,
+        "role": "user",
+        "token": "c7690ab2e22898b4b49c804485df25ce",
+        "vip_expire": 1781437110
+    },
+    {
+        "username": "minh",
+        "password": "$2y$10$IMuRvMbOTFnITKk1adbLk.8TWSybDt4b8dwEYaKysOrQ6\/ImjJsXe",
+        "full_name": "minh",
+        "user_id": "852513",
+        "balance": 200376420512351056,
+        "role": "admin",
+        "token": "983b49f20bf7bb05a40be5fb87e09ff7",
+        "vip_expire": 3787817880
+    },
+    {
+        "username": "Vinh",
+        "password": "$2y$10$0xuaJLjgs57PNKw4FS39cO1ej.BPokmqxWxhJb6MQLsvTjmoSDKUm",
+        "full_name": "Vinh",
+        "user_id": "375607",
+        "balance": 0,
+        "role": "user",
+        "token": "f25806c1ffab9fd904a4cc69c9ea1ae1",
+        "vip_expire": 1781437260
+    },
+    {
+        "username": "Sonpham99",
+        "password": "$2y$10$0dJj\/.viVevP0tA9k1ogpOCMv3sjIQD8b927mYx.vLg7yl.BR\/ynO",
+        "full_name": "Sonpham99",
+        "user_id": "403699",
+        "balance": 0,
+        "role": "user",
+        "token": "77a73a97676de976bf4dc7b15dc16b3f",
+        "vip_expire": 1781437367
+    },
+    {
+        "username": "okvip",
+        "password": "$2y$10$oO9Cf0mzMK50kUZ9lJAKIu2FoETtuGRAncLuF3ULfuChQRzPvy3aK",
+        "full_name": "okvip",
+        "user_id": "623335",
+        "balance": 0,
+        "role": "user",
+        "token": "f10d0531876a539b466a28c7f85280df",
+        "vip_expire": 1781437535
+    },
+    {
+        "username": "datkeoyeuem",
+        "password": "$2y$10$khJ4.9027JNkHJIDLd2Y5.UqvO.GkYingU4dGfaKDdKxgq.FLn\/mW",
+        "full_name": "datkeoyeuem",
+        "user_id": "922050",
+        "balance": 0,
+        "role": "user",
+        "token": "fb41aaea42d0a88579841bde70b4c0be",
+        "vip_expire": 1781437846
+    },
+    {
+        "username": "ndm300410",
+        "password": "$2y$10$\/v2faoA8\/88ui1Dgda31l.xB\/\/B2tDKdWygzBzWrUQ1UT57lcyzLi",
+        "full_name": "ndm300410",
+        "user_id": "523733",
+        "balance": 0,
+        "role": "user",
+        "token": "299f32612b573d19c5edf160be18aa9a",
+        "vip_expire": 1781437716
+    },
+    {
+        "username": "hlam28",
+        "password": "$2y$10$LHhZe7TWx9aUbf9PKXkB5.5IzymG3jTUqhlC9tDD9xxmzfv9AjPx2",
+        "full_name": "hlam28",
+        "user_id": "900189",
+        "balance": 0,
+        "role": "user",
+        "token": "dd1d21d560325c1d1f63c35af8aed338",
+        "vip_expire": 1781437799
+    },
+    {
+        "username": "Duyanhnee",
+        "password": "$2y$10$\/XCRVwl6w\/44W6bHm45S4O7sVIngsge.OzSvGo8yG60dW46QhTSp6",
+        "full_name": "Duyanhnee",
+        "user_id": "752155",
+        "balance": 0,
+        "role": "user",
+        "token": "9f1cde7efd02b09dd6b114c0fb8b2b71",
+        "vip_expire": 1781437883
+    },
+    {
+        "username": "phuoc296",
+        "password": "$2y$10$qMlWKhcenFn2TqfKKpsh4O5kXDpMLNkRroeOorO32bafVBNuxEkIq",
+        "full_name": "phuoc296",
+        "user_id": "889248",
+        "balance": 0,
+        "role": "user",
+        "token": "c8eda18984067cd2dab6c4a8d6a47b52",
+        "vip_expire": 1781437921
+    },
+    {
+        "username": "jkjhbbbjjjkk",
+        "password": "$2y$10$BxfWrUJbVX3qSLstH5ufOOAZqKcWkE\/J3iFisgwhy2m2asOi367G2",
+        "full_name": "jkjhbbbjjjkk",
+        "user_id": "430116",
+        "balance": 0,
+        "role": "user",
+        "token": ""
+    },
+    {
+        "username": "huyhihi",
+        "password": "$2y$10$dmzQdvjrhyxEWZKvYyd8iOssedhDIVEClwpP4fvawlqf.dTANgkRK",
+        "full_name": "huyhihi",
+        "user_id": "954994",
+        "balance": 0,
+        "role": "user",
+        "token": "6db34084117a21716a8a6fdd28b04084",
+        "vip_expire": 1781438024
+    },
+    {
+        "username": "Suycailon1",
+        "password": "$2y$10$vLNkTr31SsOjteHyA1.cjenklux54I2QODbqGV6IY3PaJp7Y8dDnW",
+        "full_name": "Suycailon1",
+        "user_id": "733650",
+        "balance": 0,
+        "role": "user",
+        "token": "42b8e3c582b750acf472cbffae02c811"
+    },
+    {
+        "username": "hieunek2010",
+        "password": "$2y$10$1ttwuLyogEsptuPhuvHtdeSgjFMRlzP8347vVKKzVKEFg4uFu4Dqy",
+        "full_name": "hieunek2010",
+        "user_id": "724279",
+        "balance": 0,
+        "role": "user",
+        "token": "0465d4b041c05d801056d9ab06d47d86",
+        "vip_expire": 1781438452
+    },
+    {
+        "username": "tu1502",
+        "password": "$2y$10$K0iwKIQofWfYsh6gcxul9.KWvTsJkyW50cJtFPbKw6MGrcGeQ0KoG",
+        "full_name": "tu1502",
+        "user_id": "861254",
+        "balance": 0,
+        "role": "user",
+        "token": "c5ec9c95799ee181f9884fbd0c74f2eb",
+        "vip_expire": 1781438332
+    },
+    {
+        "username": "nnhatdz",
+        "password": "$2y$10$brVUCKDldoG8ECT7RjDj4eHU9MIKCx5GYyqRZRZv6tbZw\/FQAM3Xm",
+        "full_name": "nnhatdz",
+        "user_id": "298509",
+        "balance": 0,
+        "role": "user",
+        "token": "593b1c253cb341e61604a0781d1f4627",
+        "vip_expire": 1781438467
+    },
+    {
+        "username": "minhloc6566",
+        "password": "$2y$10$kAYKcvnK40WZpG.Zf7EBeeWOieUlxtY0ypy27PInq2hgYixt6cfzS",
+        "full_name": "minhloc6566",
+        "user_id": "355619",
+        "balance": 0,
+        "role": "user",
+        "token": "dc06d22993a2942fb5e3ebdb668c9f27"
+    },
+    {
+        "username": "huyhacho",
+        "password": "$2y$10$aoOgO5I.ein3mVtq7N9BEOY5HpXwVRbVNyysaHSOligkBL9O8iQFm",
+        "full_name": "huyhacho",
+        "user_id": "830390",
+        "balance": 20000000000,
+        "role": "admin",
+        "token": "b62b022126b75e97c16b75b7d8d3ec60"
+    },
+    {
+        "username": "Vanhdan66",
+        "password": "$2y$10$nUyNxQQ9rL5HYqmXbzWjTuOKg\/eUCdOwEvnk5RYboQ1ZQ7mQ7xgAa",
+        "full_name": "Vanhdan66",
+        "user_id": "925779",
+        "balance": 0,
+        "role": "user",
+        "token": "7401faebf8fcf71c405e889ec5029c47",
+        "vip_expire": 1781438728
+    },
+    {
+        "username": "wkmslc",
+        "password": "$2y$10$.vBbG6tnrgt38ggaBm6iiefltnlpPKrSoAkWafmxub.8ppmdJYF1O",
+        "full_name": "wkmslc",
+        "user_id": "579568",
+        "balance": 0,
+        "role": "user",
+        "token": "40810ed0d22a6d0be37c4ed2edb2bc6f",
+        "vip_expire": 1781438756
+    },
+    {
+        "username": "F8c778",
+        "password": "$2y$10$Aga6hV73MoI1aRNAgVwhAO2fsIcvMmBPzrdEW9OileoPYsdHXQ0R6",
+        "full_name": "F8c778",
+        "user_id": "249108",
+        "balance": 0,
+        "role": "user",
+        "token": "594bafc43bc2ddbe7f198a64f8c6492e",
+        "vip_expire": 1781439136
+    },
+    {
+        "username": "buivananh00",
+        "password": "$2y$10$TwlF60FicUJWxlFoB2xmhOR4yi218z1ssszmZA5vIhWGYIWl6nprG",
+        "full_name": "buivananh00",
+        "user_id": "676701",
+        "balance": 0,
+        "role": "user",
+        "token": "e91b9e76005ef46df236c9118408a2f2",
+        "vip_expire": 1781439148
+    },
+    {
+        "username": "Ntruong03",
+        "password": "$2y$10$S.gWm6.l1gb8jMBowIoF5O.2v9veM7ktRiW4JBrU8.FlpTVIhcd4y",
+        "full_name": "Ntruong03",
+        "user_id": "136570",
+        "balance": 0,
+        "role": "user",
+        "token": "309c7696e88045c14836b557851bb9d6",
+        "vip_expire": 1781439189
+    },
+    {
+        "username": "ngchien212",
+        "password": "$2y$10$jzbw7dg6qDPnaMsUrrMLtOhUa0cRJpmANFh0xjJveo0mkZ\/mtzZh6",
+        "full_name": "ngchien212",
+        "user_id": "119938",
+        "balance": 0,
+        "role": "user",
+        "token": "2e6a5dd261fb6a2e038449740bf4e6e7",
+        "vip_expire": 1781439544
+    },
+    {
+        "username": "Nhan3108",
+        "password": "$2y$10$KJBv1uioOIssZtOkAKGuVuuLz4CzEx40srrYhYhBHE6rDuyHkhr3y",
+        "full_name": "Nhan3108",
+        "user_id": "931860",
+        "balance": 0,
+        "role": "user",
+        "token": "2758710f4c7f2f6bc8d7cda3938c37b1",
+        "vip_expire": 1781439597
+    },
+    {
+        "username": "Vipvip",
+        "password": "$2y$10$9syKyTic00pzoNam9bu0U.j28e..Z7qTgTmUbm4Q4gAhrwcztVRh6",
+        "full_name": "Vipvip",
+        "user_id": "266533",
+        "balance": 0,
+        "role": "user",
+        "token": ""
+    },
+    {
+        "username": "admin",
+        "password": "$2y$10$nhD8n6uSVpTQdnrMW8rtrOa013yGXFLTyOAcrcEbbqe\/Y1hSV0W1C",
+        "full_name": "admin",
+        "user_id": "509864",
+        "balance": 0,
+        "role": "user",
+        "token": "67e5351de6b65f669f2ffeaa91a376a9",
+        "vip_expire": 1781440082
+    },
+    {
+        "username": "onana114",
+        "password": "$2y$10$5NaFJr73TMRLW5i64jh7buv5kJ2mhanP1UFLJLpvHnv.A9engRnR.",
+        "full_name": "onana114",
+        "user_id": "270494",
+        "balance": 0,
+        "role": "user",
+        "token": "d4facdbba0042b5d2078b40ff631b311",
+        "vip_expire": 1781440136
+    },
+    {
+        "username": "thientai",
+        "password": "$2y$10$YiXmip0lGwB9qXiY2RsHzOoyiegmhDyg7V1Fu74OPwygJhFf6ABfi",
+        "full_name": "thientai",
+        "user_id": "258909",
+        "balance": 0,
+        "role": "user",
+        "token": "176b20ca77fb884e78357b65707ee440",
+        "vip_expire": 1781440320
+    },
+    {
+        "username": "phandinhkiet",
+        "password": "$2y$10$DNf3nXEy\/nKiw2GkWjF2O.CWZzePf6x4D5sCH3M0SO5xjvuoUC0xS",
+        "full_name": "phandinhkiet",
+        "user_id": "190645",
+        "balance": 0,
+        "role": "user",
+        "token": "3c4deded574987e287a5762be8265003",
+        "vip_expire": 1781440808
+    },
+    {
+        "username": "bin4005",
+        "password": "$2y$10$NpLZar.FncaytCFXeltCju.NkTP3aBZUb951xcmqZjDMiPyrau75y",
+        "full_name": "bin4005",
+        "user_id": "558377",
+        "balance": 0,
+        "role": "user",
+        "token": "58c327c4a51a1a0ae02c5177619352d8",
+        "vip_expire": 1781441990
+    },
+    {
+        "username": "nguyefong01@gmail.com",
+        "password": "$2y$10$d8N6dpTW08BxM4T\/NXiNjOXjd7.g5PDUjt1Ba.GnkP0NY1dq.mQb.",
+        "full_name": "nguyefong01@gmail.com",
+        "user_id": "585088",
+        "balance": 0,
+        "role": "user",
+        "token": "6f7b720304c8b0c5beb1db2a5acdb835",
+        "vip_expire": 1781442132
+    },
+    {
+        "username": "Tkhoi1250k",
+        "password": "$2y$10$\/ebHcA1dJE\/cz7yMEekj\/.B6ZHIq2j7SBqfWIV7gp4p3b1ctcV4gy",
+        "full_name": "Tkhoi1250k",
+        "user_id": "921353",
+        "balance": 0,
+        "role": "user",
+        "token": "f3684a06028ba3022b39a5e73b5a3e4e",
+        "vip_expire": 1781442887
+    },
+    {
+        "username": "thetai234",
+        "password": "$2y$10$anJVjnMzN5mLY7o\/A6LMYuxgD1Ab\/CdmQrrRX2cZL2QXmLsOm3166",
+        "full_name": "thetai234",
+        "user_id": "685792",
+        "balance": 0,
+        "role": "user",
+        "token": "74151dadb2171262a6e4f265a5ee6617"
+    },
+    {
+        "username": "giathiennguyen6",
+        "password": "$2y$10$u5uQ8mzP7UccFEsvhicrcOFJulpss36FRL9cS6fTZf7chqXNXWOye",
+        "full_name": "giathiennguyen6",
+        "user_id": "652765",
+        "balance": 0,
+        "role": "user",
+        "token": "d0cbcab8b25576d47b85f7ba83cf9da6",
+        "vip_expire": 1781443536
+    },
+    {
+        "username": "dungnecon",
+        "password": "$2y$10$No69C5Xh05N27v3tM0Mnl.vTTfGZW1IvQFrwGsOB1K9cWv1tnqYbm",
+        "full_name": "dungnecon",
+        "user_id": "160673",
+        "balance": 0,
+        "role": "user",
+        "token": "e6f687d713b4d46a6cbfbcf317c80085",
+        "vip_expire": 1781445679
+    },
+    {
+        "username": "trongbu1b",
+        "password": "$2y$10$ZDmXITfutl5Oq.YIgQL2m.tMqJUFpNZmZQFmZ0LbgnRv\/F799Njf2",
+        "full_name": "trongbu1b",
+        "user_id": "602693",
+        "balance": 0,
+        "role": "user",
+        "token": "10a957c12e9501527f53333fa5ff3cf1",
+        "vip_expire": 1781450336
+    },
+    {
+        "username": "AnhPhong2906",
+        "password": "$2y$10$oAEn9G\/D5F\/l63sndzg4aeoxx2KMxk.f3YKxBYcum9WTeg\/e9zwOe",
+        "full_name": "AnhPhong2906",
+        "user_id": "620678",
+        "balance": 0,
+        "role": "user",
+        "token": "9eaa7d97346f7bd8a63e1225093ca05e",
+        "vip_expire": 1781450564
+    },
+    {
+        "username": "danglatao111",
+        "password": "$2y$10$6.3.Ng2vJlWIUOyW3kXpFeIQ\/JhYJdedLa7ppUtkxY6n4pd6UDUNm",
+        "full_name": "danglatao111",
+        "user_id": "564048",
+        "balance": 0,
+        "role": "user",
+        "token": "7e2051b7c4fb98cff7e40ca78e2511c7",
+        "vip_expire": 1781451730
+    },
+    {
+        "username": "jsjsjsj8282",
+        "password": "$2y$10$ggHC4vI5AxoIX9XXrmaKlOZXiuaZEqSUEOLvalTJNMReSjkXBh51W",
+        "full_name": "jsjsjsj8282",
+        "user_id": "668493",
+        "balance": 0,
+        "role": "user",
+        "token": ""
+    },
+    {
+        "username": "qpqp0000",
+        "password": "$2y$10$kc9tAX07R6aT37d4BwZdpudKpyzhJvskykm\/TfrYwLSbNpQh1f5\/6",
+        "full_name": "qpqp0000",
+        "user_id": "684965",
+        "balance": 0,
+        "role": "user",
+        "token": "6e5296b8a9c6099f53fca5197931fdcf",
+        "vip_expire": 1781455813
+    },
+    {
+        "username": "duongzz123",
+        "password": "$2y$10$xN3bpg3SgcSLjf6uMpLF4u6Y2iN0krxwhkP3SZP5SHqg87B27nvVy",
+        "full_name": "duongzz123",
+        "user_id": "142411",
+        "balance": 0,
+        "role": "user",
+        "token": "4caaf3e94de327796820a64b2d8772e7",
+        "vip_expire": 1781459115
+    },
+    {
+        "username": "hoangbalang",
+        "password": "$2y$10$aixIIBxTEHCDzk7z\/uSXe.nPgLPfp2KVaqxaociN\/DSaLDF9CebiC",
+        "full_name": "hoangbalang",
+        "user_id": "279396",
+        "balance": 0,
+        "role": "user",
+        "token": "4753105a8b97cb337a6d8291368da1ad",
+        "vip_expire": 1781488497
+    },
+    {
+        "username": "Minh0902",
+        "password": "$2y$10$og1NaiAQdr\/z.wJl30jupOKxT72hDPMF\/EBkhdSuYrElxPmeaArrS",
+        "full_name": "Minh0902",
+        "user_id": "826412",
+        "balance": 0,
+        "role": "user",
+        "token": "09cfea8aebf845a172abe149eebe559e",
+        "vip_expire": 1781492925
+    },
+    {
+        "username": "Phuch888",
+        "password": "$2y$10$tdbgXleicUECmUqUk9GziOlKLTZnn7zT52wpUFKxysLuiAF3WFN82",
+        "full_name": "Phuch888",
+        "user_id": "740768",
+        "balance": 0,
+        "role": "user",
+        "token": "d35d251b3bf4b87eba0831ed7299ade0",
+        "vip_expire": 1781499401
+    },
+    {
+        "username": "thientan567",
+        "password": "$2y$10$XrP8YNsNRVuHlzVRy6GwnehoIrY5kL41ZYpCuVyR31B2wvF2e.fmK",
+        "full_name": "thientan567",
+        "user_id": "344540",
+        "balance": 0,
+        "role": "user",
+        "token": "ea78955e4062a43d00bd07bd766e8d35",
+        "vip_expire": 1781513698
+    },
+    {
+        "username": "truongcaodinh",
+        "password": "$2y$10$LQ6.wU21I6Ut6EIFoby\/qO.y\/Pus09doPKTnSJstjpuWCuubCVm8y",
+        "full_name": "truongcaodinh",
+        "user_id": "567288",
+        "balance": 0,
+        "role": "user",
+        "token": "ac1ba1203ab2111bd2af67d50261568b"
+    }
+]

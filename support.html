@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Trung Tâm Hỗ Trợ - TOOLTX2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>tailwind.config = { theme: { extend: { colors: { primary: '#3b82f6' } } } }</script>
+    <style>
+        body { -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+        ::-webkit-scrollbar { display: none; }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
+        .float-anim { animation: float 3s ease-in-out infinite; }
+        .float-anim-delay { animation: float 3s ease-in-out 0.5s infinite; }
+        @keyframes pulse-ring { 0% { transform: scale(0.8); opacity: 0.8; } 100% { transform: scale(1.4); opacity: 0; } }
+        .pulse-ring { animation: pulse-ring 1.5s ease-out infinite; }
+        .card-hover { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -12px rgba(0,0,0,0.1); }
+        .card-hover:active { transform: scale(0.98); }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col relative overflow-x-hidden">
+
+    <header class="bg-white shadow-sm sticky top-0 z-40 border-b border-slate-100">
+        <div class="flex items-center justify-between h-14 px-4 max-w-3xl mx-auto">
+            <a href="/account" class="w-9 h-9 flex items-center justify-center bg-slate-50 rounded-full text-slate-500 hover:text-primary active:scale-95 transition-all">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+            </a>
+            <h1 class="text-base font-bold text-slate-800">Trung tâm hỗ trợ</h1>
+            <div class="w-9"></div>
+        </div>
+    </header>
+
+    <main class="flex-grow p-4 pb-10 max-w-3xl mx-auto w-full">
+
+        <!-- Hero Section -->
+        <div class="relative bg-gradient-to-br from-primary via-blue-600 to-indigo-700 rounded-3xl p-6 pt-8 pb-10 text-white mb-6 overflow-hidden shadow-xl shadow-blue-500/20">
+            <div class="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+            <div class="absolute bottom-0 left-0 w-32 h-32 bg-blue-400/20 rounded-full -ml-10 -mb-10 blur-xl"></div>
+            <div class="absolute top-1/2 right-8 w-20 h-20 bg-white/5 rounded-full blur-lg"></div>
+            
+            <div class="relative z-10 text-center">
+                <div class="w-16 h-16 bg-white/15 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-4 float-anim">
+                    <i data-lucide="headphones" class="w-8 h-8 text-white"></i>
+                </div>
+                <h2 class="text-2xl font-black mb-2 tracking-tight">Bạn cần hỗ trợ?</h2>
+                <p class="text-blue-100 text-sm font-medium max-w-xs mx-auto leading-relaxed">
+                    Đội ngũ hỗ trợ TOOLTX2026 luôn sẵn sàng giúp đỡ bạn 24/7
+                </p>
+            </div>
+        </div>
+
+        <!-- Contact Methods -->
+        <h3 class="font-semibold text-slate-700 mb-3 text-sm uppercase tracking-wide px-1">Liên hệ trực tiếp</h3>
+        
+        <div class="space-y-3 mb-8">
+            <!-- Telegram -->
+            <a href="https://t.me/trumhknam" target="_blank" class="card-hover block bg-white rounded-3xl p-5 shadow-sm border border-slate-100 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 w-28 h-28 bg-sky-50 rounded-full -mr-10 -mt-10 opacity-60 group-hover:opacity-100 transition-opacity"></div>
+                <div class="relative z-10 flex items-center gap-4">
+                    <div class="relative">
+                        <div class="w-14 h-14 bg-gradient-to-br from-sky-400 to-sky-600 rounded-2xl flex items-center justify-center shadow-lg shadow-sky-500/30 float-anim">
+                            <svg class="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                            </svg>
+                        </div>
+                        <div class="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-green-500 border-2 border-white rounded-full shadow-sm">
+                            <div class="w-full h-full rounded-full bg-green-400 pulse-ring"></div>
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-slate-800 text-base mb-0.5">Telegram</h4>
+                        <p class="text-sm text-slate-500 font-medium">@trumhknam</p>
+                        <p class="text-xs text-sky-500 font-semibold mt-1 flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 bg-green-500 rounded-full inline-block"></span> Trực tuyến — Phản hồi nhanh
+                        </p>
+                    </div>
+                    <div class="w-10 h-10 bg-sky-50 rounded-full flex items-center justify-center text-sky-500 group-hover:bg-sky-100 transition-colors">
+                        <i data-lucide="external-link" class="w-4.5 h-4.5"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Zalo -->
+            <a href="https://zalo.me/0984705329" target="_blank" class="card-hover block bg-white rounded-3xl p-5 shadow-sm border border-slate-100 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 w-28 h-28 bg-blue-50 rounded-full -mr-10 -mt-10 opacity-60 group-hover:opacity-100 transition-opacity"></div>
+                <div class="relative z-10 flex items-center gap-4">
+                    <div class="relative">
+                        <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30 float-anim-delay">
+                            <svg class="w-7 h-7" viewBox="0 0 460.1 436.6" fill="none">
+                                <path d="M82.6 380.9c-1.8-.8-3.1-1.7-1-3.5 1.3-1 2.7-1.9 4.1-2.8 13.1-8.5 25.4-17.8 33.5-31.5 6.8-11.4 5.7-18.1-2.8-26.5C69 269.2 48.2 212.5 58.6 145.5 64.5 107.7 81.8 75 107 46.6c15.2-17.2 33.3-31.1 53.1-42.7 1.2-.7 2.9-.9 3.1-2.7-.4-1-1.1-.7-1.7-.7-33.7 0-67.4-.7-101 .2C28.3 1.7.5 26.6.6 62.3c.2 104.3 0 208.6 0 313 0 32.4 24.7 59.5 57 60.7 27.3 1.1 54.6.2 82 .1 2 .1 4 .2 6 .2H290c36 0 72 .2 108 0 33.4 0 60.5-27 60.5-60.3v-.6-58.5c0-1.4.5-2.9-.4-4.4-1.8.1-2.5 1.6-3.5 2.6-19.4 19.5-42.3 35.2-67.4 46.3-61.5 27.1-124.1 29-187.6 7.2-5.5-2-11.5-2.2-17.2-.8-8.4 2.1-16.7 4.6-25 7.1-24.4 7.6-49.3 11-74.8 6z" fill="white"/>
+                                <path d="M155.1 212.4c15.1 0 29.3-.1 43.4 0 7.9.1 12.2 3.4 13 9.7.9 7.9-3.7 13.2-12.3 13.3-16.2.2-32.3.1-48.5.1-4.7 0-9.3.2-14-.1-5.8-.3-11.5-1.5-14.3-7.5s-.8-11.4 3-16.3c15.4-19.6 30.9-39.3 46.4-58.9.9-1.2 1.8-2.4 2.7-3.5-1-1.7-2.4-.9-3.6-1-10.8-.1-21.7 0-32.5-.1-2.5 0-5-.3-7.4-.8-5.7-1.3-9.2-7-7.9-12.6.9-3.8 3.9-6.9 7.7-7.8 2.4-.6 4.9-.9 7.4-.9 17.8-.1 35.7-.1 53.5 0 3.2-.1 6.3.3 9.4 1.1 6.8 2.3 9.7 8.6 7 15.2-2.4 5.7-6.2 10.6-10 15.5-13.1 16.7-26.2 33.3-39.3 49.8-1.1 1.3-2.1 2.6-3.7 4.8z" fill="white"/>
+                                <path d="M271.1 159.8c2.4-3.1 4.9-6 9-6.8 7.9-1.6 15.3 3.5 15.4 11.5.3 20 .2 40 0 60 0 5.2-3.4 9.8-8.3 11.3-5 1.9-10.7.4-14-3.9-1.7-2.1-2.4-2.5-4.8-.6-9.1 7.4-19.4 8.7-30.5 5.1-17.8-5.8-25.1-19.7-27.1-36.6-2.1-18.3 4-33.9 20.4-43.5 13.6-8.1 27.4-7.4 39.9 3.5zm-35.4 36.5c.2 4.4 1.6 8.6 4.2 12.1 5.4 7.2 15.7 8.7 23 3.3 1.2-.9 2.3-2 3.3-3.3 5.6-7.6 5.6-20.1 0-27.7-2.8-3.9-7.2-6.2-11.9-6.3-11-.7-18.7 7.8-18.6 21.9z" fill="white"/>
+                                <path d="M340.4 196.9c-.8-25.7 16.1-44.9 40.1-45.6 25.5-.8 44.1 16.3 44.9 41.3.8 25.3-14.7 43.2-38.6 45.6-26.1 2.6-46.8-16.3-46.4-41.3zm25.1-2.4c-.2 5 1.3 9.9 4.3 14 5.5 7.2 15.8 8.6 23 3 1.1-.8 2-1.8 2.9-2.8 5.8-7.6 5.8-20.4.1-28-2.8-3.8-7.2-6.2-11.9-6.3-10.8-.6-18.4 7.6-18.4 20.1z" fill="white"/>
+                                <path d="M331.6 177c0 15.5.1 31 0 46.5.1 7.1-5.5 13-12.6 13.2-1.2 0-2.5-.1-3.7-.4-5-1.3-8.8-6.6-8.8-12.9v-79.5c0-4.7-.1-9.3 0-14 .1-7.7 5-12.7 12.4-12.7 7.6-.1 12.7 4.9 12.7 12.9.1 15.6 0 31.3 0 46.9z" fill="white"/>
+                            </svg>
+                        </div>
+                        <div class="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-green-500 border-2 border-white rounded-full shadow-sm">
+                            <div class="w-full h-full rounded-full bg-green-400 pulse-ring"></div>
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-slate-800 text-base mb-0.5">Zalo</h4>
+                        <p class="text-sm text-slate-500 font-medium">0984 705 329</p>
+                        <p class="text-xs text-blue-500 font-semibold mt-1 flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 bg-green-500 rounded-full inline-block"></span> Trực tuyến — Hỗ trợ tận tình
+                        </p>
+                    </div>
+                    <div class="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center text-blue-500 group-hover:bg-blue-100 transition-colors">
+                        <i data-lucide="external-link" class="w-4.5 h-4.5"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- FAQ Section -->
+        <h3 class="font-semibold text-slate-700 mb-3 text-sm uppercase tracking-wide px-1">Câu hỏi thường gặp</h3>
+        
+        <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden mb-6">
+            <div class="faq-item border-b border-slate-50">
+                <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-4 hover:bg-slate-50 transition-colors text-left">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-primary flex-shrink-0">
+                            <i data-lucide="help-circle" class="w-4 h-4"></i>
+                        </div>
+                        <span class="font-semibold text-slate-700 text-sm">Làm sao để nạp tiền vào tài khoản?</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 faq-icon transition-transform duration-300 flex-shrink-0"></i>
+                </button>
+                <div class="faq-answer hidden px-4 pb-4 pl-[60px]">
+                    <p class="text-sm text-slate-500 leading-relaxed">Vào mục <strong class="text-slate-700">Nạp tiền</strong>, chọn số tiền muốn nạp, sau đó chuyển khoản theo thông tin hiển thị. Hệ thống sẽ tự động cộng tiền sau khi Admin xác nhận.</p>
+                </div>
+            </div>
+            <div class="faq-item border-b border-slate-50">
+                <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-4 hover:bg-slate-50 transition-colors text-left">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-primary flex-shrink-0">
+                            <i data-lucide="help-circle" class="w-4 h-4"></i>
+                        </div>
+                        <span class="font-semibold text-slate-700 text-sm">Gói VIP có lợi ích gì?</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 faq-icon transition-transform duration-300 flex-shrink-0"></i>
+                </button>
+                <div class="faq-answer hidden px-4 pb-4 pl-[60px]">
+                    <p class="text-sm text-slate-500 leading-relaxed">Thành viên VIP được sử dụng <strong class="text-slate-700">toàn bộ dịch vụ premium</strong> trong thời hạn gói, bao gồm tốc độ ưu tiên và hỗ trợ riêng.</p>
+                </div>
+            </div>
+            <div class="faq-item border-b border-slate-50">
+                <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-4 hover:bg-slate-50 transition-colors text-left">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-primary flex-shrink-0">
+                            <i data-lucide="help-circle" class="w-4 h-4"></i>
+                        </div>
+                        <span class="font-semibold text-slate-700 text-sm">Tôi quên mật khẩu thì phải làm sao?</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 faq-icon transition-transform duration-300 flex-shrink-0"></i>
+                </button>
+                <div class="faq-answer hidden px-4 pb-4 pl-[60px]">
+                    <p class="text-sm text-slate-500 leading-relaxed">Liên hệ trực tiếp <strong class="text-slate-700">Admin qua Telegram hoặc Zalo</strong> ở phía trên, cung cấp username để được hỗ trợ đặt lại mật khẩu.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-4 hover:bg-slate-50 transition-colors text-left">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-primary flex-shrink-0">
+                            <i data-lucide="help-circle" class="w-4 h-4"></i>
+                        </div>
+                        <span class="font-semibold text-slate-700 text-sm">Nạp tiền bao lâu thì được duyệt?</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 faq-icon transition-transform duration-300 flex-shrink-0"></i>
+                </button>
+                <div class="faq-answer hidden px-4 pb-4 pl-[60px]">
+                    <p class="text-sm text-slate-500 leading-relaxed">Thông thường yêu cầu nạp tiền sẽ được duyệt trong vòng <strong class="text-slate-700">5 - 30 phút</strong>. Nếu quá 1 giờ chưa được duyệt, hãy liên hệ hỗ trợ.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Working Hours -->
+        <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 mb-6">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-500">
+                    <i data-lucide="clock" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-800 text-sm">Thời gian hoạt động</h4>
+                    <p class="text-xs text-slate-400">Giờ Việt Nam (GMT+7)</p>
+                </div>
+            </div>
+            <div class="space-y-2.5">
+                <div class="flex items-center justify-between bg-slate-50 rounded-xl px-4 py-3">
+                    <span class="text-sm font-medium text-slate-600">Thứ 2 — Thứ 6</span>
+                    <span class="text-sm font-bold text-emerald-600 flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> 8:00 — 23:00
+                    </span>
+                </div>
+                <div class="flex items-center justify-between bg-slate-50 rounded-xl px-4 py-3">
+                    <span class="text-sm font-medium text-slate-600">Thứ 7 — Chủ nhật</span>
+                    <span class="text-sm font-bold text-emerald-600 flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> 9:00 — 22:00
+                    </span>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        function toggleFaq(btn) {
+            const item = btn.closest('.faq-item');
+            const answer = item.querySelector('.faq-answer');
+            const icon = btn.querySelector('.faq-icon');
+
+            // Close other open FAQs
+            document.querySelectorAll('.faq-item').forEach(other => {
+                if (other !== item) {
+                    other.querySelector('.faq-answer').classList.add('hidden');
+                    other.querySelector('.faq-icon').style.transform = 'rotate(0deg)';
+                }
+            });
+
+            // Toggle current
+            const isHidden = answer.classList.contains('hidden');
+            answer.classList.toggle('hidden');
+            icon.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+    </script>
+</body>
+</html>

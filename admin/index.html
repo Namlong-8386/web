@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Quản Lý Người Dùng - TOOLTX2026 ADMIN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        success: '#10b981',
+                        danger: '#ef4444',
+                        warning: '#f59e0b'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-slate-900 text-white shadow-md sticky top-0 z-40">
+        <div class="max-w-6xl mx-auto flex items-center justify-between h-16 px-4">
+            <div class="flex items-center gap-3">
+                <a href="/" class="w-8 h-8 flex items-center justify-center bg-white/10 rounded-lg hover:bg-white/20 active:scale-95 transition-all text-white">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </a>
+                <h1 class="text-xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-200">
+                    TOOLTX2026 ADMIN
+                </h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="text-right hidden sm:block">
+                    <p class="text-xs text-slate-400">Đang đăng nhập</p>
+                    <p class="text-sm font-bold" id="admin-name">Admin</p>
+                </div>
+                <button onclick="logoutAdmin()" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 font-semibold py-2 px-3.5 rounded-xl text-xs flex items-center gap-1.5 active:scale-95 transition-all">
+                    <i data-lucide="log-out" class="w-4 h-4"></i> Đăng xuất
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Nội dung -->
+    <main class="flex-grow max-w-6xl w-full mx-auto p-4 pb-20">
+        <!-- Navigation Tabs -->
+        <div class="flex border-b border-slate-200 mb-6 gap-1 overflow-x-auto">
+            <a href="/admin" class="whitespace-nowrap px-4 py-3 font-bold text-sm transition-all border-b-2 border-primary text-primary flex items-center gap-2">
+                <i data-lucide="users" class="w-4 h-4"></i> Người dùng
+            </a>
+            <a href="/admin/transactions" class="whitespace-nowrap px-4 py-3 font-semibold text-sm text-slate-500 transition-all border-b-2 border-transparent hover:text-slate-700 flex items-center gap-2">
+                <i data-lucide="wallet" class="w-4 h-4"></i> Nạp tiền
+            </a>
+            <a href="/admin/packages" class="whitespace-nowrap px-4 py-3 font-semibold text-sm text-slate-500 transition-all border-b-2 border-transparent hover:text-slate-700 flex items-center gap-2">
+                <i data-lucide="package" class="w-4 h-4"></i> Trạng thái VIP
+            </a>
+            <a href="/admin/package-history" class="whitespace-nowrap px-4 py-3 font-semibold text-sm text-slate-500 transition-all border-b-2 border-transparent hover:text-slate-700 flex items-center gap-2">
+                <i data-lucide="history" class="w-4 h-4"></i> Lịch sử Mua gói
+            </a>
+            <a href="/admin/giftcodes" class="whitespace-nowrap px-4 py-3 font-semibold text-sm text-slate-500 transition-all border-b-2 border-transparent hover:text-slate-700 flex items-center gap-2">
+                <i data-lucide="ticket" class="w-4 h-4"></i> Giftcode
+            </a>
+        </div>
+
+        <!-- Tab 1: Users -->
+        <div id="tab-users" class="space-y-4">
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 overflow-x-auto">
+                <div class="flex justify-between items-center mb-4 min-w-[600px]">
+                    <h3 class="font-bold text-lg text-slate-800">Danh sách thành viên</h3>
+                    <div class="relative w-64">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i data-lucide="search" class="w-4 h-4 text-slate-400"></i>
+                        </span>
+                        <input type="text" id="search-users-input" oninput="filterUsersTable()" class="block w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-primary focus:bg-white" placeholder="Tìm tên, username, ID...">
+                    </div>
+                </div>
+                <table class="w-full text-left border-collapse min-w-[700px]">
+                    <thead>
+                        <tr class="border-b border-slate-100 text-slate-400 text-xs font-bold uppercase tracking-wider">
+                            <th class="pb-3 pt-2">ID / Username</th>
+                            <th class="pb-3 pt-2">Vai trò</th>
+                            <th class="pb-3 pt-2 text-right">Số dư khả dụng</th>
+                            <th class="pb-3 pt-2 text-center">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table-body" class="divide-y divide-slate-50 text-sm">
+                        <tr>
+                            <td colspan="5" class="py-6 text-center text-slate-400">Đang tải dữ liệu...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Custom Confirm Modal -->
+    <div id="confirm-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeConfirmModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+            <div class="w-full max-w-sm bg-white rounded-3xl p-6 pointer-events-auto shadow-2xl relative">
+                <div class="text-center mb-6">
+                    <div class="w-12 h-12 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="help-circle" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-800 mb-2">Xác nhận thao tác</h3>
+                    <p id="confirm-modal-message" class="text-sm text-slate-500 px-2">Bạn chắc chắn muốn thực hiện thao tác này?</p>
+                </div>
+                <div class="flex gap-2">
+                    <button id="confirm-modal-yes-btn" class="flex-1 py-3 bg-primary hover:bg-blue-600 active:scale-95 text-white font-bold rounded-2xl shadow-lg transition-all">
+                        Đồng ý
+                    </button>
+                    <button onclick="closeConfirmModal()" class="py-3 px-5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold rounded-2xl transition-colors">
+                        Hủy
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Alert Modal -->
+    <div id="alert-modal" class="fixed inset-0 z-[60] hidden">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeAlertModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+            <div class="w-full max-w-sm bg-white rounded-3xl p-6 pointer-events-auto shadow-2xl relative">
+                <div class="text-center mb-6">
+                    <div id="alert-modal-icon" class="w-12 h-12 rounded-full bg-blue-50 text-primary flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="info" class="w-6 h-6"></i>
+                    </div>
+                    <h3 id="alert-modal-title" class="text-lg font-bold text-slate-800 mb-2">Thông báo</h3>
+                    <p id="alert-modal-message" class="text-sm text-slate-500 px-2">...</p>
+                </div>
+                <button onclick="closeAlertModal()" class="w-full py-3 bg-primary hover:bg-blue-600 active:scale-95 text-white font-bold rounded-2xl shadow-lg transition-all">
+                    Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal sửa số dư -->
+    <div id="balance-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeBalanceModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+            <div class="w-full max-w-sm bg-white rounded-3xl p-6 pointer-events-auto shadow-2xl relative">
+                <h3 class="text-lg font-bold text-slate-800 mb-2">Thay đổi số dư</h3>
+                <p class="text-xs text-slate-500 mb-4">Điều chỉnh trực tiếp số dư của tài khoản: <span id="balance-target-user" class="font-bold text-slate-800">...</span></p>
+                <div class="space-y-4">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><span class="text-slate-400 font-bold">đ</span></div>
+                        <input type="text" id="balance-input" class="block w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-lg font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="0">
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="saveBalance()" class="flex-1 py-3 bg-primary hover:bg-blue-600 active:scale-95 text-white font-bold rounded-2xl shadow-lg transition-all">
+                            Lưu thay đổi
+                        </button>
+                        <button onclick="closeBalanceModal()" class="py-3 px-5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold rounded-2xl transition-colors">
+                            Hủy
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Xem lịch sử chi tiết người dùng -->
+    <div id="user-details-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeDetailsModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+            <div class="w-full max-w-lg bg-white rounded-3xl p-6 pointer-events-auto shadow-2xl relative flex flex-col max-h-[80vh]">
+                <h3 class="text-lg font-bold text-slate-800 mb-1">Lịch sử chi tiết người dùng</h3>
+                <p class="text-xs text-slate-500 mb-4">Tài khoản: <span id="detail-username" class="font-bold text-slate-800">...</span></p>
+                
+                <div class="flex-grow overflow-y-auto pr-1 space-y-3" id="detail-tx-list">
+                    <!-- Tải động qua JS -->
+                </div>
+
+                <div class="mt-6">
+                    <button onclick="closeDetailsModal()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-2xl transition-colors">
+                        Đóng
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        let confirmPromiseResolver = null;
+
+        function showConfirmModal(message) {
+            document.getElementById('confirm-modal-message').innerText = message;
+            document.getElementById('confirm-modal').classList.remove('hidden');
+            lucide.createIcons();
+            return new Promise((resolve) => {
+                confirmPromiseResolver = resolve;
+            });
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirm-modal').classList.add('hidden');
+            if (confirmPromiseResolver) {
+                confirmPromiseResolver(false);
+                confirmPromiseResolver = null;
+            }
+        }
+
+        document.getElementById('confirm-modal-yes-btn').addEventListener('click', () => {
+            document.getElementById('confirm-modal').classList.add('hidden');
+            if (confirmPromiseResolver) {
+                confirmPromiseResolver(true);
+                confirmPromiseResolver = null;
+            }
+        });
+
+        let alertPromiseResolver = null;
+        function alert(message, type = 'info') {
+            document.getElementById('alert-modal-message').innerText = message;
+            
+            const iconDiv = document.getElementById('alert-modal-icon');
+            if (type === 'success' || message.includes('thành công') || message.includes('Thành công')) {
+                iconDiv.className = "w-12 h-12 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center mx-auto mb-4";
+                iconDiv.innerHTML = '<i data-lucide="check-circle" class="w-6 h-6"></i>';
+                document.getElementById('alert-modal-title').innerText = 'Thành công';
+            } else if (type === 'error' || message.includes('Lỗi') || message.includes('không') || message.includes('thất bại')) {
+                iconDiv.className = "w-12 h-12 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center mx-auto mb-4";
+                iconDiv.innerHTML = '<i data-lucide="x-circle" class="w-6 h-6"></i>';
+                document.getElementById('alert-modal-title').innerText = 'Lỗi';
+            } else {
+                iconDiv.className = "w-12 h-12 rounded-full bg-blue-50 text-primary flex items-center justify-center mx-auto mb-4";
+                iconDiv.innerHTML = '<i data-lucide="info" class="w-6 h-6"></i>';
+                document.getElementById('alert-modal-title').innerText = 'Thông báo';
+            }
+            lucide.createIcons();
+            document.getElementById('alert-modal').classList.remove('hidden');
+            
+            return new Promise((resolve) => {
+                alertPromiseResolver = resolve;
+            });
+        }
+
+        function closeAlertModal() {
+            document.getElementById('alert-modal').classList.add('hidden');
+            if (alertPromiseResolver) {
+                alertPromiseResolver();
+                alertPromiseResolver = null;
+            }
+        }
+
+        const token = localStorage.getItem('token');
+        const adminRole = localStorage.getItem('role');
+
+        if (!token || adminRole !== 'admin') {
+            alert('Bạn không có quyền truy cập trang này.');
+            window.location.href = '/admin/login';
+        }
+
+        let allUsers = [];
+        let balanceTargetUser = '';
+
+        function logoutAdmin() {
+            localStorage.clear();
+            window.location.href = '/admin/login';
+        }
+
+        async function fetchUsers() {
+            try {
+                const response = await fetch('../api/admin_users.php', { headers: { 'Authorization': `Bearer ${token}` } });
+                const result = await response.json();
+                if (result.success) {
+                    allUsers = result.users;
+                    renderUsersTable(allUsers);
+                } else {
+                    alert(result.message);
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Không thể tải danh sách người dùng.');
+            }
+        }
+
+        function formatMoney(n) {
+            return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function renderUsersTable(users) {
+            const tbody = document.getElementById('users-table-body');
+            tbody.innerHTML = '';
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="py-6 text-center text-slate-400">Không tìm thấy người dùng.</td></tr>';
+                return;
+            }
+
+            users.forEach(u => {
+                const roleBadge = u.role === 'admin' 
+                    ? '<span class="px-2 py-1 bg-red-50 text-red-600 rounded-md font-bold text-[10px] uppercase">Admin</span>' 
+                    : '<span class="px-2 py-1 bg-slate-100 text-slate-600 rounded-md font-medium text-[10px]">User</span>';
+                
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50/50";
+                tr.innerHTML = `
+                    <td class="py-4">
+                        <p class="font-bold text-slate-800">${u.username}</p>
+                        <p class="text-xs text-slate-400">ID: ${u.user_id}</p>
+                    </td>
+                    <td class="py-4">${roleBadge}</td>
+                    <td class="py-4 text-right font-bold text-primary text-base">${formatMoney(u.balance)}đ</td>
+                    <td class="py-4 text-center">
+                        <div class="flex items-center justify-center gap-2">
+                            <button onclick="openBalanceModal('${u.username}', ${u.balance})" class="bg-blue-50 hover:bg-blue-100 text-primary py-1.5 px-3 rounded-lg text-xs font-bold flex items-center gap-1 active:scale-95 transition-all">
+                                <i data-lucide="edit" class="w-3.5 h-3.5"></i> Sửa số dư
+                            </button>
+                            <button onclick="toggleRole('${u.username}', '${u.role}')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 py-1.5 px-3 rounded-lg text-xs font-semibold flex items-center gap-1 active:scale-95 transition-all">
+                                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Đổi quyền
+                            </button>
+                            <button onclick="viewUserDetails('${u.username}')" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-600 py-1.5 px-3 rounded-lg text-xs font-bold flex items-center gap-1 active:scale-95 transition-all">
+                                <i data-lucide="history" class="w-3.5 h-3.5"></i> Lịch sử
+                            </button>
+                            <button onclick="deleteUser('${u.username}')" class="bg-red-50 hover:bg-red-100 text-danger py-1.5 px-3 rounded-lg text-xs font-bold flex items-center gap-1 active:scale-95 transition-all">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Xóa
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+            lucide.createIcons();
+        }
+
+        function filterUsersTable() {
+            const query = document.getElementById('search-users-input').value.toLowerCase().trim();
+            const filtered = allUsers.filter(u => 
+                u.username.toLowerCase().includes(query) || 
+                u.user_id.includes(query)
+            );
+            renderUsersTable(filtered);
+        }
+
+        function openBalanceModal(username, currentBalance) {
+            balanceTargetUser = username;
+            document.getElementById('balance-target-user').innerText = username;
+            document.getElementById('balance-input').value = formatMoney(currentBalance);
+            document.getElementById('balance-modal').classList.remove('hidden');
+        }
+
+        function closeBalanceModal() {
+            document.getElementById('balance-modal').classList.add('hidden');
+        }
+
+        async function saveBalance() {
+            const balanceInput = document.getElementById('balance-input');
+            const cleanVal = balanceInput.value.replace(/[^0-9]/g, '');
+            if (cleanVal === '') {
+                alert('Vui lòng nhập số tiền hợp lệ.');
+                return;
+            }
+
+            const amount = parseInt(cleanVal);
+            try {
+                const response = await fetch('../api/admin_users.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({
+                        action: 'update_balance',
+                        target_username: balanceTargetUser,
+                        balance: amount
+                    })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert(result.message);
+                    closeBalanceModal();
+                    fetchUsers();
+                } else {
+                    alert(result.message);
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Có lỗi xảy ra khi lưu số dư.');
+            }
+        }
+
+        document.getElementById('balance-input').addEventListener('input', function() {
+            let value = this.value.replace(/[^0-9]/g, '');
+            this.value = value !== '' ? formatMoney(value) : '';
+        });
+
+        async function toggleRole(username, currentRole) {
+            const nextRole = currentRole === 'admin' ? 'user' : 'admin';
+            const confirmChange = await showConfirmModal(`Bạn có muốn thay đổi quyền của tài khoản ${username} từ ${currentRole.toUpperCase()} thành ${nextRole.toUpperCase()} không?`);
+            if (!confirmChange) return;
+
+            try {
+                const response = await fetch('../api/admin_users.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({
+                        action: 'update_role',
+                        target_username: username,
+                        role: nextRole
+                    })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert(result.message);
+                    fetchUsers();
+                } else {
+                    alert(result.message);
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Lỗi khi thay đổi quyền người dùng.');
+            }
+        }
+
+        async function deleteUser(username) {
+            const confirmDelete = await showConfirmModal(`Bạn có chắc chắn muốn XÓA VĨNH VIỄN tài khoản ${username} không? Hành động này không thể hoàn tác.`);
+            if (!confirmDelete) return;
+
+            try {
+                const response = await fetch('../api/admin_users.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({
+                        action: 'delete_user',
+                        target_username: username
+                    })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert(result.message);
+                    fetchUsers();
+                } else {
+                    alert(result.message);
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Có lỗi xảy ra khi xóa tài khoản.');
+            }
+        }
+
+        async function viewUserDetails(username) {
+            document.getElementById('detail-username').innerText = username;
+
+            const listContainer = document.getElementById('detail-tx-list');
+            listContainer.innerHTML = '<p class="text-center text-slate-400 py-4 text-xs">Đang tải lịch sử...</p>';
+            document.getElementById('user-details-modal').classList.remove('hidden');
+
+            try {
+                const response = await fetch('../api/admin_transactions.php', { headers: { 'Authorization': `Bearer ${token}` } });
+                const result = await response.json();
+                if (result.success) {
+                    const userTxs = result.transactions.filter(tx => tx.username === username);
+                    listContainer.innerHTML = '';
+                    if (userTxs.length === 0) {
+                        listContainer.innerHTML = '<p class="text-center text-slate-400 py-6 text-xs">Người dùng này chưa có giao dịch nào.</p>';
+                        return;
+                    }
+
+                    userTxs.forEach(tx => {
+                        const isIncome = tx.type === 'in';
+                        const badgeColor = tx.status === 'Thành công' ? 'bg-success/10 text-success' 
+                                         : tx.status === 'Chờ duyệt' ? 'bg-warning/10 text-warning' : 'bg-danger/10 text-danger';
+
+                        const div = document.createElement('div');
+                        div.className = "p-3 border border-slate-100 rounded-xl flex items-center justify-between text-xs bg-slate-50/50";
+                        div.innerHTML = `
+                            <div>
+                                <p class="font-bold text-slate-800 text-[13px]">${tx.title}</p>
+                                <p class="text-slate-400 mt-0.5">${tx.time} | Mã: ${tx.id}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold text-[13px] ${isIncome ? 'text-success' : 'text-danger'}">${isIncome ? '+' : '-'}${formatMoney(tx.amount)}đ</p>
+                                <span class="px-1.5 py-0.5 rounded text-[9px] font-bold ${badgeColor} inline-block mt-1">${tx.status}</span>
+                            </div>
+                        `;
+                        listContainer.appendChild(div);
+                    });
+                } else {
+                    listContainer.innerHTML = `<p class="text-center text-red-500 py-4 text-xs">${result.message}</p>`;
+                }
+            } catch (e) {
+                console.error(e);
+                listContainer.innerHTML = '<p class="text-center text-red-500 py-4 text-xs">Lỗi tải dữ liệu.</p>';
+            }
+        }
+
+        function closeDetailsModal() {
+            document.getElementById('user-details-modal').classList.add('hidden');
+        }
+
+        fetchUsers();
+    </script>
+</body>
+</html>

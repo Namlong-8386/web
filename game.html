@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dịch vụ - TOOLTX2026</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+        body { margin: 0; padding: 0; overflow: hidden; background: #0f172a; font-family: ui-sans-serif, system-ui, sans-serif; }
+
+        /* ===== Header — luôn cố định, không bao giờ mất ===== */
+        #header-bar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 48px;
+            z-index: 100000;
+            background: linear-gradient(90deg, #0f172a 0%, #1e293b 100%);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            gap: 10px;
+        }
+
+        /* ===== iframe — cố định phía dưới header ===== */
+        #game-frame {
+            position: fixed;
+            top: 48px; left: 0; right: 0; bottom: 0;
+            width: 100%;
+            height: calc(100% - 48px);
+            border: none;
+            background: #0f172a;
+        }
+
+        /* ===== Floating Widget ===== */
+        #pred-widget {
+            position: fixed;
+            z-index: 100001;
+            bottom: 80px;
+            right: 12px;
+            width: 210px;
+            user-select: none;
+            touch-action: none;
+        }
+        #pred-widget.minimized #pred-body { display: none; }
+        #pred-widget.minimized { width: auto; }
+
+        #pred-handle {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 16px 16px 0 0;
+            padding: 8px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: grab;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        #pred-widget.minimized #pred-handle { border-radius: 14px; }
+        #pred-handle:active { cursor: grabbing; }
+
+        #pred-body {
+            background: rgba(15,23,42,0.97);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-top: none;
+            border-radius: 0 0 16px 16px;
+            padding: 10px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+        }
+
+        @keyframes pulse-glow {
+            0%,100% { box-shadow: 0 0 8px rgba(251,191,36,0.4); }
+            50%      { box-shadow: 0 0 20px rgba(251,191,36,0.8); }
+        }
+        .predict-badge {
+            animation: pulse-glow 2s infinite;
+            border-radius: 10px;
+            padding: 6px 14px;
+            font-size: 20px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            color: white;
+            text-align: center;
+            width: 100%;
+            display: block;
+        }
+        .tai-badge  { background: linear-gradient(135deg,#ef4444,#dc2626); }
+        .xiu-badge  { background: linear-gradient(135deg,#3b82f6,#2563eb); }
+
+        .dice-icon {
+            display: inline-block; width: 22px; height: 22px;
+            background: white; border-radius: 5px; color: #1e293b;
+            font-size: 11px; font-weight: 900; line-height: 22px; text-align: center;
+        }
+
+        .spinner {
+            border: 2px solid rgba(255,255,255,0.2);
+            border-top-color: #f59e0b;
+            border-radius: 50%; width: 16px; height: 16px;
+            animation: spin 0.7s linear infinite; display: inline-block;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .sep { height:1px; background:rgba(255,255,255,0.06); margin:8px 0; }
+
+        .btn-icon {
+            width:36px; height:36px; border-radius:8px;
+            background:rgba(255,255,255,0.07); border:none;
+            color:#94a3b8; cursor:pointer;
+            display:flex; align-items:center; justify-content:center; padding:0;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: rgba(255,255,255,0.1);
+            position: relative; z-index: 2;
+        }
+        .btn-icon:hover { background:rgba(255,255,255,0.12); }
+        .btn-icon:active { background:rgba(255,255,255,0.2); }
+
+        .label-xs {
+            color:#475569; font-size:9px; font-weight:700;
+            text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div id="header-bar">
+        <a href="/" style="width:32px;height:32px;border-radius:10px;background:rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:center;color:#94a3b8;flex-shrink:0;text-decoration:none;">
+            <i data-lucide="arrow-left" style="width:18px;height:18px;"></i>
+        </a>
+        <img id="game-logo" src="" alt="" style="width:28px;height:28px;object-fit:cover;border-radius:8px;flex-shrink:0;display:none;">
+        <div style="flex:1;min-width:0;">
+            <div id="game-title" style="color:white;font-weight:800;font-size:14px;line-height:1.2;">---</div>
+            <div id="game-subtitle" style="color:#64748b;font-size:10px;">Đang tải...</div>
+        </div>
+        <a id="open-btn" href="#" target="_blank" rel="noopener"
+           style="display:flex;align-items:center;gap:4px;background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3);color:#60a5fa;font-size:11px;font-weight:700;padding:5px 10px;border-radius:10px;white-space:nowrap;text-decoration:none;">
+            <i data-lucide="external-link" style="width:12px;height:12px;"></i> Mở game
+        </a>
+    </div>
+
+    <!-- Game iframe -->
+    <iframe id="game-frame" src="about:blank" allow="autoplay" title="Game"></iframe>
+
+    <!-- ===== Prediction Widget ===== -->
+    <div id="pred-widget">
+        <div id="pred-handle">
+            <div style="display:flex;align-items:center;gap:6px;">
+                <div style="width:8px;height:8px;border-radius:50%;background:#f59e0b;animation:pulse-glow 1.5s infinite;"></div>
+                <span style="color:#f59e0b;font-size:11px;font-weight:800;letter-spacing:0.5px;">DỰ ĐOÁN</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px;">
+                <button id="refresh-btn" onclick="loadHistory()" class="btn-icon" title="Làm mới">
+                    <i data-lucide="refresh-cw" style="width:12px;height:12px;"></i>
+                </button>
+                <button id="toggle-btn" onclick="toggleWidget()" class="btn-icon">
+                    <i id="toggle-icon" data-lucide="minus" style="width:12px;height:12px;"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="pred-body">
+            <!-- Loading -->
+            <div id="pred-loading" style="text-align:center;padding:16px 0;">
+                <div class="spinner" style="margin:0 auto 6px;"></div>
+                <div style="color:#64748b;font-size:10px;">Đang tải dữ liệu...</div>
+            </div>
+            <!-- Error -->
+            <div id="pred-error" style="display:none;text-align:center;padding:12px 0;">
+                <i data-lucide="wifi-off" style="width:24px;height:24px;color:#ef4444;margin:0 auto 6px;display:block;"></i>
+                <div id="error-msg" style="color:#ef4444;font-size:10px;line-height:1.4;">Lỗi kết nối</div>
+                <button onclick="loadHistory()" style="margin-top:8px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#f87171;font-size:10px;font-weight:700;padding:4px 10px;border-radius:8px;cursor:pointer;">Thử lại</button>
+            </div>
+            <!-- Content -->
+            <div id="pred-content" style="display:none;">
+                <!-- Dự đoán phiên tiếp -->
+                <div style="margin-bottom:8px;">
+                    <div class="label-xs">Phiên <span id="next-phien" style="color:#94a3b8;">---</span> — Dự đoán</div>
+                    <div id="pred-badge" class="predict-badge tai-badge">TÀI</div>
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;">
+                        <span style="color:#64748b;font-size:9px;" id="pred-reason">...</span>
+                        <span style="color:#f59e0b;font-size:10px;font-weight:800;" id="pred-conf">--%</span>
+                    </div>
+                </div>
+                <div class="sep"></div>
+                <!-- Phiên gần nhất -->
+                <div style="margin-bottom:8px;">
+                    <div class="label-xs">Phiên gần nhất</div>
+                    <div style="background:rgba(255,255,255,0.04);border-radius:10px;padding:8px;">
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+                            <span style="color:#94a3b8;font-size:9px;" id="last-phien">#---</span>
+                            <span id="last-badge" style="font-size:11px;font-weight:900;color:white;">---</span>
+                        </div>
+                        <div id="dice-row" style="display:flex;align-items:center;gap:4px;justify-content:center;">
+                            <span class="dice-icon">-</span>
+                            <span style="color:#475569;font-size:9px;">+</span>
+                            <span class="dice-icon">-</span>
+                            <span style="color:#475569;font-size:9px;">+</span>
+                            <span class="dice-icon">-</span>
+                            <span style="color:#475569;font-size:9px;">=</span>
+                            <span style="color:white;font-size:13px;font-weight:900;" id="last-total">-</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="sep"></div>
+                <!-- Lịch sử dots -->
+                <div>
+                    <div class="label-xs">Chuỗi 20 phiên</div>
+                    <div id="history-dots" style="display:flex;flex-wrap:wrap;gap:3px;"></div>
+                </div>
+                <div class="sep"></div>
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                    <span style="color:#334155;font-size:9px;">Cập nhật: <span id="updated-at" style="color:#64748b;">--:--</span></span>
+                    <div style="display:flex;align-items:center;gap:3px;">
+                        <div style="width:5px;height:5px;border-radius:50%;background:#10b981;"></div>
+                        <span style="color:#10b981;font-size:9px;font-weight:600;">Live</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // ============================================================
+        // CẤU HÌNH GAME — Thêm game mới vào đây (khớp với api/game.php)
+        // ============================================================
+        const GAME_CONFIG = {
+            sunwin: {
+                name:     'SUNWIN',
+                subtitle: 'Dịch Vụ Mục 1',
+                siteUrl:  'https://web.sunwin.tg/?affId=Sunwin',
+                logo:     'https://i.ibb.co/PvrXg25V/x.jpg',
+            },
+            // Thêm game mới:
+            // lc79: {
+            //     name:     'LC79',
+            //     subtitle: 'Dịch Vụ Mục 2',
+            //     siteUrl:  'https://lc79.example.com',
+            //     logo:     'https://i.ibb.co/Wd3CWsk/x.jpg',
+            // },
+        };
+        // ============================================================
+
+        // Đọc param ?game=xxx từ URL
+        const params   = new URLSearchParams(window.location.search);
+        const gameKey  = params.get('game') || '';
+        const gameCfg  = GAME_CONFIG[gameKey];
+        const token    = localStorage.getItem('token');
+
+        // Auth check
+        if (!token) {
+            window.location.href = '/login';
+        }
+
+        // Game không tồn tại trong cấu hình
+        if (!gameCfg) {
+            document.getElementById('game-title').innerText = 'Game không hợp lệ';
+            document.getElementById('game-subtitle').innerText = 'Vui lòng quay lại trang chủ';
+        } else {
+            // Điền header
+            document.title = gameCfg.name + ' - TOOLTX2026';
+            document.getElementById('game-title').innerText   = gameCfg.name;
+            document.getElementById('game-subtitle').innerText = gameCfg.subtitle;
+            document.getElementById('open-btn').href          = gameCfg.siteUrl;
+            const logo = document.getElementById('game-logo');
+            if (gameCfg.logo) {
+                logo.src = gameCfg.logo;
+                logo.style.display = 'block';
+            }
+            // Load iframe
+            document.getElementById('game-frame').src = gameCfg.siteUrl;
+        }
+
+        // ===== Drag logic =====
+        const widget = document.getElementById('pred-widget');
+        const handle = document.getElementById('pred-handle');
+        let dragging = false, moved = false;
+        let startX, startY, origLeft, origTop;
+
+        function getPos(e) {
+            return e.touches ? { x: e.touches[0].clientX, y: e.touches[0].clientY }
+                             : { x: e.clientX, y: e.clientY };
+        }
+
+        handle.addEventListener('mousedown', onDragStart);
+        handle.addEventListener('touchstart', onDragStart, { passive: false });
+
+        function onDragStart(e) {
+            // Không kéo khi chạm vào button
+            if (e.target.closest('button')) return;
+            dragging = true; moved = false;
+            const pos = getPos(e);
+            startX = pos.x; startY = pos.y;
+            const rect = widget.getBoundingClientRect();
+            origLeft = rect.left; origTop = rect.top;
+            widget.style.right = 'auto'; widget.style.bottom = 'auto';
+            widget.style.left = origLeft + 'px'; widget.style.top = origTop + 'px';
+            if (e.cancelable) e.preventDefault();
+        }
+
+        document.addEventListener('mousemove', onDragMove);
+        document.addEventListener('touchmove', onDragMove, { passive: false });
+
+        function onDragMove(e) {
+            if (!dragging) return;
+            const pos = getPos(e);
+            const dx = pos.x - startX, dy = pos.y - startY;
+            if (Math.abs(dx) > 3 || Math.abs(dy) > 3) moved = true;
+            const maxL = window.innerWidth  - widget.offsetWidth  - 4;
+            const maxT = window.innerHeight - widget.offsetHeight - 4;
+            widget.style.left = Math.max(4, Math.min(maxL, origLeft + dx)) + 'px';
+            widget.style.top  = Math.max(4, Math.min(maxT, origTop  + dy)) + 'px';
+            if (e.cancelable) e.preventDefault();
+        }
+
+        document.addEventListener('mouseup',  () => { dragging = false; moved = false; });
+        document.addEventListener('touchend', () => { dragging = false; moved = false; });
+
+        // ===== Toggle minimize =====
+        let minimized = false;
+        function toggleWidget() {
+            if (moved) { moved = false; return; }
+            minimized = !minimized;
+            widget.classList.toggle('minimized', minimized);
+            document.getElementById('toggle-icon').setAttribute('data-lucide', minimized ? 'plus' : 'minus');
+            lucide.createIcons();
+        }
+
+        // ===== Voting Consensus Prediction Engine (43 Algorithms) =====
+        function predict(history) {
+            if (!history || history.length < 3) return { text: '---', conf: 0, reason: 'Chưa đủ dữ liệu', algosInfo: [] };
+
+            const N   = Math.min(history.length, 60);
+            const R   = history.slice(0, N).map(h => h.Ket_qua);
+            const totals   = history.slice(0, N).map(h => parseInt(h.Tong) || 10);
+            const all_dice = history.slice(0, N).flatMap(h => [
+                parseInt(h.Xuc_xac_1)||1, parseInt(h.Xuc_xac_2)||1, parseInt(h.Xuc_xac_3)||1
+            ]);
+            const dice_freq = [0,0,0,0,0,0,0];
+            all_dice.forEach(d => { if (d>=1&&d<=6) dice_freq[d]++; });
+            const avg_total  = totals.reduce((a,b)=>a+b,0) / totals.length;
+            const last_total = totals[0];
+
+            const votes = { 'Tài': 0, 'Xỉu': 0 };
+            const algosInfo = [];
+
+            function vote(res, w, name) {
+                votes[res] += w;
+                algosInfo.push(name + '→' + (res==='Tài'?'T':'X'));
+            }
+            function opp(r) { return r === 'Tài' ? 'Xỉu' : 'Tài'; }
+
+            // Tính streak hiện tại
+            function calcStreak(arr) {
+                let len = 1;
+                while (len < arr.length && arr[len] === arr[0]) len++;
+                return { val: arr[0], len };
+            }
+            const sk = calcStreak(R);
+
+            // Phân tích cầu thành các nhóm liên tiếp
+            function calcGroups(arr, max) {
+                const gs = [];
+                let g = { val: arr[0], cnt: 1 };
+                for (let i = 1; i < Math.min(arr.length, max||30); i++) {
+                    if (arr[i] === g.val) g.cnt++;
+                    else { gs.push({...g}); g = { val: arr[i], cnt: 1 }; }
+                }
+                gs.push(g);
+                return gs;
+            }
+
+            // ══════════════════════════════════════════════════════════
+            // NHÓM A: Nhận Diện Cầu và Xu Hướng
+            // ══════════════════════════════════════════════════════════
+
+            // A1 – Sunwin Code: đối chiếu tổng với bảng tỷ lệ cổng game
+            if      (last_total <= 7)  vote('Xỉu', 3, 'A1-Sunwin');
+            else if (last_total <= 10) vote('Xỉu', 2, 'A1-Sunwin');
+            else if (last_total >= 16) vote('Tài',  3, 'A1-Sunwin');
+            else if (last_total >= 14) vote('Tài',  2, 'A1-Sunwin');
+            else                       vote(R[0],   1, 'A1-Sunwin');
+
+            // A2 – Trend Following: bám cầu bệt, trọng số tăng dần
+            if (sk.len >= 4) {
+                const w = Math.min(2 + (sk.len - 4) * 0.8, 6);
+                vote(sk.val, w, 'A2-TrendFollow');
+            } else if (sk.len >= 2) {
+                vote(sk.val, 1, 'A2-TrendFollow');
+            }
+
+            // A3 – Cầu 2-2: A-A-B → bắt tiếp B  (R newest=0)
+            if (R.length >= 3 && R[1]===R[2] && R[0]!==R[1]) {
+                vote(R[0], 5, 'A3-Cau22');
+            }
+
+            // A5.1 – Cầu 1-1 Ping-Pong: A-B-A → dự đoán B
+            // Chỉ kích khi R[2]!==R[3] để tránh xung đột với A5.5 (Cầu 2-1-2)
+            if (R.length >= 3 && R[0]===R[2] && R[0]!==R[1] &&
+                !(R.length >= 4 && R[2]===R[3])) {
+                vote(opp(R[0]), 5, 'A5.1-Cau11');
+            }
+
+            // A5.2 – Cầu 1-2: A-BB-A → vote B
+            if (R.length >= 4 && R[0]===R[3] && R[1]===R[2] && R[0]!==R[1]) {
+                vote(R[1], 4, 'A5.2-Cau12');
+            }
+
+            // A5.3 – Cầu 2-1: AA-B-AA phát hiện → vote đảo ngược A (=B)
+            if (R.length >= 5 && R[0]===R[1] && R[0]!==R[2] && R[3]===R[4] && R[3]===R[0]) {
+                vote(R[2], 4, 'A5.3-Cau21');
+            }
+
+            // A5.4 – Cầu 3-3: AAA-BB → bắt tiếp B
+            if (R.length >= 5 && R[0]===R[1] && R[0]!==R[2] && R[2]===R[3] && R[2]===R[4]) {
+                vote(R[0], 5, 'A5.4-Cau33');
+            }
+
+            // A5.5 – Cầu 2-1-2: AA-B-A → bắt tiếp A
+            if (R.length >= 4 && R[0]===R[2] && R[0]!==R[1] && R[2]===R[3]) {
+                vote(R[0], 5, 'A5.5-Cau212');
+            }
+
+            // A5.6 – Cầu 4-2-1: AAAA-BB → dự đoán C (đảo B)
+            if (R.length >= 6 && R[0]===R[1] && R[0]!==R[2] &&
+                R[2]===R[3] && R[2]===R[4] && R[2]===R[5]) {
+                vote(R[2], 5, 'A5.6-Cau421');
+            }
+
+            // A10 – Cầu 1-2-3: nhóm tăng dần (cũ→mới: 1,2,3+) → bám nhóm lớn nhất
+            if (R.length >= 7) {
+                const gs = calcGroups(R, 20);
+                // gs[0]=nhóm mới nhất, gs[2]=nhóm cũ nhất trong 3 nhóm gần nhất
+                // Cầu 1-2-3: cũ=1 → giữa=2 → mới=3+ (nhóm ngày càng lớn)
+                if (gs.length >= 3 && gs[0].cnt > gs[1].cnt && gs[1].cnt > gs[2].cnt) {
+                    vote(gs[0].val, 5, 'A10-Cau123');
+                }
+            }
+
+            // A11 – Cầu 3-2-1: nhóm giảm dần (cũ=3+, giữa=2, mới=1) → bắt tiếp nhóm mới
+            if (R.length >= 6) {
+                const gs = calcGroups(R, 20);
+                // Cầu 3-2-1: cũ≥3 → giữa=2 → mới=1 (nhóm ngày càng nhỏ)
+                if (gs.length >= 3 && gs[0].cnt===1 && gs[1].cnt===2 && gs[2].cnt>=3) {
+                    vote(gs[0].val, 5, 'A11-Cau321');
+                }
+            }
+
+            // A19 – Cầu Đối Xứng Gương 6 phiên: A-B-C-C-B-A → nhận diện palindrome dài
+            // (khác A5.2 chỉ nhìn 4 phiên; A19 nhìn 6 phiên để chính xác hơn)
+            if (R.length >= 6 && R[0]===R[5] && R[1]===R[4] && R[2]===R[3] &&
+                R[0]!==R[1] && R[1]!==R[2]) {
+                vote(R[1], 3, 'A19-Mirror6');
+            }
+
+            // A36 – Pattern Correlation: khớp 3 phiên → xem tiếp theo
+            // Bắt đầu i=3 để tránh dùng R[0] (hiện tại) làm outcome lịch sử
+            if (R.length >= 8) {
+                let mT=0, mX=0;
+                for (let i=3; i<=R.length-4; i++) {
+                    if (R[i]===R[0] && R[i+1]===R[1] && R[i+2]===R[2]) {
+                        R[i-1]==='Tài' ? mT++ : mX++;
+                    }
+                }
+                if (mT+mX >= 2) vote(mT>=mX?'Tài':'Xỉu', 2, 'A36-PatternCorr');
+            }
+
+            // A43 – Smart Streak Breaker: cầu cực đoan → bẻ cầu
+            if (sk.len >= 8) {
+                let w = sk.len>=15?6 : sk.len>=12?5 : sk.len>=9?4 : 3;
+                const avg3 = (totals[0]+(totals[1]||10)+(totals[2]||10))/3;
+                if ((sk.val==='Tài'&&avg3<10.5)||(sk.val==='Xỉu'&&avg3>10.5)) w++;
+                vote(opp(sk.val), w, 'A43-StreakBreaker');
+            }
+
+            // ══════════════════════════════════════════════════════════
+            // NHÓM B: Phân Tích Thống Kê & Toán Học
+            // ══════════════════════════════════════════════════════════
+
+            // B4 – Mean Reversion: tỷ lệ quá lệch → kéo về cân bằng
+            const w10   = R.slice(0, Math.min(10,R.length));
+            const taiIn = w10.filter(r=>r==='Tài').length;
+            const ratio = taiIn / w10.length;
+            if (ratio >= 0.85)      vote('Xỉu', 3, 'B4-MeanReversion');
+            else if (ratio <= 0.15) vote('Tài',  3, 'B4-MeanReversion');
+
+            // B6 – Dice Frequency: mặt cao (5,6) vs thấp (1,2)
+            const hiDice = dice_freq[5]+dice_freq[6];
+            const loDice = dice_freq[1]+dice_freq[2];
+            if (hiDice > loDice*1.5)      vote('Tài',  2, 'B6-DiceFreq');
+            else if (loDice > hiDice*1.5) vote('Xỉu', 2, 'B6-DiceFreq');
+
+            // B7 – Total Sum Trend: tổng 3 phiên quá biên → đảo chiều
+            if (totals.length >= 3) {
+                const s3 = totals[0]+totals[1]+totals[2];
+                if (s3 > 33)      vote('Xỉu', 2, 'B7-SumTrend');
+                else if (s3 < 18) vote('Tài',  2, 'B7-SumTrend');
+            }
+
+            // B8 – Variance Analysis: phương sai cao → hồi quy 5 phiên
+            if (totals.length >= 10) {
+                const sl = totals.slice(0,10);
+                const mn = sl.reduce((a,b)=>a+b,0)/10;
+                const va = sl.reduce((a,v)=>a+Math.pow(v-mn,2),0)/10;
+                if (va > 8) {
+                    const avg5 = totals.slice(0,5).reduce((a,b)=>a+b,0)/5;
+                    vote(avg5 >= 10.5?'Tài':'Xỉu', 2, 'B8-Variance');
+                }
+            }
+
+            // B9 – Fibonacci Pattern: quét chuỗi con lặp theo độ dài Fibonacci
+            // Nếu đoạn len gần nhất = đoạn len trước đó → pattern lặp
+            // Dự đoán tiếp theo = R[len-1] (phần tử tiếp theo trong chu kỳ)
+            [1,2,3,5].forEach(len => {
+                if (R.length >= len*2+1) {
+                    const s1=R.slice(0,len).join('|'), s2=R.slice(len,len*2).join('|');
+                    if (s1===s2) vote(R[len-1], 1, 'B9-Fibonacci');
+                }
+            });
+
+            // B37 – Dice Sum Variance: quán tính tổng điểm
+            if (totals.length >= 5) {
+                let momentum=0;
+                for (let i=0;i<4;i++) momentum += totals[i]-totals[i+1];
+                if (momentum > 5)       vote('Tài',  2, 'B37-DiceMomentum');
+                else if (momentum < -5) vote('Xỉu', 2, 'B37-DiceMomentum');
+            }
+
+            // B42 – Golden Ratio: so với ngưỡng φ trên thang 3-18
+            const phi = 1.6180339887;
+            const goldenLo = 3 + 15*(phi-1)/phi;   // ≈8.73
+            const goldenHi = 3 + 15/phi;            // ≈12.27
+            const avg10val = totals.slice(0,Math.min(10,totals.length)).reduce((a,b)=>a+b,0) / Math.min(10,totals.length);
+            if      (avg10val > goldenHi) vote('Tài',  2, 'B42-GoldenRatio');
+            else if (avg10val < goldenLo) vote('Xỉu', 2, 'B42-GoldenRatio');
+            else                          vote(R[0],   1, 'B42-GoldenRatio');
+
+            // ══════════════════════════════════════════════════════════
+            // NHÓM C: AI & Machine Learning
+            // ══════════════════════════════════════════════════════════
+
+            // C15 – Neural Network đơn lớp (8 phiên nhị phân)
+            if (R.length >= 8) {
+                const inp = R.slice(0,8).map(r=>r==='Tài'?1:-1);
+                const hw  = [0.30,-0.22,0.50,-0.13,0.41,-0.32,0.20,-0.43];
+                const ow  = [0.50,-0.31,0.38,-0.20,0.29,-0.47,0.18,-0.14];
+                let h=0, o=0;
+                inp.forEach((v,i)=>{ h+=v*hw[i]; o+=v*ow[i]; });
+                h = Math.tanh(h*0.5);
+                const act = Math.tanh(o*0.3 + h*0.7);
+                if (Math.abs(act) > 0.1) vote(act>0?'Tài':'Xỉu', 2, 'C15-NeuralNet');
+            }
+
+            // C22 – Genetic Algorithm: 3 chiến lược, chọn fitness cao nhất
+            {
+                const conservative = sk.len>=3 ? sk.val : R[0];
+                const aggressive   = opp(R[0]);
+                const taiAll = R.filter(r=>r==='Tài').length;
+                const balanced = taiAll >= R.length/2 ? 'Tài' : 'Xỉu';
+                let cf=0, af=0, bf=0;
+                // Bắt đầu i=1 để tránh dùng R[0] (chưa biết tương lai) vào fitness
+                for (let i=1; i<Math.min(16,R.length-1); i++) {
+                    const sk_i = calcStreak(R.slice(i));
+                    if (sk_i.len>=3 && R[i]===R[i+1]) cf++; else cf--;
+                    if (R[i]!==R[i+1]) af++; else af--;
+                    const tf = R.slice(i).filter(r=>r==='Tài').length;
+                    ((tf>=R.slice(i).length/2&&R[i]==='Tài')||(tf<R.slice(i).length/2&&R[i]==='Xỉu')) ? bf++ : bf--;
+                }
+                const best = [[conservative,cf,'CONS'],[aggressive,af,'AGG'],[balanced,bf,'BAL']]
+                    .reduce((a,b)=>a[1]>=b[1]?a:b);
+                vote(best[0], 2, 'C22-Genetic('+best[2]+')');
+            }
+
+            // C23 – LSTM Simulation: cổng quên/vào/ra trên 15 phiên
+            if (R.length >= 15) {
+                const seq = R.slice(0,15).map(r=>r==='Tài'?1:0);
+                let h=0, c=0;
+                seq.forEach(x => {
+                    const f = 1/(1+Math.exp(-(0.6*h+0.6*x-0.3)));
+                    const ig= 1/(1+Math.exp(-(0.4*h+0.4*x)));
+                    const g = Math.tanh(h*0.3+x*0.7);
+                    c = f*c + ig*g;
+                    const og= 1/(1+Math.exp(-(0.5*h+0.5*x)));
+                    h = og*Math.tanh(c);
+                });
+                vote(h>0?'Tài':'Xỉu', 2, 'C23-LSTM');
+            }
+
+            // C24 – Reinforcement Learning Q-Table
+            {
+                const altLen = R.slice(0,6).filter((_,i,a)=>i>0&&a[i]!==a[i-1]).length;
+                const state  = sk.len>=3?'STREAK': altLen>=4?'ALT':'NORMAL';
+                if      (state==='STREAK') vote(sk.val,        2, 'C24-RL-STREAK');
+                else if (state==='ALT')    vote(opp(R[0]),     2, 'C24-RL-ALT');
+                else                       vote(R[0],          1, 'C24-RL-NORMAL');
+            }
+
+            // C25 – Swarm Intelligence PSO (8 hạt)
+            {
+                const particles = Array.from({length:8}, (_,p) => {
+                    const seed = (R.slice(0,4).reduce((a,r,i)=>a+(r==='Tài'?1:0)*(i+1),0) + p*3) % 16;
+                    return (seed/16 + p*0.125) % 1;
+                });
+                const center = particles.reduce((a,b)=>a+b,0)/8;
+                vote(center>0.5?'Tài':'Xỉu', 2, 'C25-SwarmPSO');
+            }
+
+            // C26 – Mathematical Optimization: gradient descent trên lịch sử
+            if (R.length >= 10) {
+                let w=0.5;
+                R.slice(0,10).forEach(r=>{ w += 0.1*((r==='Tài'?1:0)-w); });
+                vote(w>=0.5?'Tài':'Xỉu', 2, 'C26-MathOptim');
+            }
+
+            // C38 – Adaptive Pattern Memory KNN: pattern 3-6 phiên
+            if (R.length >= 10) {
+                let tV=0, xV=0;
+                for (let len=3; len<=6; len++) {
+                    if (R.length < len+1) continue;
+                    const pat = R.slice(0,len);
+                    for (let i=1; i<=R.length-len-1; i++) {
+                        let m=true;
+                        for (let j=0;j<len;j++) { if(R[i+j]!==pat[j]){m=false;break;} }
+                        if (m) { const wt=1/len; R[i-1]==='Tài'?tV+=wt:xV+=wt; }
+                    }
+                }
+                if (tV+xV > 0) vote(tV>=xV?'Tài':'Xỉu', 3, 'C38-KNN');
+            }
+
+            // C40 – Random Forest: 3 cây quyết định độc lập
+            {
+                const t1 = sk.len>=2 ? sk.val : opp(R[0]);
+                const hi5 = totals.slice(0,5).filter(t=>t>=14).length;
+                const lo5 = totals.slice(0,5).filter(t=>t<=7).length;
+                const t2 = hi5>lo5?'Tài': lo5>hi5?'Xỉu': R[0];
+                const d3  = R.slice(0,3).filter(r=>r==='Tài').length;
+                const t3  = d3>=2?'Tài':'Xỉu';
+                const fvT = [t1,t2,t3].filter(v=>v==='Tài').length;
+                vote(fvT>=2?'Tài':'Xỉu', 2, 'C40-RandForest');
+            }
+
+            // C41 – Logistic Regression: sigmoid(f1*w1 + f2*w2 + f3*w3)
+            {
+                const f1=(last_total-10.5)/7.5, f2=R[0]==='Tài'?1:-1, f3=sk.len/10;
+                const z = 0.4*f1 + 0.3*f2 + 0.3*f3;
+                const sig = 1/(1+Math.exp(-z*2));
+                vote(sig>=0.5?'Tài':'Xỉu', 2, 'C41-LogisticReg');
+            }
+
+            // ══════════════════════════════════════════════════════════
+            // NHÓM D: Lý Thuyết Thông Tin & Lý Thuyết Hỗn Loạn
+            // ══════════════════════════════════════════════════════════
+
+            // D12 – Chaos Theory / Entropy: đo độ hỗn loạn
+            if (R.length >= 8) {
+                const win = Math.min(20, R.length-1);
+                let tr=0;
+                for (let i=0;i<win;i++) if(R[i]!==R[i+1]) tr++;
+                const ent = tr/win;
+                if      (ent > 0.70) vote(opp(R[0]), 2, 'D12-Entropy-High');
+                else if (ent < 0.30) vote(R[0],       2, 'D12-Entropy-Low');
+            }
+
+            // D13 – Quantum Randomness: hash hoàn toàn từ lịch sử (deterministic)
+            {
+                const seed = R.slice(0,Math.min(8,R.length)).reduce((a,r,i)=>a^((r==='Tài'?1:0)<<(i%30)),0);
+                const t3s  = (totals[0]||10)+(totals[1]||10)+(totals[2]||10);
+                const t6s  = totals.slice(0,Math.min(6,totals.length)).reduce((a,b)=>a+b,0);
+                // Dùng sin+cos kết hợp để tăng entropy mà không cần Date.now()
+                const qv   = Math.abs(Math.sin(seed*0.7+t3s*0.31)*Math.cos(seed*0.41+t6s*0.17)) % 1;
+                vote(qv>0.5?'Tài':'Xỉu', 1, 'D13-Quantum');
+            }
+
+            // D14 – Wave Pattern: pha dịch chuyển 6 bước
+            if (R.length >= 12) {
+                let m=0;
+                for (let i=0;i<6;i++) if(R[i]===R[i+6]) m++;
+                if (m >= 4) vote(R[Math.min(6,R.length-1)], 2, 'D14-Wave');
+            }
+
+            // D16 – Bayesian Probability: P(T|T), P(X|X)
+            if (R.length >= 10) {
+                let pTT=0,pTX=0,pXT=0,pXX=0;
+                for (let i=0;i<R.length-1;i++) {
+                    const cur=R[i+1], nxt=R[i];
+                    if(cur==='Tài'&&nxt==='Tài')pTT++;
+                    else if(cur==='Tài'&&nxt==='Xỉu')pTX++;
+                    else if(cur==='Xỉu'&&nxt==='Tài')pXT++;
+                    else pXX++;
+                }
+                if (R[0]==='Tài' && pTT+pTX>0) vote(pTT>=pTX?'Tài':'Xỉu',2,'D16-Bayesian');
+                else if (R[0]==='Xỉu' && pXT+pXX>0) vote(pXT>=pXX?'Tài':'Xỉu',2,'D16-Bayesian');
+            }
+
+            // D17 – Markov 3 trạng thái: STREAK / MIXED / NEUTRAL
+            if (R.length >= 10) {
+                const altL = R.slice(0,6).filter((_,i,a)=>i>0&&a[i]!==a[i-1]).length;
+                const ms   = sk.len>=3?'STREAK': altL>=4?'MIXED':'NEUTRAL';
+                if      (ms==='STREAK')  vote(sk.val,    2, 'D17-Markov-STREAK');
+                else if (ms==='MIXED')   vote(opp(R[0]), 2, 'D17-Markov-MIXED');
+                else                     vote(R[0],      1, 'D17-Markov-NEUTRAL');
+            }
+
+            // D18 – ARIMA-like: AR + MA trên 20 phiên
+            if (R.length >= 20) {
+                const bin = R.slice(0,20).map(r=>r==='Tài'?1:-1);
+                const ar  = bin.slice(0,5).reduce((a,v,i)=>a+v*Math.pow(0.7,i),0);
+                const maMean = bin.slice(0,5).reduce((a,b)=>a+b,0)/5;
+                const ma  = bin.slice(0,5).map(v=>v-maMean).reduce((a,e,i)=>a+e*(0.5-i*0.1),0);
+                vote(ar*0.6+ma*0.4 > 0 ? 'Tài':'Xỉu', 2, 'D18-ARIMA');
+            }
+
+            // D27 – Geometric: độ dốc hồi quy tuyến tính
+            if (R.length >= 10) {
+                const pts = R.slice(0,10).map((r,i)=>({x:i, y:r==='Tài'?1:-1}));
+                const n=10, sx=45, sy=pts.reduce((a,p)=>a+p.y,0);
+                const sxy=pts.reduce((a,p)=>a+p.x*p.y,0), sx2=285;
+                const slope = (n*sxy - sx*sy)/(n*sx2 - sx*sx);
+                vote(slope<0?'Tài':'Xỉu', 2, 'D27-Geometric');
+            }
+
+            // D28 – Information Theory: so sánh entropy gần vs xa
+            if (R.length >= 20) {
+                const efn = arr => {
+                    const t=arr.filter(r=>r==='Tài').length/arr.length;
+                    const x=1-t;
+                    return -(t>0?t*Math.log2(t):0)-(x>0?x*Math.log2(x):0);
+                };
+                const eNear = efn(R.slice(0,10));
+                const eFar  = efn(R.slice(10,20));
+                if      (eNear > eFar+0.1) vote(opp(R[0]), 2, 'D28-InfoTheory');
+                else if (eFar  > eNear+0.1) vote(R[0],     2, 'D28-InfoTheory');
+            }
+
+            // D29 – Combinatorial: tìm chuỗi con phổ biến nhất, dự đoán kết quả SAU nó
+            if (R.length >= 10) {
+                const enc = R.map(r=>r==='Tài'?'T':'X');
+                // Đếm cặp (pattern → outcome) để biết sau pattern thường là gì
+                const after = {}; // pattern → {T:n, X:n}
+                for (let l=2;l<=4;l++) {
+                    for (let i=0;i<=enc.length-l-1;i++) {
+                        const s=enc.slice(i,i+l).join('');
+                        if (!after[s]) after[s]={T:0,X:0};
+                        after[s][enc[i-1]===undefined?enc[i]:enc[i-1]]++;
+                        // Kết quả TRƯỚC vị trí i trong newest-first = enc[i-1] (tương lai thực)
+                    }
+                }
+                // Tìm pattern khớp với đầu mảng (R[0..l-1])
+                let bestW=0, bestPred=null;
+                for (let l=2;l<=4;l++) {
+                    if (enc.length < l+1) continue;
+                    const curPat = enc.slice(0,l).join('');
+                    // Tìm pattern này trong lịch sử và xem outcome tiếp theo
+                    let tC=0, xC=0;
+                    for (let i=l;i<enc.length-1;i++) {
+                        if (enc.slice(i,i+l).join('')===curPat) {
+                            enc[i-1]==='T'?tC++:xC++;
+                        }
+                    }
+                    const tot=tC+xC;
+                    if (tot>=2 && Math.max(tC,xC)/tot > 0.6) {
+                        const w=tot*(Math.max(tC,xC)/tot - 0.5)*2; // weighted by confidence
+                        if (w>bestW) { bestW=w; bestPred=tC>=xC?'Tài':'Xỉu'; }
+                    }
+                }
+                if (bestPred) vote(bestPred, 1, 'D29-Combinatorial');
+            }
+
+            // D30 – Stochastic Process: random walk + volatility (xử lý cũ→mới)
+            if (R.length >= 10) {
+                // Đảo ngược để tích lũy từ cũ nhất → mới nhất
+                const walk=R.slice(0,10).reverse().map(r=>r==='Tài'?1:-1);
+                let s=0; const cum=walk.map(v=>(s+=v,s));
+                const vol=Math.max(...cum)-Math.min(...cum);
+                const pos=cum[cum.length-1]; // vị trí sau khi tích lũy 10 phiên mới nhất
+                if (vol>=6&&Math.abs(pos)>=4) vote(pos>0?'Xỉu':'Tài', 2, 'D30-Stochastic');
+                else vote(pos>=0?'Tài':'Xỉu', 1, 'D30-Stochastic');
+            }
+
+            // D31 – Graph Theory: Hamming distance → nút trung tâm
+            if (R.length >= 9) {
+                const bin0 = R.slice(0,8).map(r=>r==='Tài'?1:0);
+                let minH=Infinity, bestNext=R[0];
+                for (let i=1;i<=R.length-9;i++) {
+                    const binI=R.slice(i,i+8).map(r=>r==='Tài'?1:0);
+                    const h=bin0.reduce((a,v,j)=>a+(v!==binI[j]?1:0),0);
+                    if (h < minH) { minH=h; bestNext=R[i-1]; }
+                }
+                vote(bestNext, 2, 'D31-GraphTheory');
+            }
+
+            // D32 – Number Theory: modulo 11 + số nguyên tố
+            if (totals.length >= 6) {
+                const PRIMES=new Set([2,3,5,7,11]);
+                const mods=totals.slice(0,6).map(t=>t%11);
+                const pc=mods.filter(m=>PRIMES.has(m)).length;
+                vote(pc>=3?'Tài':'Xỉu', 1, 'D32-NumberTheory');
+                if (totals.length >= 3) {
+                    const m11=(totals[0]+totals[1]+totals[2])%11;
+                    vote(PRIMES.has(m11)?'Tài':'Xỉu', 1, 'D32-NumPrime');
+                }
+            }
+
+            // D33 – Fractal Analysis: Box-counting dimension
+            if (R.length >= 16) {
+                const b=R.slice(0,16).map(r=>r==='Tài'?1:0);
+                const bx2=b.reduce((a,_,i,ar)=>i%2===0?a+(ar[i]!==ar[i+1]?1:0):a,0);
+                const bx4=b.reduce((a,_,i,ar)=>i%4===0?a+new Set(ar.slice(i,i+4)).size:a,0);
+                const dim=bx4>0?Math.log(bx2+1)/Math.log(bx4+1):0.5;
+                vote(dim>1.0?opp(R[0]):R[0], 1, 'D33-Fractal');
+            }
+
+            // D34 – Haar Wavelet Transform
+            if (totals.length >= 8) {
+                const sig=totals.slice(0,8).map(t=>t-10.5);
+                const SQ2=Math.sqrt(2);
+                const det=[];
+                for (let i=0;i<4;i++) det.push((sig[i*2]-sig[i*2+1])/SQ2);
+                const detE=det.reduce((a,d)=>a+d*d,0);
+                const apMn=sig.reduce((a,b,i,ar)=>i%2===0?a+(ar[i]+ar[i+1])/SQ2:a,0)/4;
+                vote(detE>20?opp(R[0]):apMn>0?'Tài':'Xỉu', 2, 'D34-Wavelet');
+            }
+
+            // D35 – Topological: Euler characteristic
+            if (R.length >= 10) {
+                const b=R.slice(0,10).map(r=>r==='Tài'?1:0);
+                const E=b.reduce((a,v,i,ar)=>i>0&&v===ar[i-1]?a+1:a, 0);
+                const chi=10-E;
+                vote(chi%2===0?'Tài':'Xỉu', 1, 'D35-Topology');
+            }
+
+            // D39 – Spectral Analysis: Fourier tần số cao vs thấp
+            if (R.length >= 16) {
+                const sig=R.slice(0,16).map(r=>r==='Tài'?1:-1);
+                let loE=0, hiE=0;
+                for (let f=1;f<=3;f++) {
+                    let re=0,im=0;
+                    sig.forEach((v,n)=>{re+=v*Math.cos(2*Math.PI*f*n/16);im+=v*Math.sin(2*Math.PI*f*n/16);});
+                    loE+=re*re+im*im;
+                }
+                for (let f=4;f<=7;f++) {
+                    let re=0,im=0;
+                    sig.forEach((v,n)=>{re+=v*Math.cos(2*Math.PI*f*n/16);im+=v*Math.sin(2*Math.PI*f*n/16);});
+                    hiE+=re*re+im*im;
+                }
+                vote(hiE>loE*1.5?opp(R[0]):R[0], 2, 'D39-Spectral');
+            }
+
+            // ══════════════════════════════════════════════════════════
+            // TỔNG HỢP KẾT QUẢ + ANALYZE BIG STREAK + TỶ LỆ TIN CẬY
+            // ══════════════════════════════════════════════════════════
+            const totalVotes = votes['Tài'] + votes['Xỉu'];
+            const predicted  = votes['Tài'] >= votes['Xỉu'] ? 'Tài' : 'Xỉu';
+            const winVotes   = votes[predicted];
+
+            let conf = totalVotes > 0
+                ? Math.round(50 + (winVotes/totalVotes - 0.5) * 90)
+                : 55;
+
+            // analyze_big_streak: boost hoặc ghìm tỷ lệ dựa trên cầu bệt lớn
+            if (sk.len >= 4) {
+                if (predicted === sk.val) {
+                    const boost = Math.min(85 + sk.len * 1.8, 99);
+                    if (last_total >= 14 && sk.val === 'Tài') conf = Math.min(conf + 2, 99);
+                    if (last_total <= 7  && sk.val === 'Xỉu') conf = Math.min(conf + 2, 99);
+                    conf = Math.max(conf, Math.round(boost));
+                } else {
+                    conf = Math.min(conf, 65);
+                }
+            }
+
+            conf = Math.min(99, Math.max(51, conf));
+
+            const reason = algosInfo.length > 0 ? algosInfo[0] : 'Tổng hợp';
+            return { text: predicted, conf, reason, algosInfo };
+        }
+
+        // ===== Render widget =====
+        function renderWidget(data) {
+            const latest = data[0];
+            const pred   = predict(data);
+
+            document.getElementById('next-phien').innerText = latest.Phien + 1;
+            const badge = document.getElementById('pred-badge');
+            badge.innerText   = pred.text;
+            badge.className   = 'predict-badge ' + (pred.text === 'Tài' ? 'tai-badge' : 'xiu-badge');
+            document.getElementById('pred-reason').innerText = pred.reason;
+            document.getElementById('pred-conf').innerText   = pred.conf + '%';
+
+
+            document.getElementById('last-phien').innerText = '#' + latest.Phien;
+            const lb = document.getElementById('last-badge');
+            lb.innerText  = latest.Ket_qua;
+            lb.style.color = latest.Ket_qua === 'Tài' ? '#f87171' : '#60a5fa';
+
+            document.getElementById('dice-row').innerHTML = `
+                <span class="dice-icon">${latest.Xuc_xac_1}</span>
+                <span style="color:#475569;font-size:9px;">+</span>
+                <span class="dice-icon">${latest.Xuc_xac_2}</span>
+                <span style="color:#475569;font-size:9px;">+</span>
+                <span class="dice-icon">${latest.Xuc_xac_3}</span>
+                <span style="color:#475569;font-size:9px;">=</span>
+                <span style="color:white;font-size:13px;font-weight:900;">${latest.Tong}</span>`;
+
+            const dots = document.getElementById('history-dots');
+            dots.innerHTML = '';
+            data.slice(0, 20).forEach(h => {
+                const isTai = h.Ket_qua === 'Tài';
+                const d = document.createElement('div');
+                d.style.cssText = `width:18px;height:18px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:white;flex-shrink:0;background:${isTai ? '#dc2626' : '#2563eb'};cursor:default;`;
+                d.title = `P${h.Phien}: ${h.Ket_qua} (${h.Tong})`;
+                d.innerText = isTai ? 'T' : 'X';
+                dots.appendChild(d);
+            });
+
+            document.getElementById('updated-at').innerText = new Date().toLocaleTimeString('vi-VN', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+        }
+
+        // ===== Load history =====
+        async function loadHistory() {
+            if (!gameCfg) return;
+            document.getElementById('pred-loading').style.display = 'block';
+            document.getElementById('pred-error').style.display   = 'none';
+            document.getElementById('pred-content').style.display = 'none';
+
+            const btn = document.getElementById('refresh-btn');
+            btn.style.opacity = '0.4'; btn.disabled = true;
+
+            try {
+                const res  = await fetch(`api/games/${encodeURIComponent(gameKey)}.php?action=history`, { headers: { 'Authorization': `Bearer ${token}` } });
+                const json = await res.json();
+                if (!json.success) { showError(json.message || 'Lỗi dữ liệu.'); return; }
+                renderWidget(json.data);
+                document.getElementById('pred-loading').style.display = 'none';
+                document.getElementById('pred-content').style.display = 'block';
+                lucide.createIcons();
+            } catch (err) {
+                showError('Không thể kết nối máy chủ.');
+            } finally {
+                btn.style.opacity = '1'; btn.disabled = false;
+            }
+        }
+
+        function showError(msg) {
+            document.getElementById('pred-loading').style.display = 'none';
+            document.getElementById('pred-content').style.display = 'none';
+            document.getElementById('error-msg').innerText = msg;
+            document.getElementById('pred-error').style.display = 'block';
+            lucide.createIcons();
+        }
+
+        // Auto refresh 60s
+        if (gameCfg) {
+            loadHistory();
+            setInterval(loadHistory, 60000);
+        }
+    </script>
+</body>
+</html>
