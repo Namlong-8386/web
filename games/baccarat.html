@@ -286,12 +286,17 @@ function drawChart(canvas, results) {
     const maxP = Math.max(...allVals);
     const range = maxP - minP || 1;
 
+    // Thêm padding dọc 30% để nến không bị sát mép / không quá to khi ít dữ liệu
+    const vPad  = range * 0.30;
+    const viewMin   = minP - vPad;
+    const viewRange = (range + vPad * 2) || 1;
+
     const padT = 8, padB = 8, padL = 4, padR = 4;
     const chartH = H - padT - padB;
     const chartW = W - padL - padR;
 
     function yPos(v) {
-        return padT + (1 - (v - minP) / range) * chartH;
+        return padT + (1 - (v - viewMin) / viewRange) * chartH;
     }
 
     const step    = chartW / Math.max(n, 20);
