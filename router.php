@@ -38,6 +38,21 @@ if (file_exists($file) && !is_dir($file)) {
     return false;
 }
 
+// API routes: /api/xxx -> api/xxx.php
+if (preg_match('#^/api/(.+)$#', $uri, $m)) {
+    $phpFile = __DIR__ . '/api/' . $m[1] . '.php';
+    if (file_exists($phpFile)) {
+        require $phpFile;
+        return true;
+    }
+    // Sub-paths like /api/games/sunwin
+    $phpFile2 = __DIR__ . $uri . '.php';
+    if (file_exists($phpFile2)) {
+        require $phpFile2;
+        return true;
+    }
+}
+
 // 404 fallback
 http_response_code(404);
 echo '<h1>404 - Không tìm thấy trang</h1>';

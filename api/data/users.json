@@ -6,7 +6,7 @@
         "user_id": "999999",
         "balance": 1049999,
         "role": "admin",
-        "token": "d33ae69c81c5e17997e9e89cba6626c7",
+        "token": "c8d47a08dd0b09915112bfc948f5c81b",
         "vip_expire": 1781436530
     },
     {
@@ -496,6 +496,15 @@
         "password": "$2y$10$nd.gGZowWHo1WzYipD5ygujQbaN5dAKCX5QyMcYbCrR5Kq0qEgfty",
         "full_name": "testuser123",
         "user_id": "571976",
+        "balance": 0,
+        "role": "user",
+        "token": ""
+    },
+    {
+        "username": "testuser",
+        "password": "$2y$10$LoFwJK\/2jUS2Btl4frGkY.x3QFBp\/6Q6ATKDjZVnkFMoEohSe59e.",
+        "full_name": "testuser",
+        "user_id": "843548",
         "balance": 0,
         "role": "user",
         "token": ""
