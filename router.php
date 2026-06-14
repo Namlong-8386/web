@@ -7,6 +7,7 @@ $routes = [
     '/register'              => 'register.html',
     '/packages'              => 'packages.html',
     '/game/sunwin'           => 'games/sunwin.html',
+    '/game/baccarat'         => 'games/baccarat.html',
     '/giftcode'              => 'giftcode.html',
     '/account'               => 'account.html',
     '/deposit'               => 'deposit.html',

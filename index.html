@@ -57,12 +57,12 @@
             <!-- Mục 2 -->
             <a href="javascript:void(0)" onclick="handleServiceClick('Dịch Vụ Mục 2')" class="block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow active:scale-[0.98] duration-200 border border-slate-100 relative">
                 <div class="relative w-full h-48 sm:h-56">
-                    <img src="https://i.ibb.co/Wd3CWsk/x.jpg" alt="Logo Mục 2" class="w-full h-full object-cover">
+                    <img src="https://i.ibb.co/rGY7cLXY/x.jpg" alt="Logo Baccarat" class="w-full h-full object-cover">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
                     <div class="absolute bottom-0 left-0 p-4 w-full flex justify-between items-end">
                         <div>
                             <h3 class="text-white font-bold text-lg">Dịch Vụ Mục 2</h3>
-                            <p class="text-white/80 text-xs mt-1">Trải nghiệm tính năng độc quyền</p>
+                            <p class="text-white/80 text-xs mt-1">Baccarat – Biểu đồ theo bàn trực tiếp</p>
                         </div>
                         <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white">
                             <i data-lucide="chevron-right" class="w-5 h-5"></i>
@@ -211,6 +211,8 @@
                 }
                 if (serviceName === 'Dịch Vụ Mục 1') {
                     window.location.href = '/game/sunwin';
+                } else if (serviceName === 'Dịch Vụ Mục 2') {
+                    window.location.href = '/game/baccarat';
                 } else {
                     await alert(`${serviceName} đang được chuẩn bị và sẽ sớm khả dụng!`);
                 }

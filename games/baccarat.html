@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BACCARAT - TOOLTX2026</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { margin: 0; padding: 0; background: #0f172a; font-family: ui-sans-serif, system-ui, sans-serif; color: white; }
+
+        #header-bar {
+            position: fixed; top: 0; left: 0; right: 0; height: 52px; z-index: 1000;
+            background: linear-gradient(90deg, #0f172a 0%, #1e293b 100%);
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            display: flex; align-items: center; padding: 0 12px; gap: 10px;
+        }
+
+        #main-content {
+            padding-top: 60px; padding-bottom: 20px;
+            max-width: 800px; margin: 0 auto;
+        }
+
+        /* ── Status bar ── */
+        #status-bar {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 8px 12px;
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 11px;
+        }
+
+        /* ── Grid of table cards ── */
+        #tables-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 12px;
+            padding: 12px;
+        }
+
+        .table-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+        .table-card:hover { border-color: rgba(255,255,255,0.15); }
+
+        .card-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 12px 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .table-name {
+            font-size: 13px; font-weight: 800; color: white; letter-spacing: 0.3px;
+        }
+        .round-badge {
+            font-size: 10px; color: #64748b; font-weight: 600;
+            background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 20px;
+        }
+
+        .pred-badge {
+            font-size: 12px; font-weight: 900; padding: 4px 12px;
+            border-radius: 20px; letter-spacing: 0.5px;
+        }
+        .pred-win  { background: rgba(34,197,94,0.15);  color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
+        .pred-lose { background: rgba(239,68,68,0.15);  color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+        .pred-unknown { background: rgba(100,116,139,0.15); color: #94a3b8; border: 1px solid rgba(100,116,139,0.2); }
+
+        .chart-wrap { padding: 8px 10px 6px; }
+        canvas.chart-canvas { width: 100%; height: 90px; display: block; border-radius: 8px; }
+
+        .card-footer {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 6px 12px 10px;
+        }
+
+        .dots-row { display: flex; gap: 3px; flex-wrap: wrap; }
+        .dot {
+            width: 16px; height: 16px; border-radius: 4px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 7px; font-weight: 900; color: white; flex-shrink: 0;
+        }
+        .dot-win  { background: #16a34a; }
+        .dot-lose { background: #dc2626; }
+
+        .conf-label {
+            font-size: 10px; color: #f59e0b; font-weight: 800; white-space: nowrap; margin-left: 6px;
+        }
+
+        /* ── Loading / Error overlays ── */
+        #overlay {
+            position: fixed; inset: 0; z-index: 500;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: #0f172a; gap: 12px;
+        }
+        .spinner {
+            width: 32px; height: 32px; border: 3px solid rgba(255,255,255,0.1);
+            border-top-color: #f59e0b; border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Refresh fab ── */
+        #fab-refresh {
+            position: fixed; bottom: 20px; right: 16px; z-index: 900;
+            width: 48px; height: 48px; border-radius: 50%;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border: none; cursor: pointer; color: white;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 20px rgba(245,158,11,0.4);
+            transition: transform 0.2s, opacity 0.2s;
+        }
+        #fab-refresh:active { transform: scale(0.9); }
+        #fab-refresh.loading { opacity: 0.6; pointer-events: none; }
+        #fab-refresh.loading svg { animation: spin 0.7s linear infinite; }
+
+        .streak-chip {
+            font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 10px;
+            background: rgba(255,255,255,0.07); color: #94a3b8; white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div id="header-bar">
+    <a href="/" style="width:32px;height:32px;border-radius:10px;background:rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:center;color:#94a3b8;flex-shrink:0;text-decoration:none;">
+        <i data-lucide="arrow-left" style="width:18px;height:18px;"></i>
+    </a>
+    <img src="https://i.ibb.co/rGY7cLXY/x.jpg" alt="Baccarat"
+         style="width:30px;height:30px;object-fit:cover;border-radius:8px;flex-shrink:0;">
+    <div style="flex:1;min-width:0;">
+        <div style="font-weight:800;font-size:14px;line-height:1.2;">BACCARAT</div>
+        <div style="color:#64748b;font-size:10px;" id="header-sub">Đang tải...</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;">
+        <div style="width:6px;height:6px;border-radius:50%;background:#10b981;" id="live-dot"></div>
+        <span style="color:#10b981;font-size:10px;font-weight:700;" id="updated-at">--:--</span>
+    </div>
+</div>
+
+<!-- Loading overlay -->
+<div id="overlay">
+    <div class="spinner"></div>
+    <div style="color:#64748b;font-size:12px;" id="overlay-msg">Đang tải dữ liệu bàn...</div>
+</div>
+
+<!-- Main content -->
+<div id="main-content" style="display:none;">
+    <div id="tables-grid"></div>
+</div>
+
+<!-- FAB Refresh -->
+<button id="fab-refresh" onclick="loadData()" title="Làm mới">
+    <i data-lucide="refresh-cw" style="width:20px;height:20px;"></i>
+</button>
+
+<script>
+lucide.createIcons();
+
+const token = localStorage.getItem('token');
+if (!token) { window.location.href = '/login'; }
+
+// ─────────────────────────────────────────────
+// PREDICTION ENGINE (results: oldest→newest)
+// ─────────────────────────────────────────────
+function predictBaccarat(results) {
+    if (!results || results.length < 3) return { text: '?', conf: 50 };
+
+    const R = results.slice().reverse(); // R[0] = most recent
+    const N  = Math.min(R.length, 30);
+    let wW = 0, wL = 0;
+
+    function vote(res, w) { res === 'WIN' ? wW += w : wL += w; }
+    function opp(r) { return r === 'WIN' ? 'LOSE' : 'WIN'; }
+
+    // Streak
+    let streak = 1;
+    while (streak < N && R[streak] === R[0]) streak++;
+    if (streak >= 5) vote(opp(R[0]), 4);
+    else if (streak >= 3) vote(R[0], 3);
+    else if (streak >= 2) vote(R[0], 2);
+    else vote(R[0], 1);
+
+    // Mean reversion (last 10)
+    const last10 = R.slice(0, Math.min(10, N));
+    const winRatio = last10.filter(r => r === 'WIN').length / last10.length;
+    if      (winRatio >= 0.80) vote('LOSE', 3);
+    else if (winRatio <= 0.20) vote('WIN',  3);
+    else if (winRatio >= 0.60) vote('WIN',  1);
+    else                       vote('LOSE', 1);
+
+    // Ping-pong: A-B-A → predict B
+    if (R.length >= 3 && R[0] === R[2] && R[0] !== R[1]) vote(opp(R[0]), 4);
+
+    // Pattern 2-2: AA-BB → predict B
+    if (R.length >= 4 && R[0] === R[1] && R[2] === R[3] && R[0] !== R[2]) vote(R[0], 3);
+
+    // Markov chain
+    if (R.length >= 8) {
+        let pWW=0, pWL=0, pLW=0, pLL=0;
+        for (let i = 0; i < Math.min(R.length-1, 20); i++) {
+            if (R[i]==='WIN'  && R[i+1]==='WIN')  pWW++;
+            else if (R[i]==='WIN'  && R[i+1]==='LOSE') pWL++;
+            else if (R[i]==='LOSE' && R[i+1]==='WIN')  pLW++;
+            else pLL++;
+        }
+        if (R[0] === 'WIN')  { if (pWW+pWL > 0) vote(pWW >= pWL ? 'WIN' : 'LOSE', 2); }
+        else                 { if (pLW+pLL > 0) vote(pLW >= pLL ? 'WIN' : 'LOSE', 2); }
+    }
+
+    // Recent momentum (last 5)
+    const last5 = R.slice(0, Math.min(5, N));
+    const rec5 = last5.filter(r => r === 'WIN').length;
+    if      (rec5 >= 4) vote('WIN',  2);
+    else if (rec5 <= 1) vote('LOSE', 2);
+
+    const total = wW + wL;
+    const predicted = wW >= wL ? 'WIN' : 'LOSE';
+    const conf = total > 0
+        ? Math.round(50 + (Math.max(wW, wL) / total - 0.5) * 80)
+        : 55;
+    return { text: predicted, conf: Math.min(95, Math.max(52, conf)), streak };
+}
+
+// ─────────────────────────────────────────────
+// CHART (canvas): results oldest→newest
+// ─────────────────────────────────────────────
+function drawChart(canvas, results) {
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    canvas.width  = rect.width  * dpr;
+    canvas.height = rect.height * dpr;
+
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    const W = rect.width;
+    const H = rect.height;
+
+    // Show last 40 candles
+    const maxC = 40;
+    const data = results.slice(Math.max(0, results.length - maxC));
+    const n = data.length;
+    if (n < 2) return;
+
+    // Build cumulative price: starts 0, WIN=+1, LOSE=-1
+    const prices = [0];
+    for (const r of data) prices.push(prices[prices.length - 1] + (r === 'WIN' ? 1 : -1));
+
+    const minP = Math.min(...prices);
+    const maxP = Math.max(...prices);
+    const range = maxP - minP || 1;
+
+    const padT = 8, padB = 8, padL = 4, padR = 4;
+    const chartH = H - padT - padB;
+    const chartW = W - padL - padR;
+
+    function yPos(v) {
+        return padT + (1 - (v - minP) / range) * chartH;
+    }
+
+    const step    = chartW / n;
+    const candleW = Math.max(2, step * 0.72);
+
+    // Background grid (horizontal, subtle)
+    ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+    ctx.lineWidth = 1;
+    for (let i = 1; i <= 3; i++) {
+        const y = padT + (chartH / 4) * i;
+        ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W - padR, y); ctx.stroke();
+    }
+
+    // Zero / midline
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(padL, yPos((minP + maxP) / 2));
+    ctx.lineTo(W - padR, yPos((minP + maxP) / 2));
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Draw candles
+    for (let i = 0; i < n; i++) {
+        const isWin = data[i] === 'WIN';
+        const open  = prices[i];
+        const close = prices[i + 1];
+        const x     = padL + i * step + (step - candleW) / 2;
+        const yTop  = Math.min(yPos(open), yPos(close));
+        const yBot  = Math.max(yPos(open), yPos(close));
+        const h     = Math.max(2, yBot - yTop);
+
+        // Shadow / glow effect
+        ctx.shadowColor  = isWin ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.3)';
+        ctx.shadowBlur   = 4;
+        ctx.fillStyle    = isWin ? '#22c55e' : '#ef4444';
+        ctx.fillRect(x, yTop, candleW, h);
+        ctx.shadowBlur   = 0;
+    }
+
+    // MA(5) line — amber
+    const MA = 5;
+    if (prices.length > MA) {
+        ctx.beginPath();
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth   = 1.5;
+        ctx.lineJoin    = 'round';
+        ctx.lineCap     = 'round';
+        let started = false;
+        for (let i = MA; i < prices.length; i++) {
+            const avg = prices.slice(i - MA, i).reduce((a, b) => a + b, 0) / MA;
+            const x   = padL + (i - 0.5) * step;
+            const y   = yPos(avg);
+            if (!started) { ctx.moveTo(x, y); started = true; }
+            else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+    }
+
+    // MA(10) line — blue, lighter
+    const MA10 = 10;
+    if (prices.length > MA10) {
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgba(96,165,250,0.7)';
+        ctx.lineWidth   = 1;
+        ctx.lineJoin    = 'round';
+        ctx.lineCap     = 'round';
+        let started = false;
+        for (let i = MA10; i < prices.length; i++) {
+            const avg = prices.slice(i - MA10, i).reduce((a, b) => a + b, 0) / MA10;
+            const x   = padL + (i - 0.5) * step;
+            const y   = yPos(avg);
+            if (!started) { ctx.moveTo(x, y); started = true; }
+            else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+    }
+}
+
+// ─────────────────────────────────────────────
+// RENDER TABLE CARD
+// ─────────────────────────────────────────────
+function renderTable(table) {
+    const results = table.results || [];
+    const pred    = predictBaccarat(results);
+
+    const streakLabel = (() => {
+        if (results.length < 2) return '';
+        const last = results[results.length - 1];
+        let cnt = 1;
+        for (let i = results.length - 2; i >= 0; i--) {
+            if (results[i] === last) cnt++; else break;
+        }
+        return cnt >= 2 ? `${cnt} ${last === 'WIN' ? '🟢' : '🔴'} liên tiếp` : '';
+    })();
+
+    const card = document.createElement('div');
+    card.className = 'table-card';
+    card.innerHTML = `
+        <div class="card-header">
+            <div style="display:flex;align-items:center;gap:8px;">
+                <div class="table-name">Bàn ${table.table_name}</div>
+                <div class="round-badge">Phiên ${parseInt(table.round)}</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;">
+                ${streakLabel ? `<span class="streak-chip">${streakLabel}</span>` : ''}
+                <span class="pred-badge ${pred.text === 'WIN' ? 'pred-win' : pred.text === 'LOSE' ? 'pred-lose' : 'pred-unknown'}">
+                    ${pred.text === 'WIN' ? '▲ WIN' : pred.text === 'LOSE' ? '▼ LOSE' : '?'}
+                </span>
+                <span class="conf-label">${pred.conf}%</span>
+            </div>
+        </div>
+        <div class="chart-wrap">
+            <canvas class="chart-canvas"></canvas>
+        </div>
+        <div class="card-footer">
+            <div class="dots-row" id="dots-wrap"></div>
+            <div style="font-size:9px;color:#334155;margin-left:8px;flex-shrink:0;">
+                <span style="color:#f59e0b;">─</span> MA5&nbsp;
+                <span style="color:#60a5fa;">─</span> MA10
+            </div>
+        </div>`;
+
+    // Dots (last 15, newest right)
+    const dotsWrap  = card.querySelector('.dots-row');
+    const dotSlice  = results.slice(Math.max(0, results.length - 15));
+    dotSlice.forEach(r => {
+        const d = document.createElement('div');
+        d.className = `dot ${r === 'WIN' ? 'dot-win' : 'dot-lose'}`;
+        d.textContent = r === 'WIN' ? 'W' : 'L';
+        dotsWrap.appendChild(d);
+    });
+
+    return card;
+}
+
+// ─────────────────────────────────────────────
+// LOAD DATA
+// ─────────────────────────────────────────────
+async function loadData() {
+    const fab = document.getElementById('fab-refresh');
+    fab.classList.add('loading');
+    lucide.createIcons();
+
+    try {
+        const res  = await fetch('/api/games/baccarat.php', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const json = await res.json();
+
+        if (!json.success) {
+            showOverlayError(json.message || 'Lỗi dữ liệu.');
+            return;
+        }
+
+        const tables = json.tables || [];
+        const grid   = document.getElementById('tables-grid');
+        grid.innerHTML = '';
+
+        tables.forEach(table => {
+            const card = renderTable(table);
+            grid.appendChild(card);
+        });
+
+        // Draw charts after cards are in DOM
+        requestAnimationFrame(() => {
+            document.querySelectorAll('.table-card').forEach((card, idx) => {
+                const canvas  = card.querySelector('canvas.chart-canvas');
+                const table   = tables[idx];
+                if (canvas && table) drawChart(canvas, table.results || []);
+            });
+        });
+
+        // Update status
+        document.getElementById('header-sub').textContent = `${tables.length} bàn đang hoạt động`;
+        document.getElementById('updated-at').textContent = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+        // Hide overlay, show content
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('main-content').style.display = 'block';
+
+    } catch (err) {
+        showOverlayError('Không thể kết nối máy chủ.');
+    } finally {
+        fab.classList.remove('loading');
+        lucide.createIcons();
+    }
+}
+
+function showOverlayError(msg) {
+    const ov = document.getElementById('overlay');
+    ov.innerHTML = `
+        <i data-lucide="wifi-off" style="width:40px;height:40px;color:#ef4444;"></i>
+        <div style="color:#ef4444;font-size:13px;text-align:center;max-width:260px;">${msg}</div>
+        <button onclick="loadData()" style="margin-top:8px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#f87171;font-size:12px;font-weight:700;padding:8px 20px;border-radius:12px;cursor:pointer;">
+            Thử lại
+        </button>`;
+    ov.style.display = 'flex';
+    document.getElementById('main-content').style.display = 'none';
+    lucide.createIcons();
+}
+
+// Redraw charts on resize
+let resizeTimer;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+        const cards  = document.querySelectorAll('.table-card');
+        const tables = Array.from(document.querySelectorAll('#tables-grid .table-card'));
+        // Re-fetch to get fresh data on resize isn't needed; just redraw
+        cards.forEach((card, idx) => {
+            const canvas = card.querySelector('canvas.chart-canvas');
+            if (canvas) {
+                const dataAttr = canvas.dataset.results;
+                if (dataAttr) drawChart(canvas, JSON.parse(dataAttr));
+            }
+        });
+    }, 200);
+});
+
+// Auto refresh every 30s
+loadData();
+setInterval(loadData, 30000);
+</script>
+</body>
+</html>
