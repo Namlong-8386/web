@@ -362,16 +362,6 @@ function renderTable(table) {
     const results = table.results || [];
     const pred    = predictBaccarat(results);
 
-    const streakLabel = (() => {
-        if (results.length < 2) return '';
-        const last = results[results.length - 1];
-        let cnt = 1;
-        for (let i = results.length - 2; i >= 0; i--) {
-            if (results[i] === last) cnt++; else break;
-        }
-        const icon = last === 'WIN' ? '🟢' : last === 'LOSE' ? '🔴' : '🟡';
-        return cnt >= 2 ? `${cnt} ${icon} liên tiếp` : '';
-    })();
 
     const card = document.createElement('div');
     card.className = 'table-card';
@@ -380,9 +370,6 @@ function renderTable(table) {
             <div style="display:flex;align-items:center;gap:8px;">
                 <div class="table-name">Bàn ${table.table_name}</div>
                 <div class="round-badge">Phiên ${parseInt(table.round)}</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:6px;">
-                ${streakLabel ? `<span class="streak-chip">${streakLabel}</span>` : ''}
             </div>
         </div>
         <div class="chart-wrap">
