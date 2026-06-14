@@ -383,28 +383,13 @@ function renderTable(table) {
             </div>
             <div style="display:flex;align-items:center;gap:6px;">
                 ${streakLabel ? `<span class="streak-chip">${streakLabel}</span>` : ''}
-                <span class="pred-badge ${pred.text === 'WIN' ? 'pred-win' : pred.text === 'LOSE' ? 'pred-lose' : 'pred-unknown'}">
-                    ${pred.text === 'WIN' ? '▲ WIN' : pred.text === 'LOSE' ? '▼ LOSE' : '?'}
-                </span>
-                <span class="conf-label">${pred.conf}%</span>
             </div>
         </div>
         <div class="chart-wrap">
             <canvas class="chart-canvas"></canvas>
         </div>
-        <div class="card-footer">
-            <div class="dots-row" id="dots-wrap"></div>
         </div>`;
 
-    // Dots (last 15, newest right)
-    const dotsWrap  = card.querySelector('.dots-row');
-    const dotSlice  = results.slice(Math.max(0, results.length - 15));
-    dotSlice.forEach(r => {
-        const d = document.createElement('div');
-        d.className = `dot ${r === 'WIN' ? 'dot-win' : r === 'TIE' ? 'dot-tie' : 'dot-lose'}`;
-        d.textContent = r === 'WIN' ? 'W' : r === 'TIE' ? 'T' : 'L';
-        dotsWrap.appendChild(d);
-    });
 
     return card;
 }
