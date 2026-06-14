@@ -337,43 +337,6 @@ function drawChart(canvas, results) {
         ctx.shadowBlur   = 0;
     }
 
-    // MA(5) line — amber (based on closes)
-    const MA = 5;
-    if (closes.length >= MA) {
-        ctx.beginPath();
-        ctx.strokeStyle = '#f59e0b';
-        ctx.lineWidth   = 1.5;
-        ctx.lineJoin    = 'round';
-        ctx.lineCap     = 'round';
-        let started = false;
-        for (let i = MA - 1; i < closes.length; i++) {
-            const avg = closes.slice(i - MA + 1, i + 1).reduce((a, b) => a + b, 0) / MA;
-            const x   = padL + (i + 0.5) * step;
-            const y   = yPos(avg);
-            if (!started) { ctx.moveTo(x, y); started = true; }
-            else ctx.lineTo(x, y);
-        }
-        ctx.stroke();
-    }
-
-    // MA(10) line — blue, lighter
-    const MA10 = 10;
-    if (closes.length >= MA10) {
-        ctx.beginPath();
-        ctx.strokeStyle = 'rgba(96,165,250,0.7)';
-        ctx.lineWidth   = 1;
-        ctx.lineJoin    = 'round';
-        ctx.lineCap     = 'round';
-        let started = false;
-        for (let i = MA10 - 1; i < closes.length; i++) {
-            const avg = closes.slice(i - MA10 + 1, i + 1).reduce((a, b) => a + b, 0) / MA10;
-            const x   = padL + (i + 0.5) * step;
-            const y   = yPos(avg);
-            if (!started) { ctx.moveTo(x, y); started = true; }
-            else ctx.lineTo(x, y);
-        }
-        ctx.stroke();
-    }
 }
 
 // ─────────────────────────────────────────────
@@ -414,10 +377,6 @@ function renderTable(table) {
         </div>
         <div class="card-footer">
             <div class="dots-row" id="dots-wrap"></div>
-            <div style="font-size:9px;color:#334155;margin-left:8px;flex-shrink:0;">
-                <span style="color:#f59e0b;">─</span> MA5&nbsp;
-                <span style="color:#60a5fa;">─</span> MA10
-            </div>
         </div>`;
 
     // Dots (last 15, newest right)
