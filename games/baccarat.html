@@ -246,7 +246,7 @@ function drawChart(canvas, results) {
     const data = results.slice(Math.max(0, results.length - maxC));
     const n = data.length;
 
-    if (n < 2) {
+    if (n < 1) {
         // Vẽ đường baseline ở giữa + chữ "Chưa có dữ liệu"
         const midY = H / 2;
         ctx.strokeStyle = 'rgba(255,255,255,0.08)';
