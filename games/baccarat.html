@@ -244,7 +244,25 @@ function drawChart(canvas, results) {
     const maxC = 40;
     const data = results.slice(Math.max(0, results.length - maxC));
     const n = data.length;
-    if (n < 2) return;
+
+    if (n < 2) {
+        // Vẽ đường baseline ở giữa + chữ "Chưa có dữ liệu"
+        const midY = H / 2;
+        ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(4, midY);
+        ctx.lineTo(W - 4, midY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = 'rgba(100,116,139,0.5)';
+        ctx.font = '11px ui-sans-serif, system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('Chưa có dữ liệu', W / 2, midY - 10);
+        return;
+    }
 
     // Build candle open/close:
     // Same direction as previous → open = prev close (continue)
