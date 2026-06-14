@@ -280,9 +280,9 @@ function drawChart(canvas, results) {
     for (let i = 0; i < n; i++) {
         const r = data[i];
         if (r === 'TIE') {
-            // Hòa: nến phẳng, giữ nguyên mức giá trước
-            opens[i]  = i === 0 ? 0 : closes[i - 1];
-            closes[i] = opens[i];
+            // Hòa: nến vàng cùng vị trí nến trước (open và close giống hệt nến trước)
+            opens[i]  = i === 0 ? 0 : opens[i - 1];
+            closes[i] = i === 0 ? 0 : closes[i - 1];
         } else {
             const delta = r === 'WIN' ? 1 : -1;
             if (i === 0) {
