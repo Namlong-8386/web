@@ -288,8 +288,9 @@ function drawChart(canvas, results) {
     for (let i = 0; i < n; i++) {
         const r = data[i];
         if (r === 'TIE') {
+            // TIE: cùng vị trí nến trước (open và close giống hệt)
             openLvl[i]  = i === 0 ? 0 : openLvl[i - 1];
-            closeLvl[i] = openLvl[i];
+            closeLvl[i] = i === 0 ? 0 : closeLvl[i - 1];
         } else {
             const isWin = r === 'WIN';
             const prev  = lastNonTie(i);
@@ -347,11 +348,14 @@ function drawChart(canvas, results) {
         const x     = padL + i * step + (step - candleW) / 2;
 
         if (isTie) {
-            const y = lvlY(openLvl[i]);
+            const yOpen  = lvlY(openLvl[i]);
+            const yClose = lvlY(closeLvl[i]);
+            const yTop   = Math.min(yOpen, yClose);
+            const h      = Math.max(3, Math.abs(yClose - yOpen));
             ctx.shadowColor = 'rgba(251,191,36,0.4)';
             ctx.shadowBlur  = 4;
             ctx.fillStyle   = '#fbbf24';
-            ctx.fillRect(x, y - 1.5, candleW, 3);
+            ctx.fillRect(x, yTop, candleW, h);
             ctx.shadowBlur  = 0;
         } else {
             const yOpen  = lvlY(openLvl[i]);
