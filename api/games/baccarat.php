@@ -35,7 +35,7 @@ if (!is_array($parsed)) {
 }
 
 $tables = array_values(array_filter($parsed, function($t) {
-    return isset($t['results']) && count($t['results']) >= 3;
+    return isset($t['table_name']);
 }));
 
 usort($tables, function($a, $b) {
