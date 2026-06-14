@@ -265,60 +265,61 @@ function drawChart(canvas, results) {
         return;
     }
 
-    // Build candle open/close:
-    // Same direction as previous → open = prev close (continue)
-    // Opposite direction         → open = prev open  (snap back to prev start)
-    const opens  = new Array(n);
-    const closes = new Array(n);
-    // Tìm kết quả không phải TIE gần nhất trước vị trí i
-    function lastNonTie(i) {
-        for (let j = i - 1; j >= 0; j--) {
-            if (data[j] !== 'TIE') return data[j];
-        }
-        return null;
-    }
-    for (let i = 0; i < n; i++) {
-        const r = data[i];
-        if (r === 'TIE') {
-            // Hòa: nến vàng cùng vị trí nến trước (open và close giống hệt nến trước)
-            opens[i]  = i === 0 ? 0 : opens[i - 1];
-            closes[i] = i === 0 ? 0 : closes[i - 1];
-        } else {
-            const delta = r === 'WIN' ? 1 : -1;
-            if (i === 0) {
-                opens[i]  = 0;
-                closes[i] = delta;
-            } else {
-                const prev = lastNonTie(i);
-                const prevSameDir = (prev !== null && r === prev);
-                opens[i]  = prevSameDir ? closes[i - 1] : opens[i - 1];
-                closes[i] = opens[i] + delta;
-            }
-        }
-    }
-
-    const allVals = [...opens, ...closes];
-    const minP = Math.min(...allVals);
-    const maxP = Math.max(...allVals);
-    const range = maxP - minP || 1;
-
-    // Thêm padding dọc 30% để nến không bị sát mép / không quá to khi ít dữ liệu
-    const vPad  = range * 0.30;
-    const viewMin   = minP - vPad;
-    const viewRange = (range + vPad * 2) || 1;
-
     const padT = 8, padB = 8, padL = 4, padR = 4;
     const chartH = H - padT - padB;
     const chartW = W - padL - padR;
 
-    function yPos(v) {
-        return padT + (1 - (v - viewMin) / viewRange) * chartH;
-    }
-
     const step    = chartW / Math.max(n, 20);
     const candleW = Math.min(10, Math.max(2, step * 0.72));
 
-    // Background grid (horizontal, subtle)
+    // Chiều cao cố định mỗi nến — tất cả bằng nhau
+    const unitH = Math.max(4, Math.min(16, chartH / 5));
+
+    // Tính vị trí Y tuyệt đối cho từng nến dựa trên lịch sử
+    // currentY = vị trí đường baseline nến hiện tại (top của nến WIN, bottom của nến LOSE)
+    // Bắt đầu từ giữa chart
+    const yStarts = new Array(n); // y pixel của điểm "open" mỗi nến
+    let curY = padT + chartH / 2;
+
+    // Tìm kết quả không phải TIE gần nhất trước vị trí i
+    function lastNonTie(idx) {
+        for (let j = idx - 1; j >= 0; j--) {
+            if (data[j] !== 'TIE') return data[j];
+        }
+        return null;
+    }
+
+    for (let i = 0; i < n; i++) {
+        const r = data[i];
+        if (r === 'TIE') {
+            yStarts[i] = i === 0 ? curY : yStarts[i - 1];
+        } else {
+            const prev = lastNonTie(i);
+            const prevSameDir = (prev !== null && r === prev);
+            if (i === 0) {
+                yStarts[i] = curY;
+            } else if (prevSameDir) {
+                // Cùng chiều: tiếp tục từ cuối nến trước
+                yStarts[i] = r === 'WIN' ? yStarts[i-1] - unitH : yStarts[i-1] + unitH;
+            } else {
+                // Đổi chiều: quay về đầu nến trước
+                yStarts[i] = yStarts[i-1];
+            }
+            curY = r === 'WIN' ? yStarts[i] - unitH : yStarts[i] + unitH;
+        }
+    }
+
+    // Căn giữa chart dựa trên khoảng Y thực tế
+    const allY = yStarts.flatMap((y, i) =>
+        data[i] === 'WIN'  ? [y, y - unitH] :
+        data[i] === 'LOSE' ? [y, y + unitH] : [y]
+    );
+    const minY = Math.min(...allY);
+    const maxY = Math.max(...allY);
+    const totalSpan = maxY - minY;
+    const offset = (padT + chartH / 2) - (minY + totalSpan / 2);
+
+    // Background grid
     ctx.strokeStyle = 'rgba(255,255,255,0.04)';
     ctx.lineWidth = 1;
     for (let i = 1; i <= 3; i++) {
@@ -326,41 +327,36 @@ function drawChart(canvas, results) {
         ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W - padR, y); ctx.stroke();
     }
 
-    // Baseline: nến đầu tiên luôn bắt đầu tại đường trung bình
+    // Baseline giữa chart
     ctx.strokeStyle = 'rgba(255,255,255,0.08)';
     ctx.lineWidth = 1;
     ctx.setLineDash([4, 4]);
     ctx.beginPath();
-    ctx.moveTo(padL, yPos(opens[0]));
-    ctx.lineTo(W - padR, yPos(opens[0]));
+    ctx.moveTo(padL, yStarts[0] + offset);
+    ctx.lineTo(W - padR, yStarts[0] + offset);
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // Draw candles
+    // Draw candles — tất cả cùng chiều cao unitH
     for (let i = 0; i < n; i++) {
         const r     = data[i];
         const isTie = r === 'TIE';
         const isWin = r === 'WIN';
-        const open  = opens[i];
-        const close = closes[i];
         const x     = padL + i * step + (step - candleW) / 2;
+        const yBase = yStarts[i] + offset;
 
         if (isTie) {
-            // Nến hòa: đường ngang vàng mỏng
-            const y = yPos(open);
             ctx.shadowColor = 'rgba(251,191,36,0.4)';
             ctx.shadowBlur  = 4;
             ctx.fillStyle   = '#fbbf24';
-            ctx.fillRect(x, y - 1.5, candleW, 3);
+            ctx.fillRect(x, yBase - 1.5, candleW, 3);
             ctx.shadowBlur  = 0;
         } else {
-            const yTop = Math.min(yPos(open), yPos(close));
-            const yBot = Math.max(yPos(open), yPos(close));
-            const h    = Math.max(2, yBot - yTop);
+            const yTop = isWin ? yBase - unitH : yBase;
             ctx.shadowColor = isWin ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.3)';
             ctx.shadowBlur  = 4;
             ctx.fillStyle   = isWin ? '#22c55e' : '#ef4444';
-            ctx.fillRect(x, yTop, candleW, h);
+            ctx.fillRect(x, yTop, candleW, unitH);
             ctx.shadowBlur  = 0;
         }
     }
