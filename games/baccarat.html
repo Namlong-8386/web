@@ -246,12 +246,26 @@ function drawChart(canvas, results) {
     const n = data.length;
     if (n < 2) return;
 
-    // Build cumulative price: starts 0, WIN=+1, LOSE=-1
-    const prices = [0];
-    for (const r of data) prices.push(prices[prices.length - 1] + (r === 'WIN' ? 1 : -1));
+    // Build candle open/close:
+    // Same direction as previous → open = prev close (continue)
+    // Opposite direction         → open = prev open  (snap back to prev start)
+    const opens  = new Array(n);
+    const closes = new Array(n);
+    for (let i = 0; i < n; i++) {
+        const isWin = data[i] === 'WIN';
+        if (i === 0) {
+            opens[i]  = 0;
+            closes[i] = isWin ? 1 : -1;
+        } else {
+            const prevSameDir = (data[i] === data[i - 1]);
+            opens[i]  = prevSameDir ? closes[i - 1] : opens[i - 1];
+            closes[i] = opens[i] + (isWin ? 1 : -1);
+        }
+    }
 
-    const minP = Math.min(...prices);
-    const maxP = Math.max(...prices);
+    const allVals = [...opens, ...closes];
+    const minP = Math.min(...allVals);
+    const maxP = Math.max(...allVals);
     const range = maxP - minP || 1;
 
     const padT = 8, padB = 8, padL = 4, padR = 4;
@@ -286,14 +300,13 @@ function drawChart(canvas, results) {
     // Draw candles
     for (let i = 0; i < n; i++) {
         const isWin = data[i] === 'WIN';
-        const open  = prices[i];
-        const close = prices[i + 1];
+        const open  = opens[i];
+        const close = closes[i];
         const x     = padL + i * step + (step - candleW) / 2;
         const yTop  = Math.min(yPos(open), yPos(close));
         const yBot  = Math.max(yPos(open), yPos(close));
         const h     = Math.max(2, yBot - yTop);
 
-        // Shadow / glow effect
         ctx.shadowColor  = isWin ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.3)';
         ctx.shadowBlur   = 4;
         ctx.fillStyle    = isWin ? '#22c55e' : '#ef4444';
@@ -301,18 +314,18 @@ function drawChart(canvas, results) {
         ctx.shadowBlur   = 0;
     }
 
-    // MA(5) line — amber
+    // MA(5) line — amber (based on closes)
     const MA = 5;
-    if (prices.length > MA) {
+    if (closes.length >= MA) {
         ctx.beginPath();
         ctx.strokeStyle = '#f59e0b';
         ctx.lineWidth   = 1.5;
         ctx.lineJoin    = 'round';
         ctx.lineCap     = 'round';
         let started = false;
-        for (let i = MA; i < prices.length; i++) {
-            const avg = prices.slice(i - MA, i).reduce((a, b) => a + b, 0) / MA;
-            const x   = padL + (i - 0.5) * step;
+        for (let i = MA - 1; i < closes.length; i++) {
+            const avg = closes.slice(i - MA + 1, i + 1).reduce((a, b) => a + b, 0) / MA;
+            const x   = padL + (i + 0.5) * step;
             const y   = yPos(avg);
             if (!started) { ctx.moveTo(x, y); started = true; }
             else ctx.lineTo(x, y);
@@ -322,16 +335,16 @@ function drawChart(canvas, results) {
 
     // MA(10) line — blue, lighter
     const MA10 = 10;
-    if (prices.length > MA10) {
+    if (closes.length >= MA10) {
         ctx.beginPath();
         ctx.strokeStyle = 'rgba(96,165,250,0.7)';
         ctx.lineWidth   = 1;
         ctx.lineJoin    = 'round';
         ctx.lineCap     = 'round';
         let started = false;
-        for (let i = MA10; i < prices.length; i++) {
-            const avg = prices.slice(i - MA10, i).reduce((a, b) => a + b, 0) / MA10;
-            const x   = padL + (i - 0.5) * step;
+        for (let i = MA10 - 1; i < closes.length; i++) {
+            const avg = closes.slice(i - MA10 + 1, i + 1).reduce((a, b) => a + b, 0) / MA10;
+            const x   = padL + (i + 0.5) * step;
             const y   = yPos(avg);
             if (!started) { ctx.moveTo(x, y); started = true; }
             else ctx.lineTo(x, y);
