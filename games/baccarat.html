@@ -103,19 +103,6 @@
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ── Refresh fab ── */
-        #fab-refresh {
-            position: fixed; bottom: 20px; right: 16px; z-index: 900;
-            width: 48px; height: 48px; border-radius: 50%;
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            border: none; cursor: pointer; color: white;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 20px rgba(245,158,11,0.4);
-            transition: transform 0.2s, opacity 0.2s;
-        }
-        #fab-refresh:active { transform: scale(0.9); }
-        #fab-refresh.loading { opacity: 0.6; pointer-events: none; }
-        #fab-refresh.loading svg { animation: spin 0.7s linear infinite; }
 
         .streak-chip {
             font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 10px;
@@ -153,10 +140,6 @@
     <div id="tables-grid"></div>
 </div>
 
-<!-- FAB Refresh -->
-<button id="fab-refresh" onclick="loadData()" title="Làm mới">
-    <i data-lucide="refresh-cw" style="width:20px;height:20px;"></i>
-</button>
 
 <script>
 lucide.createIcons();
@@ -430,9 +413,6 @@ function renderTable(table) {
 // LOAD DATA
 // ─────────────────────────────────────────────
 async function loadData() {
-    const fab = document.getElementById('fab-refresh');
-    fab.classList.add('loading');
-    lucide.createIcons();
 
     try {
         const res  = await fetch('/api/games/baccarat.php', {
@@ -473,10 +453,7 @@ async function loadData() {
 
     } catch (err) {
         showOverlayError('Không thể kết nối máy chủ.');
-    } finally {
-        fab.classList.remove('loading');
-        lucide.createIcons();
-    }
+    } finally {}
 }
 
 function showOverlayError(msg) {
@@ -512,7 +489,7 @@ window.addEventListener('resize', () => {
 
 // Auto refresh every 30s
 loadData();
-setInterval(loadData, 30000);
+setInterval(loadData, 1000);
 </script>
 </body>
 </html>
