@@ -84,6 +84,7 @@
         }
         .dot-win  { background: #16a34a; }
         .dot-lose { background: #dc2626; }
+        .dot-tie  { background: #d97706; }
 
         .conf-label {
             font-size: 10px; color: #f59e0b; font-weight: 800; white-space: nowrap; margin-left: 6px;
@@ -269,15 +270,30 @@ function drawChart(canvas, results) {
     // Opposite direction         → open = prev open  (snap back to prev start)
     const opens  = new Array(n);
     const closes = new Array(n);
+    // Tìm kết quả không phải TIE gần nhất trước vị trí i
+    function lastNonTie(i) {
+        for (let j = i - 1; j >= 0; j--) {
+            if (data[j] !== 'TIE') return data[j];
+        }
+        return null;
+    }
     for (let i = 0; i < n; i++) {
-        const isWin = data[i] === 'WIN';
-        if (i === 0) {
-            opens[i]  = 0;
-            closes[i] = isWin ? 1 : -1;
+        const r = data[i];
+        if (r === 'TIE') {
+            // Hòa: nến phẳng, giữ nguyên mức giá trước
+            opens[i]  = i === 0 ? 0 : closes[i - 1];
+            closes[i] = opens[i];
         } else {
-            const prevSameDir = (data[i] === data[i - 1]);
-            opens[i]  = prevSameDir ? closes[i - 1] : opens[i - 1];
-            closes[i] = opens[i] + (isWin ? 1 : -1);
+            const delta = r === 'WIN' ? 1 : -1;
+            if (i === 0) {
+                opens[i]  = 0;
+                closes[i] = delta;
+            } else {
+                const prev = lastNonTie(i);
+                const prevSameDir = (prev !== null && r === prev);
+                opens[i]  = prevSameDir ? closes[i - 1] : opens[i - 1];
+                closes[i] = opens[i] + delta;
+            }
         }
     }
 
@@ -322,19 +338,31 @@ function drawChart(canvas, results) {
 
     // Draw candles
     for (let i = 0; i < n; i++) {
-        const isWin = data[i] === 'WIN';
+        const r     = data[i];
+        const isTie = r === 'TIE';
+        const isWin = r === 'WIN';
         const open  = opens[i];
         const close = closes[i];
         const x     = padL + i * step + (step - candleW) / 2;
-        const yTop  = Math.min(yPos(open), yPos(close));
-        const yBot  = Math.max(yPos(open), yPos(close));
-        const h     = Math.max(2, yBot - yTop);
 
-        ctx.shadowColor  = isWin ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.3)';
-        ctx.shadowBlur   = 4;
-        ctx.fillStyle    = isWin ? '#22c55e' : '#ef4444';
-        ctx.fillRect(x, yTop, candleW, h);
-        ctx.shadowBlur   = 0;
+        if (isTie) {
+            // Nến hòa: đường ngang vàng mỏng
+            const y = yPos(open);
+            ctx.shadowColor = 'rgba(251,191,36,0.4)';
+            ctx.shadowBlur  = 4;
+            ctx.fillStyle   = '#fbbf24';
+            ctx.fillRect(x, y - 1.5, candleW, 3);
+            ctx.shadowBlur  = 0;
+        } else {
+            const yTop = Math.min(yPos(open), yPos(close));
+            const yBot = Math.max(yPos(open), yPos(close));
+            const h    = Math.max(2, yBot - yTop);
+            ctx.shadowColor = isWin ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.3)';
+            ctx.shadowBlur  = 4;
+            ctx.fillStyle   = isWin ? '#22c55e' : '#ef4444';
+            ctx.fillRect(x, yTop, candleW, h);
+            ctx.shadowBlur  = 0;
+        }
     }
 
 }
@@ -353,7 +381,8 @@ function renderTable(table) {
         for (let i = results.length - 2; i >= 0; i--) {
             if (results[i] === last) cnt++; else break;
         }
-        return cnt >= 2 ? `${cnt} ${last === 'WIN' ? '🟢' : '🔴'} liên tiếp` : '';
+        const icon = last === 'WIN' ? '🟢' : last === 'LOSE' ? '🔴' : '🟡';
+        return cnt >= 2 ? `${cnt} ${icon} liên tiếp` : '';
     })();
 
     const card = document.createElement('div');
@@ -384,8 +413,8 @@ function renderTable(table) {
     const dotSlice  = results.slice(Math.max(0, results.length - 15));
     dotSlice.forEach(r => {
         const d = document.createElement('div');
-        d.className = `dot ${r === 'WIN' ? 'dot-win' : 'dot-lose'}`;
-        d.textContent = r === 'WIN' ? 'W' : 'L';
+        d.className = `dot ${r === 'WIN' ? 'dot-win' : r === 'TIE' ? 'dot-tie' : 'dot-lose'}`;
+        d.textContent = r === 'WIN' ? 'W' : r === 'TIE' ? 'T' : 'L';
         dotsWrap.appendChild(d);
     });
 
