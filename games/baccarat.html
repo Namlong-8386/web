@@ -287,13 +287,13 @@ function drawChart(canvas, results) {
         ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W - padR, y); ctx.stroke();
     }
 
-    // Zero / midline
+    // Baseline: nến đầu tiên luôn bắt đầu tại đường trung bình
     ctx.strokeStyle = 'rgba(255,255,255,0.08)';
     ctx.lineWidth = 1;
     ctx.setLineDash([4, 4]);
     ctx.beginPath();
-    ctx.moveTo(padL, yPos((minP + maxP) / 2));
-    ctx.lineTo(W - padR, yPos((minP + maxP) / 2));
+    ctx.moveTo(padL, yPos(opens[0]));
+    ctx.lineTo(W - padR, yPos(opens[0]));
     ctx.stroke();
     ctx.setLineDash([]);
 
