@@ -4,10 +4,10 @@
         "password": "$2y$10$Z21fxGjUJODW4vRpknRe..oDiTCxhMntPrvZutTCR1ESUb5eUHmHC",
         "full_name": "Quản trị viên",
         "user_id": "999999",
-        "balance": 1049999,
+        "balance": 1039999,
         "role": "admin",
         "token": "4488612cabeb2b4ca7e3584653a9b49c",
-        "vip_expire": 1781436530
+        "vip_expire": 1781570484
     },
     {
         "username": "trumhknam",

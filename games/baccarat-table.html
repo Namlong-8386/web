@@ -299,25 +299,6 @@ function render(data) {
         tube.appendChild(div);
     }
 
-    // --- Stats ---
-    const rated = history.filter(h => h.status && h.status !== '');
-    const wins  = rated.filter(h => h.status === 'WIN').length;
-    const loses = rated.filter(h => h.status === 'LOSE').length;
-    const ties  = rated.filter(h => h.status === 'TIE').length;
-    const total = rated.length || 1;
-
-    function pct(n) { return Math.round(n / total * 100); }
-
-    document.querySelector('#stat-win .stat-num').textContent  = wins;
-    document.querySelector('#stat-lose .stat-num').textContent = loses;
-    document.querySelector('#stat-tie .stat-num').textContent  = ties;
-    document.getElementById('pct-win').textContent   = pct(wins)  + '%';
-    document.getElementById('pct-lose').textContent  = pct(loses) + '%';
-    document.getElementById('pct-tie').textContent   = pct(ties)  + '%';
-    document.getElementById('bar-win').style.width   = pct(wins)  + '%';
-    document.getElementById('bar-lose').style.width  = pct(loses) + '%';
-    document.getElementById('bar-tie').style.width   = pct(ties)  + '%';
-
     // --- History table (newest first) ---
     const body = document.getElementById('history-body');
     body.innerHTML = '';
