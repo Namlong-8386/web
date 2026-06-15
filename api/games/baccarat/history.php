@@ -5,13 +5,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     json_response(false, 'Phương thức không được hỗ trợ.', 405);
 }
 
-$user = require_login();
-
-$now = time();
-$vip_expire = isset($user['vip_expire']) ? intval($user['vip_expire']) : 0;
-if ($user['role'] !== 'admin' && $vip_expire <= $now) {
-    json_response(false, 'Bạn cần có gói VIP còn hiệu lực để sử dụng tính năng này.', 403);
-}
+require_login();
 
 $HISTORY_URL = 'http://103.249.117.228:46566/history';
 

@@ -7,7 +7,7 @@
         "balance": 1039999,
         "role": "admin",
         "token": "4488612cabeb2b4ca7e3584653a9b49c",
-        "vip_expire": 1781570484
+        "vip_expire": 0
     },
     {
         "username": "trumhknam",
@@ -16,8 +16,8 @@
         "user_id": "112704",
         "balance": 0,
         "role": "user",
-        "token": "fb36738e12f87afb600d37e7c45e87b2",
-        "vip_expire": 1781436576
+        "token": "ff560738569634a5762628b0a285643d",
+        "vip_expire": 0
     },
     {
         "username": "quanggphu",
