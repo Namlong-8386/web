@@ -377,19 +377,25 @@ function drawChart(canvas, results) {
         }
     }
 
-    // --- Pass 2: tính span thực tế → unitH vừa khít chartH ---
+    // --- Pass 2: unitH = candleW → nến luôn vuông, clip nếu tràn ---
     const allLvls = [...openLvl, ...closeLvl];
     const minLvl  = Math.min(...allLvls);
     const maxLvl  = Math.max(...allLvls);
-    const span    = (maxLvl - minLvl) || 1;
-    // +2 padding (1 unit trên + 1 unit dưới)
-    const unitH   = Math.max(2, Math.floor(chartH / (span + 2)));
 
-    // level → pixel Y (level 0 ở giữa chart, level tăng → xuống)
+    // unitH cố định = candleW để nến luôn là hình vuông
+    const unitH = candleW;
+
+    // Căn giữa theo dữ liệu thực tế
     const midLvl = (minLvl + maxLvl) / 2;
     function lvlY(l) {
         return padT + chartH / 2 + (l - midLvl) * unitH;
     }
+
+    // Clip vùng chart để nến không tràn ra ngoài
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(padL, padT, chartW, chartH);
+    ctx.clip();
 
     // Background grid
     ctx.strokeStyle = 'rgba(255,255,255,0.04)';
@@ -409,7 +415,7 @@ function drawChart(canvas, results) {
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // Draw candles — tất cả cùng chiều cao unitH
+    // Draw candles — mỗi nến là hình vuông candleW × candleW
     for (let i = 0; i < n; i++) {
         const r     = data[i];
         const isTie = r === 'TIE';
@@ -417,20 +423,18 @@ function drawChart(canvas, results) {
         const x     = padL + i * step + (step - candleW) / 2;
 
         if (isTie) {
-            const yOpen  = lvlY(openLvl[i]);
-            const yClose = lvlY(closeLvl[i]);
-            const yTop   = Math.min(yOpen, yClose);
-            const h      = Math.max(3, Math.abs(yClose - yOpen));
+            const yCenter = lvlY(openLvl[i]);
+            const yTop    = yCenter - candleW / 2;
             ctx.shadowColor = 'rgba(251,191,36,0.4)';
             ctx.shadowBlur  = 4;
             ctx.fillStyle   = '#fbbf24';
-            ctx.fillRect(x, yTop, candleW, h);
+            ctx.fillRect(x, yTop, candleW, candleW);
             ctx.shadowBlur  = 0;
         } else {
             const yOpen  = lvlY(openLvl[i]);
             const yClose = lvlY(closeLvl[i]);
             const yTop   = Math.min(yOpen, yClose);
-            const h      = Math.max(unitH, Math.abs(yClose - yOpen));
+            const h      = candleW;
             ctx.shadowColor = isWin ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.3)';
             ctx.shadowBlur  = 4;
             ctx.fillStyle   = isWin ? '#22c55e' : '#ef4444';
@@ -439,6 +443,7 @@ function drawChart(canvas, results) {
         }
     }
 
+    ctx.restore();
 }
 
 // ─────────────────────────────────────────────
