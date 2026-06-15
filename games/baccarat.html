@@ -414,12 +414,16 @@ function drawChart(canvas, results) {
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // Draw candles — hình vuông size × size, căn giữa trong step
+    // Xếp nến sát nhau, căn giữa toàn bộ trong chart
+    const totalW  = n * candleW;
+    const startX  = padL + (chartW - totalW) / 2;
+
+    // Draw candles — hình vuông size × size, chạm nhau
     for (let i = 0; i < n; i++) {
         const r     = data[i];
         const isTie = r === 'TIE';
         const isWin = r === 'WIN';
-        const x     = padL + i * step + (step - candleW) / 2;
+        const x     = startX + i * candleW;
 
         if (isTie) {
             const yCenter = lvlY(openLvl[i]);
