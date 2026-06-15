@@ -70,21 +70,20 @@
         .tube-wrap {
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 16px; padding: 14px; margin-bottom: 12px;
+            border-radius: 16px; padding: 10px 14px; margin-bottom: 12px;
         }
         .tube-bar {
-            display: flex; gap: 6px; align-items: center; justify-content: center; flex-wrap: wrap;
+            display: flex; gap: 5px; align-items: center; justify-content: space-between;
         }
         .tube-pill {
-            width: 36px; height: 36px; border-radius: 50%;
+            flex: 1; height: 28px; border-radius: 6px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 15px; font-weight: 900;
-            transition: transform 0.2s;
+            font-size: 13px; font-weight: 900; color: white;
         }
-        .tube-P { background: rgba(96,165,250,0.2); border: 2px solid #60a5fa; color: #60a5fa; box-shadow: 0 0 8px rgba(96,165,250,0.3); }
-        .tube-B { background: rgba(248,113,113,0.2); border: 2px solid #f87171; color: #f87171; box-shadow: 0 0 8px rgba(248,113,113,0.3); }
-        .tube-T { background: rgba(251,191,36,0.2);  border: 2px solid #fbbf24; color: #fbbf24; box-shadow: 0 0 8px rgba(251,191,36,0.3); }
-        .tube-empty { background: rgba(255,255,255,0.03); border: 2px solid rgba(255,255,255,0.08); color: #334155; }
+        .tube-P { background: #2563eb; }
+        .tube-B { background: #dc2626; }
+        .tube-T { background: #d97706; }
+        .tube-empty { background: rgba(255,255,255,0.05); color: #334155; }
 
         /* ── Stats table ── */
         .stats-wrap {
