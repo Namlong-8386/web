@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/../../config.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     json_response(false, 'Phương thức không được hỗ trợ.', 405);

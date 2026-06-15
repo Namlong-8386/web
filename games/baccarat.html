@@ -387,7 +387,7 @@ function renderTable(table) {
 async function loadData() {
 
     try {
-        const res  = await fetch('/api/games/baccarat.php', {
+        const res  = await fetch('/api/games/baccarat/history', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         const json = await res.json();
