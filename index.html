@@ -210,7 +210,13 @@
                 return;
             }
 
-            // Kiểm tra VIP trước khi vào dịch vụ
+            // Dịch Vụ Mục 3 (Baccarat): chỉ cần đăng nhập, không cần VIP
+            if (serviceName === 'Dịch Vụ Mục 3') {
+                window.location.href = '/game/baccarat';
+                return;
+            }
+
+            // Các dịch vụ khác: kiểm tra VIP
             try {
                 const res = await fetch('api/user.php', { headers: { 'Authorization': `Bearer ${token}` } });
                 const data = await res.json();
@@ -228,8 +234,6 @@
                 }
                 if (serviceName === 'Dịch Vụ Mục 1') {
                     window.location.href = '/game/sunwin';
-                } else if (serviceName === 'Dịch Vụ Mục 3') {
-                    window.location.href = '/game/baccarat';
                 } else {
                     await alert(`${serviceName} đang được chuẩn bị và sẽ sớm khả dụng!`);
                 }
