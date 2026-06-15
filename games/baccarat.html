@@ -358,16 +358,13 @@ function drawChart(canvas, results) {
 }
 
 // ─────────────────────────────────────────────
-// RENDER TABLE CARD
+// RENDER TABLE CARD (tạo mới)
 // ─────────────────────────────────────────────
-function renderTable(table) {
-    const results = table.results || [];
-    const pred    = predictBaccarat(results);
-
-
+function createTableCard(table) {
     const card = document.createElement('a');
     card.className = 'table-card';
     card.href = '/game/baccarat-table?table=' + encodeURIComponent(table.table_name);
+    card.dataset.tableName = table.table_name;
     card.innerHTML = `
         <div class="card-header">
             <div style="display:flex;align-items:center;gap:8px;">
@@ -377,18 +374,23 @@ function renderTable(table) {
         </div>
         <div class="chart-wrap">
             <canvas class="chart-canvas"></canvas>
-        </div>
         </div>`;
-
-
     return card;
 }
 
+// Cập nhật card đã có (không tạo lại DOM)
+function updateTableCard(card, table) {
+    const roundBadge = card.querySelector('.round-badge');
+    if (roundBadge) roundBadge.textContent = `Phiên ${parseInt(table.round)}`;
+
+    const canvas = card.querySelector('canvas.chart-canvas');
+    if (canvas) drawChart(canvas, table.results || []);
+}
+
 // ─────────────────────────────────────────────
-// LOAD DATA
+// LOAD DATA (smart update — không flicker)
 // ─────────────────────────────────────────────
 async function loadData() {
-
     try {
         const res  = await fetch('/api/games/baccarat/history', {
             headers: { 'Authorization': `Bearer ${token}` }
@@ -402,21 +404,31 @@ async function loadData() {
 
         const tables = json.tables || [];
         const grid   = document.getElementById('tables-grid');
-        grid.innerHTML = '';
 
-        tables.forEach(table => {
-            const card = renderTable(table);
-            grid.appendChild(card);
+        // Build map of existing cards
+        const existingCards = {};
+        grid.querySelectorAll('.table-card[data-table-name]').forEach(c => {
+            existingCards[c.dataset.tableName] = c;
         });
 
-        // Draw charts after cards are in DOM
-        requestAnimationFrame(() => {
-            document.querySelectorAll('.table-card').forEach((card, idx) => {
-                const canvas  = card.querySelector('canvas.chart-canvas');
-                const table   = tables[idx];
-                if (canvas && table) drawChart(canvas, table.results || []);
-            });
+        // Add or update cards
+        tables.forEach((table, idx) => {
+            const name = table.table_name;
+            if (existingCards[name]) {
+                updateTableCard(existingCards[name], table);
+                delete existingCards[name];
+            } else {
+                const card = createTableCard(table);
+                grid.appendChild(card);
+                requestAnimationFrame(() => {
+                    const canvas = card.querySelector('canvas.chart-canvas');
+                    if (canvas) drawChart(canvas, table.results || []);
+                });
+            }
         });
+
+        // Remove cards no longer in data
+        Object.values(existingCards).forEach(c => c.remove());
 
         // Update status
         document.getElementById('header-sub').textContent = `${tables.length} bàn đang hoạt động`;
@@ -428,7 +440,7 @@ async function loadData() {
 
     } catch (err) {
         showOverlayError('Không thể kết nối máy chủ.');
-    } finally {}
+    }
 }
 
 function showOverlayError(msg) {
