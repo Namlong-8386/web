@@ -376,27 +376,25 @@ function drawChart(canvas, results) {
         }
     }
 
-    // --- Pass 2: candleW = step (chạm nhau), unitH = candleW (vuông), clip overflow ---
+    // --- Pass 2: size = min(step, chartH/(span+2)) → vuông, vừa khít, đủ dữ liệu ---
     const allLvls = [...openLvl, ...closeLvl];
     const minLvl  = Math.min(...allLvls);
     const maxLvl  = Math.max(...allLvls);
+    const span    = (maxLvl - minLvl) || 1;
 
-    // Nến lấp đầy bề ngang — không khoảng cách
-    const candleW = Math.max(2, step);
-    // Chiều cao = chiều rộng → luôn vuông
-    const unitH   = candleW;
+    // Kích thước nến: ràng buộc bởi chiều ngang VÀ chiều dọc, lấy cái nhỏ hơn
+    const sizeH = chartH / (span + 2);           // vừa khít dọc
+    const sizeW = step;                           // vừa khít ngang (chạm nhau)
+    const size  = Math.max(2, Math.min(sizeW, sizeH));
 
-    // Căn giữa theo dữ liệu thực tế
+    const candleW = size;
+    const unitH   = size;
+
+    // Căn giữa toàn bộ dữ liệu
     const midLvl = (minLvl + maxLvl) / 2;
     function lvlY(l) {
         return padT + chartH / 2 + (l - midLvl) * unitH;
     }
-
-    // Clip vùng chart để nến không tràn ra ngoài
-    ctx.save();
-    ctx.beginPath();
-    ctx.rect(padL, padT, chartW, chartH);
-    ctx.clip();
 
     // Background grid
     ctx.strokeStyle = 'rgba(255,255,255,0.04)';
@@ -416,7 +414,7 @@ function drawChart(canvas, results) {
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // Draw candles — mỗi nến là hình vuông candleW × candleW
+    // Draw candles — hình vuông size × size, căn giữa trong step
     for (let i = 0; i < n; i++) {
         const r     = data[i];
         const isTie = r === 'TIE';
@@ -435,16 +433,13 @@ function drawChart(canvas, results) {
             const yOpen  = lvlY(openLvl[i]);
             const yClose = lvlY(closeLvl[i]);
             const yTop   = Math.min(yOpen, yClose);
-            const h      = candleW;
             ctx.shadowColor = isWin ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.3)';
             ctx.shadowBlur  = 4;
             ctx.fillStyle   = isWin ? '#22c55e' : '#ef4444';
-            ctx.fillRect(x, yTop, candleW, h);
+            ctx.fillRect(x, yTop, candleW, candleW);
             ctx.shadowBlur  = 0;
         }
     }
-
-    ctx.restore();
 }
 
 // ─────────────────────────────────────────────
