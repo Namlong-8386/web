@@ -338,8 +338,7 @@ function drawChart(canvas, results) {
     const chartH = H - padT - padB;
     const chartW = W - padL - padR;
 
-    const step    = chartW / Math.max(n, 20);
-    const candleW = Math.min(10, Math.max(2, step * 0.72));
+    const step = chartW / Math.max(n, 20);
 
     // --- Pass 1: tính "level" nguyên cho từng nến (không dùng pixel) ---
     // WIN open ở level L, close ở L-1 (đi lên)
@@ -377,13 +376,18 @@ function drawChart(canvas, results) {
         }
     }
 
-    // --- Pass 2: unitH = candleW → nến luôn vuông, clip nếu tràn ---
+    // --- Pass 2: tính unitH vừa khít chart, candleW = unitH → luôn vuông ---
     const allLvls = [...openLvl, ...closeLvl];
     const minLvl  = Math.min(...allLvls);
     const maxLvl  = Math.max(...allLvls);
+    const span    = (maxLvl - minLvl) || 1;
 
-    // unitH cố định = candleW để nến luôn là hình vuông
-    const unitH = candleW;
+    // Kích thước tối đa nếu ít dữ liệu
+    const maxSize = Math.min(10, Math.max(2, step * 0.72));
+    // Thu nhỏ đều để toàn bộ span vừa khít chartH (có padding 2 unit)
+    const unitH   = Math.max(2, Math.min(maxSize, Math.floor(chartH / (span + 2))));
+    // candleW = unitH → nến luôn vuông
+    const candleW = unitH;
 
     // Căn giữa theo dữ liệu thực tế
     const midLvl = (minLvl + maxLvl) / 2;
