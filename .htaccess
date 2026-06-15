@@ -7,8 +7,11 @@ RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# API - giữ nguyên
-RewriteRule ^api/ - [L]
+# API - file .php tồn tại trực tiếp thì đã được bắt ở trên
+# Nếu URL không có .php, thêm vào để Apache tìm đúng file
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(api/.+?)/?$ $1.php [L]
 
 # ─── Trang Admin ────────────────────────────────────────────────────────────
 RewriteRule ^admin/?$                   admin/index.html [L]
