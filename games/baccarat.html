@@ -376,18 +376,15 @@ function drawChart(canvas, results) {
         }
     }
 
-    // --- Pass 2: tính unitH vừa khít chart, candleW = unitH → luôn vuông ---
+    // --- Pass 2: candleW = step (chạm nhau), unitH = candleW (vuông), clip overflow ---
     const allLvls = [...openLvl, ...closeLvl];
     const minLvl  = Math.min(...allLvls);
     const maxLvl  = Math.max(...allLvls);
-    const span    = (maxLvl - minLvl) || 1;
 
-    // Kích thước tối đa nếu ít dữ liệu
-    const maxSize = Math.min(10, Math.max(2, step * 0.72));
-    // Thu nhỏ đều để toàn bộ span vừa khít chartH (có padding 2 unit)
-    const unitH   = Math.max(2, Math.min(maxSize, Math.floor(chartH / (span + 2))));
-    // candleW = unitH → nến luôn vuông
-    const candleW = unitH;
+    // Nến lấp đầy bề ngang — không khoảng cách
+    const candleW = Math.max(2, step);
+    // Chiều cao = chiều rộng → luôn vuông
+    const unitH   = candleW;
 
     // Căn giữa theo dữ liệu thực tế
     const midLvl = (minLvl + maxLvl) / 2;
