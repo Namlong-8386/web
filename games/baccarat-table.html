@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chi tiết bàn – BACCARAT</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { margin: 0; padding: 0; background: #0f172a; font-family: ui-sans-serif, system-ui, sans-serif; color: white; min-height: 100vh; }
+
+        /* ── Header ── */
+        #header-bar {
+            position: fixed; top: 0; left: 0; right: 0; height: 52px; z-index: 1000;
+            background: linear-gradient(90deg, #0f172a 0%, #1e293b 100%);
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            display: flex; align-items: center; padding: 0 12px; gap: 10px;
+        }
+
+        #main-content { padding: 64px 12px 24px; max-width: 600px; margin: 0 auto; }
+
+        /* ── Loading ── */
+        #overlay {
+            position: fixed; inset: 0; z-index: 500;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: #0f172a; gap: 12px;
+        }
+        .spinner {
+            width: 32px; height: 32px; border: 3px solid rgba(255,255,255,0.1);
+            border-top-color: #f59e0b; border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Top 2 boxes ── */
+        .top-row {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;
+        }
+        .info-box {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 14px 12px 12px;
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
+        }
+        .info-box-label {
+            font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.8px;
+        }
+        .result-val {
+            font-size: 42px; font-weight: 900; line-height: 1;
+        }
+        .result-P { color: #60a5fa; text-shadow: 0 0 16px rgba(96,165,250,0.5); }
+        .result-B { color: #f87171; text-shadow: 0 0 16px rgba(248,113,113,0.5); }
+        .result-T { color: #fbbf24; text-shadow: 0 0 16px rgba(251,191,36,0.5); }
+
+        .result-label-P { font-size: 11px; font-weight: 700; color: #93c5fd; }
+        .result-label-B { font-size: 11px; font-weight: 700; color: #fca5a5; }
+        .result-label-T { font-size: 11px; font-weight: 700; color: #fde68a; }
+
+        .pred-big {
+            font-size: 42px; font-weight: 900; line-height: 1;
+        }
+        .good-road {
+            font-size: 10px; font-weight: 700; color: #f59e0b;
+            background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.2);
+            border-radius: 20px; padding: 2px 8px; text-align: center;
+        }
+
+        /* ── Tube bar (last 10) ── */
+        .section-title {
+            font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;
+            letter-spacing: 0.8px; margin-bottom: 8px;
+        }
+        .tube-wrap {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px; padding: 12px 14px; margin-bottom: 12px;
+        }
+        .tube-bar {
+            display: flex; gap: 5px; align-items: center;
+        }
+        .tube-pill {
+            flex: 1; height: 36px; border-radius: 10px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            font-size: 14px; font-weight: 900; gap: 1px;
+            transition: transform 0.2s;
+        }
+        .tube-pill span.sub { font-size: 8px; font-weight: 600; opacity: 0.7; }
+        .tube-P { background: rgba(96,165,250,0.15); border: 1px solid rgba(96,165,250,0.3); color: #60a5fa; }
+        .tube-B { background: rgba(248,113,113,0.15); border: 1px solid rgba(248,113,113,0.3); color: #f87171; }
+        .tube-T { background: rgba(251,191,36,0.15);  border: 1px solid rgba(251,191,36,0.3);  color: #fbbf24; }
+        .tube-empty { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); color: #334155; }
+
+        /* ── Stats table ── */
+        .stats-wrap {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px; overflow: hidden; margin-bottom: 12px;
+        }
+        .stats-header {
+            display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+            padding: 8px 14px;
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .stats-row {
+            display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+            padding: 10px 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            align-items: center;
+            font-size: 13px;
+        }
+        .stats-row:last-child { border-bottom: none; }
+
+        .stat-badge {
+            display: inline-block; font-size: 11px; font-weight: 800;
+            padding: 3px 10px; border-radius: 20px; letter-spacing: 0.5px;
+        }
+        .badge-win  { background: rgba(34,197,94,0.15);  color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
+        .badge-lose { background: rgba(239,68,68,0.15);  color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+        .badge-tie  { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+
+        .stat-num { font-weight: 800; color: white; }
+        .stat-pct { font-size: 11px; color: #64748b; font-weight: 600; }
+
+        /* ── History table ── */
+        .history-wrap {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px; overflow: hidden;
+        }
+        .history-header {
+            display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
+            padding: 8px 14px;
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .history-row {
+            display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
+            padding: 9px 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            font-size: 12px; align-items: center;
+        }
+        .history-row:last-child { border-bottom: none; }
+        .history-row.win-row  { background: rgba(34,197,94,0.04); }
+        .history-row.lose-row { background: rgba(239,68,68,0.04); }
+        .history-row.tie-row  { background: rgba(251,191,36,0.04); }
+
+        .res-chip {
+            display: inline-block; font-size: 11px; font-weight: 800;
+            width: 24px; height: 24px; border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .chip-P { background: rgba(96,165,250,0.15); color: #60a5fa; border: 1px solid rgba(96,165,250,0.25); }
+        .chip-B { background: rgba(248,113,113,0.15); color: #f87171; border: 1px solid rgba(248,113,113,0.25); }
+        .chip-T { background: rgba(251,191,36,0.15);  color: #fbbf24; border: 1px solid rgba(251,191,36,0.25); }
+        .chip-empty { background: rgba(255,255,255,0.05); color: #475569; }
+
+        .round-num { color: #475569; font-size: 11px; font-weight: 700; }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div id="header-bar">
+    <a href="/game/baccarat" style="width:32px;height:32px;border-radius:10px;background:rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:center;color:#94a3b8;flex-shrink:0;text-decoration:none;">
+        <i data-lucide="arrow-left" style="width:18px;height:18px;"></i>
+    </a>
+    <img src="https://i.ibb.co/rGY7cLXY/x.jpg" alt="Baccarat"
+         style="width:30px;height:30px;object-fit:cover;border-radius:8px;flex-shrink:0;">
+    <div style="flex:1;min-width:0;">
+        <div style="font-weight:800;font-size:14px;line-height:1.2;" id="header-title">Đang tải...</div>
+        <div style="color:#64748b;font-size:10px;" id="header-sub">Baccarat</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;">
+        <div style="width:6px;height:6px;border-radius:50%;background:#10b981;" id="live-dot"></div>
+        <span style="color:#10b981;font-size:10px;font-weight:700;" id="updated-at">--:--</span>
+    </div>
+</div>
+
+<!-- Loading overlay -->
+<div id="overlay">
+    <div class="spinner"></div>
+    <div style="color:#64748b;font-size:12px;" id="overlay-msg">Đang tải dữ liệu bàn...</div>
+</div>
+
+<!-- Main content -->
+<div id="main-content" style="display:none;">
+
+    <!-- Top 2 boxes -->
+    <div class="top-row">
+        <div class="info-box">
+            <div class="info-box-label">Ván hiện tại</div>
+            <div class="result-val" id="cur-result">–</div>
+            <div id="cur-result-label" style="font-size:11px;font-weight:700;color:#94a3b8;">–</div>
+            <div style="font-size:10px;color:#475569;font-weight:600;" id="cur-round">Phiên –</div>
+        </div>
+        <div class="info-box">
+            <div class="info-box-label">Dự đoán</div>
+            <div class="result-val" id="pred-result">–</div>
+            <div id="pred-result-label" style="font-size:11px;font-weight:700;color:#94a3b8;">–</div>
+            <div class="good-road" id="good-road" style="display:none;">–</div>
+        </div>
+    </div>
+
+    <!-- Tube bar: last 10 -->
+    <div class="tube-wrap">
+        <div class="section-title">10 ván gần nhất (P / B / T)</div>
+        <div class="tube-bar" id="tube-bar"></div>
+    </div>
+
+    <!-- WIN / LOSE / TIE stats -->
+    <div class="stats-wrap">
+        <div class="stats-header">
+            <div>Kết quả</div>
+            <div>Số ván</div>
+            <div>Tỉ lệ</div>
+            <div>Tỉ lệ %</div>
+        </div>
+        <div class="stats-row win-row" id="stat-win">
+            <div><span class="stat-badge badge-win">WIN</span></div>
+            <div class="stat-num">–</div>
+            <div style="background:rgba(34,197,94,0.08);border-radius:4px;height:6px;overflow:hidden;"><div id="bar-win" style="height:100%;background:#22c55e;border-radius:4px;transition:width 0.5s;"></div></div>
+            <div class="stat-pct" id="pct-win">–</div>
+        </div>
+        <div class="stats-row lose-row" id="stat-lose">
+            <div><span class="stat-badge badge-lose">LOSE</span></div>
+            <div class="stat-num">–</div>
+            <div style="background:rgba(239,68,68,0.08);border-radius:4px;height:6px;overflow:hidden;"><div id="bar-lose" style="height:100%;background:#ef4444;border-radius:4px;transition:width 0.5s;"></div></div>
+            <div class="stat-pct" id="pct-lose">–</div>
+        </div>
+        <div class="stats-row tie-row" id="stat-tie">
+            <div><span class="stat-badge badge-tie">TIE</span></div>
+            <div class="stat-num">–</div>
+            <div style="background:rgba(251,191,36,0.08);border-radius:4px;height:6px;overflow:hidden;"><div id="bar-tie" style="height:100%;background:#f59e0b;border-radius:4px;transition:width 0.5s;"></div></div>
+            <div class="stat-pct" id="pct-tie">–</div>
+        </div>
+    </div>
+
+    <!-- Full history table -->
+    <div class="history-wrap">
+        <div class="history-header">
+            <div>Phiên</div>
+            <div>Dự đoán</div>
+            <div>Kết quả</div>
+            <div>Trạng thái</div>
+        </div>
+        <div id="history-body"></div>
+    </div>
+
+</div>
+
+<script>
+lucide.createIcons();
+
+const token = localStorage.getItem('token');
+if (!token) { window.location.href = '/login'; }
+
+const params    = new URLSearchParams(location.search);
+const tableName = params.get('table') || '';
+if (!tableName) { window.location.href = '/game/baccarat'; }
+
+// ── Label helpers ──
+function resultLabel(r) {
+    if (r === 'P') return 'Player';
+    if (r === 'B') return 'Banker';
+    if (r === 'T') return 'Tie';
+    return '–';
+}
+function resultClass(r) {
+    if (r === 'P') return 'result-P';
+    if (r === 'B') return 'result-B';
+    if (r === 'T') return 'result-T';
+    return '';
+}
+function resultLabelClass(r) {
+    if (r === 'P') return 'result-label-P';
+    if (r === 'B') return 'result-label-B';
+    if (r === 'T') return 'result-label-T';
+    return '';
+}
+function chipClass(r) {
+    if (r === 'P') return 'chip-P';
+    if (r === 'B') return 'chip-B';
+    if (r === 'T') return 'chip-T';
+    return 'chip-empty';
+}
+
+// ── Render ──
+function render(data) {
+    const history = data.history || [];
+    const resultStr = data.result || '';
+
+    // --- Top boxes ---
+    const lastChar = resultStr.length > 0 ? resultStr[resultStr.length - 1] : '–';
+    const curEl = document.getElementById('cur-result');
+    curEl.textContent  = lastChar;
+    curEl.className    = 'result-val ' + resultClass(lastChar);
+    const curLbl = document.getElementById('cur-result-label');
+    curLbl.textContent = resultLabel(lastChar);
+    curLbl.className   = resultLabelClass(lastChar);
+    document.getElementById('cur-round').textContent = 'Phiên ' + (data.round || '–');
+
+    const pred = data.current_prediction || '?';
+    const predEl = document.getElementById('pred-result');
+    predEl.textContent = pred;
+    predEl.className   = 'result-val ' + resultClass(pred);
+    const predLbl = document.getElementById('pred-result-label');
+    predLbl.textContent = resultLabel(pred);
+    predLbl.className   = resultLabelClass(pred);
+
+    const grEl = document.getElementById('good-road');
+    if (data.goodRoad) {
+        grEl.textContent = data.goodRoad;
+        grEl.style.display = '';
+    } else { grEl.style.display = 'none'; }
+
+    // --- Tube bar: last 10 ---
+    const tube = document.getElementById('tube-bar');
+    tube.innerHTML = '';
+    const last10 = resultStr.slice(-10).padStart(10, ' ');
+    for (let i = 0; i < 10; i++) {
+        const ch = last10[i].trim();
+        const div = document.createElement('div');
+        if (!ch) {
+            div.className = 'tube-pill tube-empty';
+            div.textContent = '–';
+        } else {
+            div.className = 'tube-pill tube-' + ch;
+            div.innerHTML = ch + '<span class="sub">' + (i < 9 ? (10 - 9 + i) : 10) + '</span>';
+        }
+        tube.appendChild(div);
+    }
+    // Re-label index left to right = oldest to newest in the last 10
+    const pills = tube.querySelectorAll('.tube-pill');
+    pills.forEach((p, i) => {
+        const sub = p.querySelector('.sub');
+        if (sub) sub.textContent = (i + 1);
+    });
+
+    // --- Stats ---
+    const rated = history.filter(h => h.status && h.status !== '');
+    const wins  = rated.filter(h => h.status === 'WIN').length;
+    const loses = rated.filter(h => h.status === 'LOSE').length;
+    const ties  = rated.filter(h => h.status === 'TIE').length;
+    const total = rated.length || 1;
+
+    function pct(n) { return Math.round(n / total * 100); }
+
+    document.querySelector('#stat-win .stat-num').textContent  = wins;
+    document.querySelector('#stat-lose .stat-num').textContent = loses;
+    document.querySelector('#stat-tie .stat-num').textContent  = ties;
+    document.getElementById('pct-win').textContent   = pct(wins)  + '%';
+    document.getElementById('pct-lose').textContent  = pct(loses) + '%';
+    document.getElementById('pct-tie').textContent   = pct(ties)  + '%';
+    document.getElementById('bar-win').style.width   = pct(wins)  + '%';
+    document.getElementById('bar-lose').style.width  = pct(loses) + '%';
+    document.getElementById('bar-tie').style.width   = pct(ties)  + '%';
+
+    // --- History table (newest first) ---
+    const body = document.getElementById('history-body');
+    body.innerHTML = '';
+    const sorted = history.slice().reverse();
+    sorted.forEach(h => {
+        const rowClass = h.status === 'WIN' ? 'win-row' : h.status === 'LOSE' ? 'lose-row' : h.status === 'TIE' ? 'tie-row' : '';
+        let statusHtml = '–';
+        if (h.status === 'WIN')  statusHtml = '<span class="stat-badge badge-win">WIN</span>';
+        else if (h.status === 'LOSE') statusHtml = '<span class="stat-badge badge-lose">LOSE</span>';
+        else if (h.status === 'TIE')  statusHtml = '<span class="stat-badge badge-tie">TIE</span>';
+
+        const predChip = h.prediction
+            ? `<span class="res-chip ${chipClass(h.prediction)}">${h.prediction}</span>`
+            : `<span class="res-chip chip-empty">–</span>`;
+        const resChip = h.result
+            ? `<span class="res-chip ${chipClass(h.result)}">${h.result}</span>`
+            : `<span class="res-chip chip-empty">–</span>`;
+
+        const row = document.createElement('div');
+        row.className = 'history-row ' + rowClass;
+        row.innerHTML = `
+            <div class="round-num">#${h.round}</div>
+            <div>${predChip}</div>
+            <div>${resChip}</div>
+            <div>${statusHtml}</div>`;
+        body.appendChild(row);
+    });
+}
+
+// ── Load data ──
+async function loadData() {
+    try {
+        const res  = await fetch('/api/games/baccarat/table?table=' + encodeURIComponent(tableName), {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const json = await res.json();
+
+        if (!json.success) {
+            showOverlayError(json.message || 'Lỗi dữ liệu.');
+            return;
+        }
+
+        render(json);
+
+        document.getElementById('header-title').textContent = 'Bàn ' + (json.table_name || tableName);
+        document.getElementById('header-sub').textContent   = 'Phiên ' + (json.round || '–') + ' • ' + (json.time || '');
+        document.getElementById('updated-at').textContent   = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+        document.getElementById('overlay').style.display      = 'none';
+        document.getElementById('main-content').style.display = 'block';
+
+    } catch (err) {
+        showOverlayError('Không thể kết nối máy chủ.');
+    }
+}
+
+function showOverlayError(msg) {
+    const ov = document.getElementById('overlay');
+    ov.innerHTML = `
+        <i data-lucide="wifi-off" style="width:40px;height:40px;color:#ef4444;"></i>
+        <div style="color:#ef4444;font-size:13px;text-align:center;max-width:260px;">${msg}</div>
+        <button onclick="loadData()" style="margin-top:8px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#f87171;font-size:12px;font-weight:700;padding:8px 20px;border-radius:12px;cursor:pointer;">
+            Thử lại
+        </button>`;
+    ov.style.display = 'flex';
+    document.getElementById('main-content').style.display = 'none';
+    lucide.createIcons();
+}
+
+loadData();
+setInterval(loadData, 5000);
+</script>
+</body>
+</html>

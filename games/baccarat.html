@@ -43,9 +43,11 @@
             border: 1px solid rgba(255,255,255,0.08);
             border-radius: 16px;
             overflow: hidden;
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, transform 0.15s;
+            cursor: pointer; text-decoration: none; display: block; color: white;
         }
-        .table-card:hover { border-color: rgba(255,255,255,0.15); }
+        .table-card:hover { border-color: rgba(255,255,255,0.25); transform: translateY(-2px); }
+        .table-card:active { transform: scale(0.98); }
 
         .card-header {
             display: flex; align-items: center; justify-content: space-between;
@@ -363,8 +365,9 @@ function renderTable(table) {
     const pred    = predictBaccarat(results);
 
 
-    const card = document.createElement('div');
+    const card = document.createElement('a');
     card.className = 'table-card';
+    card.href = '/game/baccarat-table?table=' + encodeURIComponent(table.table_name);
     card.innerHTML = `
         <div class="card-header">
             <div style="display:flex;align-items:center;gap:8px;">
