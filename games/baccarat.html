@@ -149,6 +149,19 @@ lucide.createIcons();
 const token = localStorage.getItem('token');
 if (!token) { window.location.href = '/login'; }
 
+// Cache trạng thái VIP
+let userIsVip = false;
+async function checkVipStatus() {
+    try {
+        const res = await fetch('/api/user.php', { headers: { 'Authorization': `Bearer ${token}` } });
+        const data = await res.json();
+        if (!data.success) return;
+        const now = Math.floor(Date.now() / 1000);
+        userIsVip = (data.vip_expire && data.vip_expire > now) || data.role === 'admin';
+    } catch (e) {}
+}
+checkVipStatus();
+
 // ─────────────────────────────────────────────
 // PREDICTION ENGINE (results: oldest→newest)
 // ─────────────────────────────────────────────
@@ -375,6 +388,12 @@ function createTableCard(table) {
         <div class="chart-wrap">
             <canvas class="chart-canvas"></canvas>
         </div>`;
+    card.addEventListener('click', function(e) {
+        if (!userIsVip) {
+            e.preventDefault();
+            alert('Bạn cần có gói VIP còn hiệu lực để xem chi tiết bàn này. Vui lòng mua gói tại mục "Mua gói".');
+        }
+    });
     return card;
 }
 
