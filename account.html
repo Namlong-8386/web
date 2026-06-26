@@ -41,7 +41,19 @@
             <div class="bg-white rounded-3xl p-4 flex items-center gap-4 shadow-sm border border-slate-100 mb-4 relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-full -mr-12 -mt-12 opacity-50 pointer-events-none"></div>
                 <div class="relative z-10">
-                    <img src="https://via.placeholder.com/150" alt="Avatar" class="w-16 h-16 rounded-full object-cover border-2 border-blue-100 shadow-sm">
+                    <div class="w-16 h-16 rounded-full border-2 border-blue-100 shadow-sm overflow-hidden flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="64" height="64">
+                            <defs>
+                                <linearGradient id="avbg" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#60a5fa"/>
+                                    <stop offset="100%" style="stop-color:#1d4ed8"/>
+                                </linearGradient>
+                            </defs>
+                            <circle cx="50" cy="50" r="50" fill="url(#avbg)"/>
+                            <circle cx="50" cy="38" r="18" fill="white" fill-opacity="0.9"/>
+                            <ellipse cx="50" cy="87" rx="29" ry="22" fill="white" fill-opacity="0.9"/>
+                        </svg>
+                    </div>
                     <div class="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-white rounded-full shadow-sm"></div>
                 </div>
                 <div class="flex-1 z-10">
