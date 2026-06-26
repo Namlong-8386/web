@@ -119,7 +119,17 @@
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
                 </svg>
                 <p class="text-xs text-primary font-medium">Đang chờ xác nhận thanh toán...</p>
-                <span id="poll-count" class="ml-auto text-[10px] text-blue-300 font-mono"></span>
+            </div>
+
+            <!-- QR Code -->
+            <div class="flex flex-col items-center mb-4 fade-in-up" style="animation-delay:.09s">
+                <div class="bg-white rounded-3xl shadow-lg p-4 inline-block">
+                    <div id="qr-skeleton" class="w-48 h-48 rounded-2xl bg-slate-100 animate-pulse"></div>
+                    <img id="qr-image" src="" alt="VietQR" class="hidden w-48 h-48 rounded-2xl object-contain"
+                        onload="this.classList.remove('hidden');document.getElementById('qr-skeleton').classList.add('hidden');"
+                        onerror="document.getElementById('qr-skeleton').innerHTML='<div class=\'w-48 h-48 flex items-center justify-center text-xs text-slate-400\'>Không tải được QR</div>';">
+                </div>
+                <p class="text-[10px] text-slate-400 mt-2">Quét bằng app ngân hàng hoặc nhập thông tin bên dưới</p>
             </div>
 
             <!-- Bank info card -->
@@ -384,14 +394,17 @@
         updateTimer();
         const timerInterval = setInterval(updateTimer, 1000);
 
+        /* ── QR image ────────────────────────────────────────────── */
+        if (uid && amount) {
+            const qrUrl = `https://img.vietqr.io/image/970422-0984705329-qr_only.png?amount=${amount}&addInfo=${encodeURIComponent(uid)}&accountName=${encodeURIComponent('HO KHANH NAM')}`;
+            document.getElementById('qr-image').src = qrUrl;
+        }
+
         /* ── Polling ─────────────────────────────────────────────── */
-        let pollCount = 0;
         let pollInterval = null;
 
         async function checkStatus() {
             if (!txId || !token) return;
-            pollCount++;
-            document.getElementById('poll-count').innerText = '#' + pollCount;
 
             try {
                 const res  = await fetch(`/api/payment_qr?tx=${encodeURIComponent(txId)}`,
