@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Quét QR Thanh Toán - TOOLTX2026</title>
+    <title>Thanh Toán - TOOLTX2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>tailwind.config = { theme: { extend: { colors: { primary: '#3b82f6' } } } }</script>
@@ -11,56 +11,53 @@
         body { -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
         ::-webkit-scrollbar { display: none; }
 
-        @keyframes shimmer {
-            0% { background-position: -400px 0; }
-            100% { background-position: 400px 0; }
-        }
-        .skeleton {
-            background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
-            background-size: 800px 100%;
-            animation: shimmer 1.4s infinite;
-            border-radius: 12px;
-        }
-
-        @keyframes pulse-ring {
-            0% { transform: scale(1); opacity: 0.6; }
-            50% { transform: scale(1.08); opacity: 0.2; }
-            100% { transform: scale(1); opacity: 0.6; }
-        }
-        .pulse-ring { animation: pulse-ring 2s ease-in-out infinite; }
-
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
-        .fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
+        .fade-in-up { animation: fadeInUp 0.45s ease-out forwards; }
 
-        .qr-glow {
-            box-shadow: 0 0 0 4px rgba(59,130,246,0.15), 0 20px 60px rgba(59,130,246,0.2);
+        @keyframes pulseRing {
+            0%, 100% { transform: scale(1);    opacity: .5; }
+            50%       { transform: scale(1.12); opacity: .15; }
         }
+        .pulse-ring { animation: pulseRing 2s ease-in-out infinite; }
 
-        @keyframes borderGlow {
-            0%, 100% { border-color: rgba(59,130,246,0.4); }
-            50% { border-color: rgba(59,130,246,0.9); }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spin { animation: spin 1s linear infinite; }
+
+        /* Step 3 overlay */
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(.85); }
+            to   { opacity: 1; transform: scale(1); }
         }
-        .border-glow { animation: borderGlow 2s ease-in-out infinite; }
+        .scale-in { animation: scaleIn 0.4s cubic-bezier(.34,1.56,.64,1) forwards; }
 
-        .copy-btn:active { transform: scale(0.92); }
-
-        @keyframes checkPop {
-            0% { transform: scale(0); opacity: 0; }
-            60% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
+        /* Ripple success */
+        @keyframes ripple {
+            0%   { transform: scale(1);   opacity: .6; }
+            100% { transform: scale(2.4); opacity: 0;  }
         }
-        .check-pop { animation: checkPop 0.3s ease-out forwards; }
+        .ripple { animation: ripple 1.4s ease-out infinite; }
 
-        .countdown-ring {
-            transition: stroke-dashoffset 1s linear;
+        .copy-btn:active { transform: scale(.9); }
+
+        .countdown-ring { transition: stroke-dashoffset 1s linear; }
+
+        @keyframes checkDraw {
+            from { stroke-dashoffset: 60; }
+            to   { stroke-dashoffset: 0; }
+        }
+        .check-draw {
+            stroke-dasharray: 60;
+            stroke-dashoffset: 60;
+            animation: checkDraw .5s ease-out .2s forwards;
         }
     </style>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
 
+    <!-- HEADER -->
     <header class="bg-white shadow-sm sticky top-0 z-40 border-b border-slate-100">
         <div class="flex items-center justify-between h-14 px-4">
             <a href="/deposit" class="w-8 h-8 flex items-center justify-center text-slate-500 active:bg-slate-100 rounded-full transition-colors">
@@ -73,186 +70,244 @@
         </div>
     </header>
 
-    <main class="flex-grow p-4 pb-10 max-w-lg mx-auto w-full">
+    <!-- STEP 2 — PAYMENT VIEW -->
+    <div id="view-payment" class="flex-grow flex flex-col">
+        <main class="flex-grow p-4 pb-10 max-w-lg mx-auto w-full">
 
-        <!-- Step indicator -->
-        <div class="flex items-center gap-2 mb-5 fade-in-up">
-            <div class="flex items-center gap-1.5">
-                <div class="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center">
-                    <i data-lucide="check" class="w-3.5 h-3.5 text-white"></i>
+            <!-- Step indicator -->
+            <div class="flex items-center gap-2 mb-5 fade-in-up">
+                <div class="flex items-center gap-1.5">
+                    <div class="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center">
+                        <i data-lucide="check" class="w-3.5 h-3.5 text-white"></i>
+                    </div>
+                    <span class="text-xs font-semibold text-emerald-600">Tạo lệnh</span>
                 </div>
-                <span class="text-xs font-semibold text-emerald-600">Tạo lệnh</span>
-            </div>
-            <div class="flex-1 h-0.5 bg-gradient-to-r from-emerald-400 to-primary rounded-full"></div>
-            <div class="flex items-center gap-1.5">
-                <div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
-                    <span class="text-white text-[10px] font-bold">2</span>
+                <div class="flex-1 h-0.5 bg-gradient-to-r from-emerald-400 to-primary rounded-full"></div>
+                <div class="flex items-center gap-1.5">
+                    <div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+                        <span class="text-white text-[10px] font-bold">2</span>
+                    </div>
+                    <span class="text-xs font-semibold text-primary">Thanh toán</span>
                 </div>
-                <span class="text-xs font-semibold text-primary">Quét QR</span>
-            </div>
-            <div class="flex-1 h-0.5 bg-slate-200 rounded-full"></div>
-            <div class="flex items-center gap-1.5">
-                <div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center">
-                    <span class="text-slate-400 text-[10px] font-bold">3</span>
+                <div class="flex-1 h-0.5 bg-slate-200 rounded-full"></div>
+                <div class="flex items-center gap-1.5">
+                    <div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center">
+                        <span class="text-slate-400 text-[10px] font-bold">3</span>
+                    </div>
+                    <span class="text-xs font-medium text-slate-400">Xác nhận</span>
                 </div>
-                <span class="text-xs font-medium text-slate-400">Xác nhận</span>
             </div>
-        </div>
 
-        <!-- Timer + Title -->
-        <div class="text-center mb-4 fade-in-up" style="animation-delay:0.05s">
-            <div class="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-full px-4 py-1.5 mb-3">
-                <svg id="timer-svg" width="20" height="20" viewBox="0 0 36 36" class="-rotate-90">
-                    <circle cx="18" cy="18" r="15" fill="none" stroke="#fde68a" stroke-width="3"/>
-                    <circle id="timer-ring" cx="18" cy="18" r="15" fill="none" stroke="#f59e0b" stroke-width="3"
-                        stroke-dasharray="94.2" stroke-dashoffset="0" class="countdown-ring"/>
-                </svg>
-                <span class="text-sm font-bold text-amber-700">Còn <span id="timer-display">15:00</span></span>
-            </div>
-            <h2 class="text-lg font-bold text-slate-800">Quét mã để thanh toán</h2>
-            <p class="text-xs text-slate-500 mt-1">Sử dụng app ngân hàng hoặc ví điện tử để quét</p>
-        </div>
-
-        <!-- QR Card -->
-        <div class="bg-white rounded-3xl overflow-hidden shadow-xl mb-4 fade-in-up qr-glow" style="animation-delay:0.1s">
-
-            <!-- Bank header -->
-            <div class="bg-gradient-to-r from-[#003087] to-[#0055b3] px-5 py-3 flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm">
-                    <svg width="28" height="16" viewBox="0 0 90 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <text x="2" y="30" font-family="Arial Black, sans-serif" font-size="28" font-weight="900" fill="#003087">MB</text>
+            <!-- Timer + title -->
+            <div class="text-center mb-5 fade-in-up" style="animation-delay:.05s">
+                <div class="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-full px-4 py-1.5 mb-3">
+                    <svg id="timer-svg" width="20" height="20" viewBox="0 0 36 36" class="-rotate-90">
+                        <circle cx="18" cy="18" r="15" fill="none" stroke="#fde68a" stroke-width="3"/>
+                        <circle id="timer-ring" cx="18" cy="18" r="15" fill="none" stroke="#f59e0b" stroke-width="3"
+                            stroke-dasharray="94.2" stroke-dashoffset="0" class="countdown-ring"/>
                     </svg>
+                    <span class="text-sm font-bold text-amber-700">Còn <span id="timer-display">15:00</span></span>
                 </div>
-                <div>
-                    <p class="text-white font-black text-sm tracking-wide">MBBANK</p>
-                    <p class="text-blue-200 text-[10px]">Military Commercial Joint Stock Bank</p>
-                </div>
-                <div class="ml-auto flex items-center gap-1 bg-emerald-400/20 border border-emerald-400/40 rounded-full px-2.5 py-1">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse inline-block"></span>
-                    <span class="text-emerald-300 text-[10px] font-semibold">Hoạt động</span>
-                </div>
+                <h2 class="text-lg font-bold text-slate-800">Chuyển khoản để nạp tiền</h2>
+                <p class="text-xs text-slate-500 mt-1">Chuyển đúng <strong>nội dung</strong> — hệ thống tự duyệt khi nhận được tiền</p>
             </div>
 
-            <!-- QR Image area -->
-            <div class="flex flex-col items-center px-6 py-5">
-                <div class="relative">
-                    <!-- Animated corner accents -->
-                    <div class="absolute -top-1 -left-1 w-6 h-6 border-t-[3px] border-l-[3px] border-primary rounded-tl-lg border-glow"></div>
-                    <div class="absolute -top-1 -right-1 w-6 h-6 border-t-[3px] border-r-[3px] border-primary rounded-tr-lg border-glow"></div>
-                    <div class="absolute -bottom-1 -left-1 w-6 h-6 border-b-[3px] border-l-[3px] border-primary rounded-bl-lg border-glow"></div>
-                    <div class="absolute -bottom-1 -right-1 w-6 h-6 border-b-[3px] border-r-[3px] border-primary rounded-br-lg border-glow"></div>
-
-                    <!-- Pulse ring -->
-                    <div class="absolute inset-0 rounded-2xl bg-primary/5 pulse-ring"></div>
-
-                    <!-- QR Image skeleton -->
-                    <div id="qr-skeleton" class="skeleton w-52 h-52 rounded-2xl"></div>
-                    <img id="qr-image" src="" alt="VietQR" class="hidden w-52 h-52 rounded-2xl object-contain" onload="onQRLoaded()" onerror="onQRError()">
-                </div>
-
-                <div class="mt-3 flex items-center gap-1.5 text-xs text-slate-400">
-                    <img src="https://img.vietqr.io/image/vietqr_logo.png" alt="VietQR" class="h-4" onerror="this.style.display='none'">
-                    <span>Powered by VietQR</span>
-                </div>
+            <!-- Polling status bar -->
+            <div id="polling-bar" class="flex items-center gap-2 bg-blue-50 border border-blue-100 rounded-2xl px-4 py-2.5 mb-4 fade-in-up" style="animation-delay:.08s">
+                <svg class="spin w-4 h-4 text-primary flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                </svg>
+                <p class="text-xs text-primary font-medium">Đang chờ xác nhận thanh toán...</p>
+                <span id="poll-count" class="ml-auto text-[10px] text-blue-300 font-mono"></span>
             </div>
 
-            <!-- Divider with label -->
-            <div class="flex items-center gap-3 px-5 mb-4">
-                <div class="flex-1 h-px bg-slate-100"></div>
-                <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Thông tin chuyển khoản</span>
-                <div class="flex-1 h-px bg-slate-100"></div>
-            </div>
+            <!-- Bank info card -->
+            <div class="bg-white rounded-3xl shadow-xl overflow-hidden mb-4 fade-in-up" style="animation-delay:.1s">
 
-            <!-- Bank info rows -->
-            <div class="px-5 pb-5 space-y-3">
-
-                <!-- Bank name -->
-                <div class="flex items-center justify-between">
-                    <span class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
-                        <i data-lucide="landmark" class="w-3.5 h-3.5 text-slate-400"></i>
-                        Ngân Hàng
-                    </span>
-                    <span class="text-sm font-bold text-slate-800">MBBANK</span>
-                </div>
-
-                <!-- Recipient -->
-                <div class="flex items-center justify-between">
-                    <span class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
-                        <i data-lucide="user-check" class="w-3.5 h-3.5 text-slate-400"></i>
-                        Người Nhận
-                    </span>
-                    <span class="text-sm font-bold text-slate-800">HO KHANH NAM</span>
-                </div>
-
-                <!-- Account number with copy -->
-                <div class="flex items-center justify-between">
-                    <span class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
-                        <i data-lucide="credit-card" class="w-3.5 h-3.5 text-slate-400"></i>
-                        Số Tài Khoản
-                    </span>
-                    <div class="flex items-center gap-2">
-                        <span class="text-sm font-bold text-slate-800 font-mono tracking-wide">0984705329</span>
-                        <button onclick="copyText('0984705329', this)" class="copy-btn w-7 h-7 rounded-lg bg-blue-50 hover:bg-blue-100 flex items-center justify-center transition-colors" title="Sao chép">
-                            <i data-lucide="copy" class="w-3.5 h-3.5 text-primary"></i>
-                        </button>
+                <!-- Bank header -->
+                <div class="bg-gradient-to-r from-[#003087] to-[#0055b3] px-5 py-3.5 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm font-black text-[#003087] text-lg tracking-tight">MB</div>
+                    <div>
+                        <p class="text-white font-black text-sm tracking-wide">MBBANK</p>
+                        <p class="text-blue-200 text-[10px]">Military Commercial Joint Stock Bank</p>
+                    </div>
+                    <div class="ml-auto flex items-center gap-1 bg-emerald-400/20 border border-emerald-400/40 rounded-full px-2.5 py-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse inline-block"></span>
+                        <span class="text-emerald-300 text-[10px] font-semibold">Hoạt động</span>
                     </div>
                 </div>
 
-                <!-- Amount -->
-                <div class="flex items-center justify-between bg-blue-50 rounded-2xl px-4 py-3 -mx-1">
-                    <span class="text-xs text-primary font-semibold flex items-center gap-1.5">
-                        <i data-lucide="banknote" class="w-3.5 h-3.5"></i>
-                        Số Tiền
-                    </span>
-                    <span id="display-amount" class="text-base font-black text-primary">Đang tải...</span>
+                <!-- Info rows -->
+                <div class="px-5 py-4 space-y-3.5">
+
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+                            <i data-lucide="landmark" class="w-3.5 h-3.5 text-slate-400"></i>
+                            Ngân Hàng
+                        </span>
+                        <span class="text-sm font-bold text-slate-800">MBBANK</span>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+                            <i data-lucide="user-check" class="w-3.5 h-3.5 text-slate-400"></i>
+                            Người Nhận
+                        </span>
+                        <span class="text-sm font-bold text-slate-800">HO KHANH NAM</span>
+                    </div>
+
+                    <!-- STK + copy -->
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+                            <i data-lucide="credit-card" class="w-3.5 h-3.5 text-slate-400"></i>
+                            Số Tài Khoản
+                        </span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm font-bold text-slate-800 font-mono tracking-wider">0984705329</span>
+                            <button onclick="copyText('0984705329', this)" class="copy-btn w-7 h-7 rounded-lg bg-blue-50 hover:bg-blue-100 flex items-center justify-center transition-colors">
+                                <i data-lucide="copy" class="w-3.5 h-3.5 text-primary"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Amount -->
+                    <div class="flex items-center justify-between bg-blue-50 rounded-2xl px-4 py-3 -mx-1">
+                        <span class="text-xs text-primary font-semibold flex items-center gap-1.5">
+                            <i data-lucide="banknote" class="w-3.5 h-3.5"></i>
+                            Số Tiền
+                        </span>
+                        <span id="display-amount" class="text-base font-black text-primary">—</span>
+                    </div>
+
+                    <!-- Nội dung + copy -->
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+                            <i data-lucide="message-square" class="w-3.5 h-3.5 text-slate-400"></i>
+                            Nội Dung CK
+                        </span>
+                        <div class="flex items-center gap-2">
+                            <span id="display-content" class="text-sm font-bold text-slate-800 font-mono">—</span>
+                            <button onclick="copyText(document.getElementById('display-content').innerText, this)" class="copy-btn w-7 h-7 rounded-lg bg-blue-50 hover:bg-blue-100 flex items-center justify-center transition-colors">
+                                <i data-lucide="copy" class="w-3.5 h-3.5 text-primary"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Notice -->
+            <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-4 fade-in-up" style="animation-delay:.15s">
+                <div class="flex gap-3">
+                    <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5"></i>
+                    <div class="text-xs text-amber-800 leading-relaxed space-y-1">
+                        <p class="font-bold">Lưu ý:</p>
+                        <p>• Nhập <strong>đúng nội dung</strong> để hệ thống nhận diện tự động.</p>
+                        <p>• Giao dịch được duyệt trong <strong>5–15 phút</strong> sau khi chuyển.</p>
+                        <p>• Trang này tự động cập nhật, <strong>không cần tải lại</strong>.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="grid grid-cols-2 gap-3 fade-in-up" style="animation-delay:.2s">
+                <a href="/history" class="flex items-center justify-center gap-2 bg-white border border-slate-200 text-slate-700 font-semibold py-3.5 rounded-2xl shadow-sm active:scale-[0.97] transition-transform text-sm">
+                    <i data-lucide="clock" class="w-4 h-4"></i>
+                    Lịch sử
+                </a>
+                <a href="/support" class="flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-blue-600 text-white font-semibold py-3.5 rounded-2xl shadow-lg shadow-blue-500/25 active:scale-[0.97] transition-transform text-sm">
+                    <i data-lucide="headphones" class="w-4 h-4"></i>
+                    Hỗ trợ
+                </a>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- STEP 3 — RESULT VIEW (hidden initially) -->
+    <div id="view-result" class="hidden fixed inset-0 bg-slate-100 flex flex-col items-center justify-center p-6 z-50">
+        <div class="w-full max-w-sm">
+
+            <!-- Result card -->
+            <div id="result-card" class="bg-white rounded-3xl shadow-2xl overflow-hidden scale-in">
+
+                <!-- Result header -->
+                <div id="result-header" class="px-6 pt-8 pb-6 flex flex-col items-center">
+                    <!-- Icon with ripple -->
+                    <div class="relative w-24 h-24 flex items-center justify-center mb-5">
+                        <div id="result-ripple1" class="absolute inset-0 rounded-full ripple"></div>
+                        <div id="result-ripple2" class="absolute inset-0 rounded-full ripple" style="animation-delay:.5s"></div>
+                        <div id="result-icon-wrap" class="relative w-20 h-20 rounded-full flex items-center justify-center shadow-lg">
+                            <!-- SVG check/x drawn inline for animation -->
+                            <svg id="result-svg-check" class="hidden w-10 h-10" viewBox="0 0 40 40" fill="none">
+                                <polyline class="check-draw" points="8,20 17,29 32,12" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <svg id="result-svg-x" class="hidden w-10 h-10" viewBox="0 0 40 40" fill="none">
+                                <line x1="12" y1="12" x2="28" y2="28" stroke="white" stroke-width="4" stroke-linecap="round"/>
+                                <line x1="28" y1="12" x2="12" y2="28" stroke="white" stroke-width="4" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <h2 id="result-title" class="text-xl font-black text-slate-800 mb-1">—</h2>
+                    <p id="result-msg" class="text-sm text-slate-500 text-center px-2">—</p>
                 </div>
 
-                <!-- Transfer content with copy -->
-                <div class="flex items-center justify-between">
-                    <span class="text-xs text-slate-500 font-medium flex items-center gap-1.5">
-                        <i data-lucide="message-square" class="w-3.5 h-3.5 text-slate-400"></i>
-                        Nội Dung
-                    </span>
-                    <div class="flex items-center gap-2">
-                        <span id="display-content" class="text-sm font-bold text-slate-800 font-mono">Đang tải...</span>
-                        <button id="copy-content-btn" onclick="copyText(document.getElementById('display-content').innerText, this)" class="copy-btn w-7 h-7 rounded-lg bg-blue-50 hover:bg-blue-100 flex items-center justify-center transition-colors" title="Sao chép">
-                            <i data-lucide="copy" class="w-3.5 h-3.5 text-primary"></i>
-                        </button>
+                <!-- Step indicator (completed) -->
+                <div class="flex items-center gap-2 px-6 py-3 bg-slate-50 border-t border-slate-100">
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center">
+                            <i data-lucide="check" class="w-3 h-3 text-white"></i>
+                        </div>
+                        <span class="text-[10px] font-semibold text-emerald-600">Tạo lệnh</span>
+                    </div>
+                    <div class="flex-1 h-0.5 bg-emerald-400 rounded-full"></div>
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center">
+                            <i data-lucide="check" class="w-3 h-3 text-white"></i>
+                        </div>
+                        <span class="text-[10px] font-semibold text-emerald-600">Thanh toán</span>
+                    </div>
+                    <div id="step3-line" class="flex-1 h-0.5 rounded-full"></div>
+                    <div class="flex items-center gap-1.5">
+                        <div id="step3-dot" class="w-5 h-5 rounded-full flex items-center justify-center">
+                            <i id="step3-icon" data-lucide="check" class="w-3 h-3 text-white"></i>
+                        </div>
+                        <span id="step3-label" class="text-[10px] font-semibold">Xác nhận</span>
                     </div>
                 </div>
 
-            </div>
-        </div>
+                <!-- Amount + detail -->
+                <div class="px-6 py-4 border-t border-slate-100 space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-slate-400">Số tiền</span>
+                        <span id="result-amount" class="text-sm font-bold text-slate-800">—</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-slate-400">Mã giao dịch</span>
+                        <span id="result-txid" class="text-xs font-mono text-slate-600">—</span>
+                    </div>
+                </div>
 
-        <!-- Notice box -->
-        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-4 fade-in-up" style="animation-delay:0.15s">
-            <div class="flex gap-3">
-                <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5"></i>
-                <div class="text-xs text-amber-800 leading-relaxed space-y-1">
-                    <p class="font-bold">Lưu ý quan trọng:</p>
-                    <p>• Nhập <strong>đúng nội dung</strong> chuyển khoản để hệ thống xác nhận tự động.</p>
-                    <p>• Giao dịch sẽ được duyệt trong vòng <strong>5–15 phút</strong> sau khi chuyển.</p>
-                    <p>• Liên hệ hỗ trợ nếu chờ quá <strong>30 phút</strong> chưa nhận tiền.</p>
+                <!-- Action buttons -->
+                <div class="px-6 pb-6 pt-2 space-y-3">
+                    <a href="/deposit" id="result-btn-retry" class="hidden w-full flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-blue-600 text-white font-bold py-3.5 rounded-2xl shadow shadow-blue-500/25 active:scale-[0.97] transition-transform text-sm">
+                        <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                        Nạp tiền lại
+                    </a>
+                    <a href="/" id="result-btn-home" class="w-full flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3.5 rounded-2xl active:scale-[0.97] transition-transform text-sm">
+                        <i data-lucide="home" class="w-4 h-4"></i>
+                        Về trang chủ
+                    </a>
                 </div>
             </div>
+
         </div>
+    </div>
 
-        <!-- Action buttons -->
-        <div class="grid grid-cols-2 gap-3 fade-in-up" style="animation-delay:0.2s">
-            <a href="/history" class="flex items-center justify-center gap-2 bg-white border border-slate-200 text-slate-700 font-semibold py-3.5 rounded-2xl shadow-sm active:scale-[0.97] transition-transform text-sm">
-                <i data-lucide="clock" class="w-4 h-4"></i>
-                Lịch sử
-            </a>
-            <a href="/support" class="flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-blue-600 text-white font-semibold py-3.5 rounded-2xl shadow-lg shadow-blue-500/25 active:scale-[0.97] transition-transform text-sm">
-                <i data-lucide="headphones" class="w-4 h-4"></i>
-                Hỗ trợ
-            </a>
-        </div>
-
-    </main>
-
-    <!-- Toast notification -->
-    <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] pointer-events-none">
         <div id="toast-inner" class="hidden bg-slate-800/95 text-white text-sm font-medium px-5 py-3 rounded-2xl shadow-xl flex items-center gap-2 backdrop-blur-sm">
             <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
             <span id="toast-msg">Đã sao chép!</span>
@@ -262,74 +317,36 @@
     <script>
         lucide.createIcons();
 
-        const params = new URLSearchParams(window.location.search);
-        const txId   = params.get('tx') || '';
-        const amount = parseInt(params.get('amount') || '0');
-        const uid    = params.get('uid') || '';
-        const method = params.get('method') || 'bank';
-
-        const BANK_ID     = '970422';
-        const ACCOUNT_NO  = '0984705329';
-        const ACCOUNT_NAME = 'HO KHANH NAM';
+        const params  = new URLSearchParams(window.location.search);
+        const txId    = params.get('tx')     || '';
+        const amount  = parseInt(params.get('amount') || '0');
+        const uid     = params.get('uid')    || '';
+        const method  = params.get('method') || 'bank';
+        const token   = localStorage.getItem('token') || '';
 
         function formatMoney(n) {
             return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' VNĐ';
         }
 
-        function buildQRUrl(amt, desc) {
-            const encodedDesc = encodeURIComponent(desc);
-            const encodedName = encodeURIComponent(ACCOUNT_NAME);
-            return `https://img.vietqr.io/image/${BANK_ID}-${ACCOUNT_NO}-qr_only.png?amount=${amt}&addInfo=${encodedDesc}&accountName=${encodedName}`;
-        }
+        /* ── Init page data ───────────────────────────────────────── */
+        document.getElementById('display-amount').innerText  = amount ? formatMoney(amount) : '—';
+        document.getElementById('display-content').innerText = uid    || '—';
 
-        function onQRLoaded() {
-            document.getElementById('qr-skeleton').classList.add('hidden');
-            const img = document.getElementById('qr-image');
-            img.classList.remove('hidden');
-            img.classList.add('fade-in-up');
-        }
-
-        function onQRError() {
-            document.getElementById('qr-skeleton').innerHTML = '<div class="w-52 h-52 rounded-2xl bg-rose-50 flex flex-col items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><p class="text-xs text-rose-500 font-medium px-4 text-center">Không tải được QR.<br>Vui lòng thử lại.</p></div>';
-        }
-
-        function initPage() {
-            if (!uid || !amount) {
-                document.getElementById('display-amount').innerText = 'Không xác định';
-                document.getElementById('display-content').innerText = 'Không xác định';
-                return;
-            }
-
-            document.getElementById('display-amount').innerText = formatMoney(amount);
-            document.getElementById('display-content').innerText = uid;
-
-            const qrUrl = buildQRUrl(amount, uid);
-            document.getElementById('qr-image').src = qrUrl;
-        }
-
+        /* ── Copy ────────────────────────────────────────────────── */
         function copyText(text, btn) {
-            navigator.clipboard.writeText(text).then(() => {
+            if (!text || text === '—') return;
+            const doCopy = () => {
                 const origHTML = btn.innerHTML;
-                btn.innerHTML = '<svg class="w-3.5 h-3.5 text-emerald-500 check-pop" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
-                btn.classList.add('bg-emerald-50');
-                btn.classList.remove('bg-blue-50');
-                showToast('Đã sao chép vào clipboard!');
-                setTimeout(() => {
-                    btn.innerHTML = origHTML;
-                    btn.classList.remove('bg-emerald-50');
-                    btn.classList.add('bg-blue-50');
-                    lucide.createIcons();
-                }, 2000);
-            }).catch(() => {
-                const ta = document.createElement('textarea');
-                ta.value = text;
-                ta.style.position = 'fixed';
-                ta.style.opacity = '0';
-                document.body.appendChild(ta);
-                ta.select();
-                document.execCommand('copy');
-                document.body.removeChild(ta);
+                btn.innerHTML = '<svg class="w-3.5 h-3.5 text-emerald-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+                btn.classList.replace('bg-blue-50','bg-emerald-50');
                 showToast('Đã sao chép!');
+                setTimeout(() => { btn.innerHTML = origHTML; btn.classList.replace('bg-emerald-50','bg-blue-50'); lucide.createIcons(); }, 2000);
+            };
+            navigator.clipboard.writeText(text).then(doCopy).catch(() => {
+                const ta = document.createElement('textarea');
+                ta.value = text; ta.style.cssText = 'position:fixed;opacity:0';
+                document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+                document.body.removeChild(ta); doCopy();
             });
         }
 
@@ -339,32 +356,24 @@
             const inner = document.getElementById('toast-inner');
             document.getElementById('toast-msg').innerText = msg;
             inner.classList.remove('hidden');
-            inner.style.opacity = '1';
-            toastTimer = setTimeout(() => {
-                inner.style.opacity = '0';
-                setTimeout(() => inner.classList.add('hidden'), 300);
-            }, 2200);
+            toastTimer = setTimeout(() => { inner.classList.add('hidden'); }, 2400);
         }
 
-        // Countdown timer: 15 minutes
+        /* ── Countdown 15 min ────────────────────────────────────── */
         let totalSeconds = 15 * 60;
-        const circumference = 2 * Math.PI * 15;
+        const circumference = 2 * Math.PI * 15; // ≈94.25
         const ring = document.getElementById('timer-ring');
         ring.setAttribute('stroke-dasharray', circumference);
 
         function updateTimer() {
-            const mins = Math.floor(totalSeconds / 60);
-            const secs = totalSeconds % 60;
+            const m = Math.floor(totalSeconds / 60);
+            const s = totalSeconds % 60;
             document.getElementById('timer-display').innerText =
-                String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
-            const offset = circumference - (totalSeconds / (15 * 60)) * circumference;
+                String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+            const offset = circumference * (1 - totalSeconds / (15 * 60));
             ring.style.strokeDashoffset = offset;
-
             if (totalSeconds <= 60) {
-                ring.setAttribute('stroke', '#ef4444');
-                document.getElementById('timer-display').parentElement.classList.remove('bg-amber-50', 'border-amber-200');
-                document.getElementById('timer-display').parentElement.classList.add('bg-rose-50', 'border-rose-200');
-                document.getElementById('timer-display').classList.add('text-rose-700');
+                ring.setAttribute('stroke','#ef4444');
             }
             if (totalSeconds <= 0) {
                 clearInterval(timerInterval);
@@ -375,7 +384,100 @@
         updateTimer();
         const timerInterval = setInterval(updateTimer, 1000);
 
-        initPage();
+        /* ── Polling ─────────────────────────────────────────────── */
+        let pollCount = 0;
+        let pollInterval = null;
+
+        async function checkStatus() {
+            if (!txId || !token) return;
+            pollCount++;
+            document.getElementById('poll-count').innerText = '#' + pollCount;
+
+            try {
+                const res  = await fetch(`/api/payment_qr?tx=${encodeURIComponent(txId)}`,
+                    { headers: { 'Authorization': `Bearer ${token}` } });
+                const data = await res.json();
+                if (!data.success) return;
+
+                const status = data.status || '';
+
+                if (status === 'Thành công') {
+                    stopPolling();
+                    showResult('success');
+                } else if (status === 'Từ chối') {
+                    stopPolling();
+                    showResult('rejected');
+                }
+                // 'Chờ duyệt' → keep polling
+            } catch (e) {
+                // network error, keep trying
+            }
+        }
+
+        function stopPolling() {
+            clearInterval(pollInterval);
+            clearInterval(timerInterval);
+        }
+
+        function showResult(type) {
+            const isSuccess = type === 'success';
+
+            /* ── Step indicator ── */
+            const dot   = document.getElementById('step3-dot');
+            const icon  = document.getElementById('step3-icon');
+            const label = document.getElementById('step3-label');
+            const line  = document.getElementById('step3-line');
+
+            if (isSuccess) {
+                dot.className   = 'w-5 h-5 rounded-full flex items-center justify-center bg-emerald-500';
+                label.className = 'text-[10px] font-semibold text-emerald-600';
+                label.innerText = 'Xác nhận';
+                line.classList.add('bg-emerald-400');
+            } else {
+                dot.className   = 'w-5 h-5 rounded-full flex items-center justify-center bg-rose-500';
+                label.className = 'text-[10px] font-semibold text-rose-600';
+                label.innerText = 'Từ chối';
+                line.classList.add('bg-rose-300');
+            }
+
+            /* ── Icon / colors ── */
+            const wrap = document.getElementById('result-icon-wrap');
+            const r1   = document.getElementById('result-ripple1');
+            const r2   = document.getElementById('result-ripple2');
+
+            if (isSuccess) {
+                wrap.className = 'relative w-20 h-20 rounded-full flex items-center justify-center shadow-lg bg-emerald-500';
+                r1.className   = 'absolute inset-0 rounded-full ripple bg-emerald-300/40';
+                r2.className   = 'absolute inset-0 rounded-full ripple bg-emerald-300/30';
+                document.getElementById('result-svg-check').classList.remove('hidden');
+                document.getElementById('result-title').innerText = 'Thanh toán thành công!';
+                document.getElementById('result-title').className  = 'text-xl font-black text-emerald-600 mb-1';
+                document.getElementById('result-msg').innerText   = 'Số dư của bạn đã được cộng tiền. Cảm ơn bạn đã nạp tiền!';
+            } else {
+                wrap.className = 'relative w-20 h-20 rounded-full flex items-center justify-center shadow-lg bg-rose-500';
+                r1.className   = 'absolute inset-0 rounded-full ripple bg-rose-300/40';
+                r2.className   = 'absolute inset-0 rounded-full ripple bg-rose-300/30';
+                document.getElementById('result-svg-x').classList.remove('hidden');
+                document.getElementById('result-title').innerText = 'Giao dịch bị từ chối';
+                document.getElementById('result-title').className  = 'text-xl font-black text-rose-600 mb-1';
+                document.getElementById('result-msg').innerText   = 'Giao dịch của bạn đã bị quản trị viên từ chối. Vui lòng liên hệ hỗ trợ nếu cần.';
+                document.getElementById('result-btn-retry').classList.remove('hidden');
+            }
+
+            document.getElementById('result-amount').innerText = amount ? formatMoney(amount) : '—';
+            document.getElementById('result-txid').innerText   = txId || '—';
+
+            /* ── Show step 3 view ── */
+            const view = document.getElementById('view-result');
+            view.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        /* Start polling immediately and then every 1 second */
+        if (txId && token) {
+            checkStatus();
+            pollInterval = setInterval(checkStatus, 1000);
+        }
     </script>
 </body>
 </html>
