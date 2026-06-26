@@ -279,7 +279,7 @@
         function buildQRUrl(amt, desc) {
             const encodedDesc = encodeURIComponent(desc);
             const encodedName = encodeURIComponent(ACCOUNT_NAME);
-            return `https://img.vietqr.io/image/${BANK_ID}-${ACCOUNT_NO}-compact2.png?amount=${amt}&addInfo=${encodedDesc}&accountName=${encodedName}`;
+            return `https://img.vietqr.io/image/${BANK_ID}-${ACCOUNT_NO}-qr_only.png?amount=${amt}&addInfo=${encodedDesc}&accountName=${encodedName}`;
         }
 
         function onQRLoaded() {

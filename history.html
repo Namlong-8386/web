@@ -126,6 +126,15 @@
         });
 
         let rawTransactions = [];
+        let currentUserId = '';
+
+        async function fetchCurrentUser() {
+            try {
+                const r = await fetch('api/user.php', { headers: { 'Authorization': `Bearer ${token}` } });
+                const d = await r.json();
+                if (d.success) currentUserId = d.user_id || '';
+            } catch(e) {}
+        }
 
         function formatMoney(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
 
@@ -222,28 +231,55 @@
                 items.forEach(item => {
                     const isSuccess = item.status === 'Thành công';
                     const isPending = item.status === 'Chờ duyệt';
-                    const statusClass = isSuccess ? 'text-success bg-success/10' : (isPending ? 'text-amber-600 bg-amber-500/10' : 'text-danger bg-danger/10');
-                    const timeOnly = item.time.split(' ')[1] ? item.time.split(' ')[1].substring(0, 5) : '';
+                    const isRejected = item.status === 'Từ chối';
+                    const isPendingDeposit = isPending && item.type === 'in';
+
+                    let statusLabel, statusClass;
+                    if (isPendingDeposit) {
+                        statusLabel  = 'Chưa thanh toán';
+                        statusClass  = 'text-rose-600 bg-rose-50 border border-rose-200';
+                    } else if (isSuccess) {
+                        statusLabel  = item.status;
+                        statusClass  = 'text-success bg-success/10';
+                    } else if (isPending) {
+                        statusLabel  = item.status;
+                        statusClass  = 'text-amber-600 bg-amber-500/10';
+                    } else {
+                        statusLabel  = item.status;
+                        statusClass  = 'text-danger bg-danger/10';
+                    }
+
+                    const timeOnly = item.time.split(' ')[0] ? item.time.split(' ')[0] : '';
+                    const uid = item.user_id || currentUserId;
+                    const method = item.method || 'bank';
+                    const qrLink = `/payment-qr?tx=${item.id}&amount=${item.amount}&uid=${encodeURIComponent(uid)}&method=${method}`;
 
                     groupHtml += `
-                        <div class="transaction-item p-4 flex items-center gap-3" data-type="${item.type}">
-                            <div class="w-12 h-12 rounded-2xl ${item.type === 'in' ? 'bg-blue-50 text-primary' : 'bg-orange-50 text-orange-500'} flex items-center justify-center">
-                                <i data-lucide="${item.type === 'in' ? 'arrow-down-to-line' : 'package'}" class="w-6 h-6"></i>
+                        <div class="transaction-item p-4" data-type="${item.type}">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-2xl flex-shrink-0 ${item.type === 'in' ? 'bg-blue-50 text-primary' : 'bg-orange-50 text-orange-500'} flex items-center justify-center">
+                                    <i data-lucide="${item.type === 'in' ? 'arrow-down-to-line' : 'package'}" class="w-6 h-6"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="font-bold text-slate-800 text-sm truncate trans-title">${item.title}</h4>
+                                    <p class="text-xs text-slate-400 flex items-center gap-1 mt-0.5">${timeOnly} · <span class="font-mono">${item.id}</span>
+                                        <button onclick="copyText('${item.id}')" title="Sao chép mã" class="inline-flex items-center justify-center w-5 h-5 bg-slate-100 hover:bg-blue-50 hover:text-primary text-slate-400 rounded active:scale-90 transition-all"><i data-lucide="copy" class="w-3 h-3"></i></button>
+                                    </p>
+                                </div>
+                                <div class="text-right flex-shrink-0">
+                                    <p class="font-bold ${item.type === 'in' ? 'text-success' : 'text-danger'} text-sm trans-amount">
+                                        ${item.type === 'in' ? '+' : '-'}${formatMoney(item.amount)}đ
+                                    </p>
+                                    <span class="text-[10px] font-semibold ${statusClass} px-2 py-0.5 rounded-md mt-1 inline-block">
+                                        ${statusLabel}
+                                    </span>
+                                </div>
                             </div>
-                            <div class="flex-1 min-w-0">
-                                <h4 class="font-bold text-slate-800 text-base truncate trans-title">${item.title}</h4>
-                                <p class="text-xs text-slate-500 flex items-center gap-1">${timeOnly} - Mã: <span class="font-mono">${item.id}</span>
-                                    <button onclick="copyText('${item.id}')" title="Sao chép mã" class="inline-flex items-center justify-center w-5 h-5 bg-slate-100 hover:bg-blue-50 hover:text-primary text-slate-400 rounded active:scale-90 transition-all"><i data-lucide="copy" class="w-3 h-3"></i></button>
-                                </p>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-bold ${item.type === 'in' ? 'text-success' : 'text-danger'} text-base trans-amount">
-                                    ${item.type === 'in' ? '+' : '-'}${formatMoney(item.amount)}đ
-                                </p>
-                                <span class="text-[10px] ${statusClass} px-2 py-0.5 rounded-md mt-1 inline-block">
-                                    ${item.status}
-                                </span>
-                            </div>
+                            ${isPendingDeposit ? `
+                            <a href="${qrLink}" class="mt-3 w-full flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-blue-600 text-white text-xs font-bold py-2.5 rounded-xl shadow shadow-blue-500/25 active:scale-[0.97] transition-transform">
+                                <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
+                                Quét mã thanh toán ngay
+                            </a>` : ''}
                         </div>
                     `;
                 });
@@ -256,7 +292,7 @@
             lucide.createIcons();
         }
 
-        fetchTransactions();
+        fetchCurrentUser().then(() => fetchTransactions());
     </script>
 </body>
 </html>

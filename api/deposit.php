@@ -25,13 +25,15 @@ $transactions = read_json('transactions.json');
 $tx_id = 'TX' . time() . rand(100, 999);
 
 $new_tx = [
-    'id' => $tx_id,
+    'id'       => $tx_id,
     'username' => $user['username'],
-    'type' => 'in',
-    'title' => 'Nạp tiền vào ví (' . ($method === 'bank' ? 'Bank' : 'Momo') . ')',
-    'amount' => $amount,
-    'time' => date('H:i - d/m/Y'),
-    'status' => 'Chờ duyệt' // Chờ admin phê duyệt
+    'user_id'  => $user['user_id'],
+    'type'     => 'in',
+    'title'    => 'Nạp tiền vào ví (' . ($method === 'bank' ? 'Bank' : 'Momo') . ')',
+    'amount'   => $amount,
+    'method'   => $method,
+    'time'     => date('H:i - d/m/Y'),
+    'status'   => 'Chờ duyệt'
 ];
 
 $transactions[] = $new_tx;
