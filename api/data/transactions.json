@@ -550,6 +550,17 @@
         "amount": 50000,
         "method": "bank",
         "time": "12:44 - 26\/06\/2026",
-        "status": "Chờ duyệt"
+        "status": "Thành công"
+    },
+    {
+        "id": "TX1782453490853",
+        "username": "Nam1411",
+        "user_id": "999999",
+        "type": "in",
+        "title": "Nạp tiền vào ví (Bank)",
+        "amount": 50000,
+        "method": "bank",
+        "time": "12:58 - 26\/06\/2026",
+        "status": "Từ chối"
     }
 ]
