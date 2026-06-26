@@ -37,7 +37,13 @@ $new_tx = [
 $transactions[] = $new_tx;
 
 if (write_json('transactions.json', $transactions)) {
-    json_response(true, 'Yêu cầu nạp tiền đã được gửi. Vui lòng chờ quản trị viên phê duyệt!');
+    json_response(true, [
+        'message' => 'Yêu cầu nạp tiền đã được gửi. Vui lòng chờ quản trị viên phê duyệt!',
+        'tx_id'   => $tx_id,
+        'amount'  => $amount,
+        'method'  => $method,
+        'user_id' => $user['user_id']
+    ]);
 } else {
     json_response(false, 'Lỗi hệ thống khi gửi yêu cầu. Vui lòng thử lại sau.', 500);
 }

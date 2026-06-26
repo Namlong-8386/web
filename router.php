@@ -14,6 +14,7 @@ $routes = [
     '/deposit'               => 'deposit.html',
     '/history'               => 'history.html',
     '/support'               => 'support.html',
+    '/payment-qr'            => 'payment-qr.html',
     '/admin'                 => 'admin/index.html',
     '/admin/'                => 'admin/index.html',
     '/admin/login'           => 'admin/login.html',
