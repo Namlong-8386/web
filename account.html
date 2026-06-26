@@ -41,62 +41,17 @@
             <div class="bg-white rounded-3xl p-4 flex items-center gap-4 shadow-sm border border-slate-100 mb-4 relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-full -mr-12 -mt-12 opacity-50 pointer-events-none"></div>
                 <div class="relative z-10">
-                    <div class="w-16 h-16 rounded-full border-2 border-white shadow-lg flex-shrink-0 overflow-hidden">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="64" height="64">
-                          <defs>
-                            <radialGradient id="bgGrad" cx="40%" cy="35%" r="65%">
-                              <stop offset="0%" stop-color="#60a5fa"/>
-                              <stop offset="100%" stop-color="#1e3a8a"/>
-                            </radialGradient>
-                            <radialGradient id="skinGrad" cx="40%" cy="35%" r="65%">
-                              <stop offset="0%" stop-color="#fde4c8"/>
-                              <stop offset="100%" stop-color="#f4a96a"/>
-                            </radialGradient>
-                            <radialGradient id="shirtGrad" cx="50%" cy="0%" r="100%">
-                              <stop offset="0%" stop-color="#3b82f6"/>
-                              <stop offset="100%" stop-color="#1e40af"/>
-                            </radialGradient>
-                            <radialGradient id="hairGrad" cx="50%" cy="30%" r="70%">
-                              <stop offset="0%" stop-color="#4b3728"/>
-                              <stop offset="100%" stop-color="#1a0f08"/>
-                            </radialGradient>
-                            <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
-                              <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.25)"/>
-                            </filter>
-                            <clipPath id="circleClip">
-                              <circle cx="60" cy="60" r="60"/>
-                            </clipPath>
-                          </defs>
-
-                          <circle cx="60" cy="60" r="60" fill="url(#bgGrad)"/>
-
-                          <ellipse cx="60" cy="118" rx="36" ry="24" fill="url(#shirtGrad)" clip-path="url(#circleClip)"/>
-                          <rect x="24" y="100" width="72" height="25" fill="url(#shirtGrad)" clip-path="url(#circleClip)"/>
-
-                          <ellipse cx="60" cy="97" rx="18" ry="10" fill="#f4a96a" clip-path="url(#circleClip)"/>
-
-                          <circle cx="60" cy="62" r="22" fill="url(#skinGrad)" filter="url(#softShadow)"/>
-
-                          <ellipse cx="60" cy="52" rx="20" ry="14" fill="url(#hairGrad)"/>
-                          <ellipse cx="60" cy="42" rx="17" ry="10" fill="url(#hairGrad)"/>
-                          <ellipse cx="44" cy="55" rx="7" ry="10" fill="url(#hairGrad)"/>
-                          <ellipse cx="76" cy="55" rx="7" ry="10" fill="url(#hairGrad)"/>
-
-                          <ellipse cx="54" cy="62" rx="3.5" ry="4.5" fill="white" opacity="0.9"/>
-                          <ellipse cx="66" cy="62" rx="3.5" ry="4.5" fill="white" opacity="0.9"/>
-                          <circle cx="54.5" cy="63" r="2.2" fill="#1e3a8a"/>
-                          <circle cx="66.5" cy="63" r="2.2" fill="#1e3a8a"/>
-                          <circle cx="53.8" cy="62.3" r="0.8" fill="white"/>
-                          <circle cx="65.8" cy="62.3" r="0.8" fill="white"/>
-
-                          <path d="M55 71 Q60 75.5 65 71" stroke="#c0763a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-
-                          <ellipse cx="49" cy="67" rx="4" ry="2.5" fill="#f8a5a5" opacity="0.45"/>
-                          <ellipse cx="71" cy="67" rx="4" ry="2.5" fill="#f8a5a5" opacity="0.45"/>
-
-                          <ellipse cx="42" cy="28" rx="14" ry="10" fill="rgba(255,255,255,0.12)" transform="rotate(-20,42,28)"/>
-                          <ellipse cx="60" cy="60" rx="59" ry="59" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
-                          <ellipse cx="60" cy="60" rx="57" ry="57" fill="none" stroke="rgba(0,0,0,0.08)" stroke-width="1"/>
+                    <div class="w-16 h-16 rounded-full border-2 border-blue-100 shadow-sm overflow-hidden flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="64" height="64">
+                            <defs>
+                                <linearGradient id="avbg" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#60a5fa"/>
+                                    <stop offset="100%" style="stop-color:#1d4ed8"/>
+                                </linearGradient>
+                            </defs>
+                            <circle cx="50" cy="50" r="50" fill="url(#avbg)"/>
+                            <circle cx="50" cy="38" r="18" fill="white" fill-opacity="0.9"/>
+                            <ellipse cx="50" cy="87" rx="29" ry="22" fill="white" fill-opacity="0.9"/>
                         </svg>
                     </div>
                     <div class="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-white rounded-full shadow-sm"></div>
@@ -262,53 +217,6 @@
             });
         }
 
-        function drawAvatar(username) {
-            const canvas = document.getElementById('avatar-canvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            const size = 64;
-            const palettes = [
-                ['#f97316','#ea580c'],['#8b5cf6','#6d28d9'],['#10b981','#059669'],
-                ['#ef4444','#dc2626'],['#3b82f6','#1d4ed8'],['#ec4899','#db2777'],
-                ['#f59e0b','#d97706'],['#06b6d4','#0891b2'],['#84cc16','#65a30d'],
-                ['#a855f7','#9333ea']
-            ];
-            const code = [...(username||'U')].reduce((s,c)=>s+c.charCodeAt(0),0);
-            const [c1, c2] = palettes[code % palettes.length];
-            const letter = (username||'U')[0].toUpperCase();
-
-            const grad = ctx.createLinearGradient(0, 0, size, size);
-            grad.addColorStop(0, c1);
-            grad.addColorStop(1, c2);
-
-            ctx.beginPath();
-            ctx.arc(size/2, size/2, size/2, 0, Math.PI*2);
-            ctx.fillStyle = grad;
-            ctx.fill();
-
-            ctx.beginPath();
-            ctx.arc(size/2, size/2, size/2 - 1, 0, Math.PI*2);
-            ctx.strokeStyle = 'rgba(255,255,255,0.25)';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-
-            const shimGrad = ctx.createLinearGradient(0, 0, size, size/2);
-            shimGrad.addColorStop(0, 'rgba(255,255,255,0.18)');
-            shimGrad.addColorStop(1, 'rgba(255,255,255,0)');
-            ctx.beginPath();
-            ctx.arc(size/2, size/2, size/2, 0, Math.PI*2);
-            ctx.fillStyle = shimGrad;
-            ctx.fill();
-
-            ctx.font = `bold ${size * 0.42}px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillStyle = 'rgba(255,255,255,0.96)';
-            ctx.shadowColor = 'rgba(0,0,0,0.18)';
-            ctx.shadowBlur = 4;
-            ctx.fillText(letter, size/2, size/2 + 1);
-        }
-
         async function initAccountPage() {
             if (!token) {
                 loggedInView.classList.add('hidden'); loggedInView.classList.remove('block');
@@ -328,7 +236,6 @@
                         nameHtml += ` <span class="inline-flex items-center gap-0.5 px-2 py-0.5 bg-amber-500 text-white text-[10px] font-black rounded-full shadow-sm ml-1 uppercase"><i data-lucide="crown" class="w-3 h-3"></i> VIP</span>`;
                     }
                     document.getElementById('user-username').innerHTML = nameHtml;
-                    drawAvatar(result.username);
 
                     currentUserId = result.user_id;
                     let idHtml = result.user_id;
