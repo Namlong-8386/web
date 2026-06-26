@@ -573,5 +573,16 @@
         "method": "bank",
         "time": "13:01 - 26\/06\/2026",
         "status": "Chờ duyệt"
+    },
+    {
+        "id": "TX1782473827614",
+        "username": "Nam1411",
+        "user_id": "999999",
+        "type": "in",
+        "title": "Nạp tiền vào ví (Momo)",
+        "amount": 50000,
+        "method": "momo",
+        "time": "18:37 - 26\/06\/2026",
+        "status": "Từ chối"
     }
 ]

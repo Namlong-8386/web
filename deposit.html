@@ -218,6 +218,10 @@
         });
 
         async function submitDeposit() {
+            if (selectedMethod === 'momo') {
+                alert('⚠️ Ví Momo đang bảo trì, vui lòng sử dụng Chuyển khoản Ngân hàng.');
+                return;
+            }
             const amountVal = amountInput.value.replace(/[^0-9]/g, '');
             if(!amountVal || parseInt(amountVal) < 10000) { alert("Vui lòng nhập số tiền hợp lệ (Tối thiểu 10,000đ)"); return; }
             
