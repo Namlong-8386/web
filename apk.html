@@ -240,7 +240,7 @@
                     </div>
                     <div>
                         <h2 class="text-white font-black text-lg">Key miễn phí</h2>
-                        <p class="text-emerald-100 text-xs mt-1">Vượt link → Nhận key dùng thử 1 ngày</p>
+                        <p class="text-emerald-100 text-xs mt-1">Vượt link → Nhận key dùng thử 12 tiếng</p>
                     </div>
                 </div>
             </div>
@@ -267,7 +267,7 @@
                         <div class="w-7 h-7 bg-amber-200 rounded-lg flex items-center justify-center flex-shrink-0">
                             <i data-lucide="clock" class="w-3.5 h-3.5 text-amber-700"></i>
                         </div>
-                        <p class="text-sm text-amber-700">Link hết hạn sau <span class="font-bold">1 giờ</span> · Mỗi tài khoản nhận <span class="font-bold">1 lần</span></p>
+                        <p class="text-sm text-amber-700">Link hết hạn sau <span class="font-bold">1 giờ</span> · Vượt bao nhiêu lần tùy thích</p>
                     </div>
                 </div>
             </div>
@@ -446,7 +446,7 @@
                 const data = await res.json();
                 if (!data.success) { localStorage.clear(); fkShow('logout'); return; }
                 document.getElementById('fk-username').innerText = data.username;
-                fkShow(data.free_key_claimed ? 'used' : 'ready');
+                fkShow('ready');
             } catch(e) {
                 fkShow('ready');
             }

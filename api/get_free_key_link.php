@@ -7,17 +7,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $user = require_login();
 
-// Kiểm tra đã nhận key chưa
-$users = read_json('users.json');
-$uIndex = -1;
-foreach ($users as $i => $u) {
-    if ($u['user_id'] === $user['user_id']) { $uIndex = $i; break; }
-}
-if ($uIndex === -1) json_response(false, 'Không tìm thấy tài khoản.', 404);
-if (!empty($users[$uIndex]['free_key_claimed'])) {
-    json_response(false, 'Tài khoản đã nhận key miễn phí rồi.', 400);
-}
-
 // Xoá token cũ của user này nếu còn
 $tokens = read_json('key_tokens.json');
 foreach ($tokens as $tk => $td) {

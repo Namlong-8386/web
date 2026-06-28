@@ -37,7 +37,7 @@ write_json('key_tokens.json', $tokens);
 
 // Ghi key vào keys.json
 $key     = $td['key'];
-$expiry  = date('Y-m-d H:i:s', strtotime('+1 day'));
+$expiry  = date('Y-m-d H:i:s', strtotime('+12 hours'));
 $keys    = read_json('keys.json');
 $keys[$key] = [
     'hwid'       => '',
@@ -47,18 +47,6 @@ $keys[$key] = [
     'created_at' => date('Y-m-d H:i:s'),
 ];
 write_json('keys.json', $keys);
-
-// Đánh dấu user đã nhận key
-$users  = read_json('users.json');
-foreach ($users as &$u) {
-    if ($u['user_id'] === $td['user_id']) {
-        $u['free_key_claimed'] = true;
-        $u['free_key']         = $key;
-        break;
-    }
-}
-unset($u);
-write_json('users.json', $users);
 
 json_response(true, [
     'key'    => $key,
