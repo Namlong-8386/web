@@ -3,393 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Quản Lý Nạp Tiền - TOOLTX2026 ADMIN</title>
+    <title>Nạp tiền - TOOLTX2026 Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#3b82f6',
-                        success: '#10b981',
-                        danger: '#ef4444',
-                        warning: '#f59e0b'
-                    }
-                }
-            }
-        }
-    </script>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#3b82f6',success:'#10b981',danger:'#ef4444',warning:'#f59e0b'}}}}</script>
     <style>
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        .copy-toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 8px 20px; border-radius: 99px; font-size: 13px; font-weight: 600; z-index: 9999; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
-        .copy-toast.show { opacity: 1; }
+        ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:#f1f5f9}::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}::-webkit-scrollbar-thumb:hover{background:#94a3b8}
+        .copy-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e293b;color:white;padding:8px 20px;border-radius:99px;font-size:13px;font-weight:600;z-index:9999;opacity:0;transition:opacity .2s;pointer-events:none}.copy-toast.show{opacity:1}
     </style>
 </head>
-<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
-    <div class="copy-toast" id="copy-toast">Đã sao chép!</div>
+<body class="bg-slate-50 text-slate-800 font-sans">
+<div id="copy-toast" class="copy-toast">Đã sao chép!</div>
 
-    <!-- Header -->
-    <header class="bg-slate-900 text-white shadow-md sticky top-0 z-40">
-        <div class="max-w-6xl mx-auto flex items-center justify-between h-16 px-4">
-            <div class="flex items-center gap-3">
-                <a href="/" class="w-8 h-8 flex items-center justify-center bg-white/10 rounded-lg hover:bg-white/20 active:scale-95 transition-all text-white">
-                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
-                </a>
-                <h1 class="text-xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-200">
-                    TOOLTX2026 ADMIN
-                </h1>
-            </div>
-            <div class="flex items-center gap-4">
-                <div class="text-right hidden sm:block">
-                    <p class="text-xs text-slate-400">Đang đăng nhập</p>
-                    <p class="text-sm font-bold" id="admin-name">Admin</p>
-                </div>
-                <button onclick="logoutAdmin()" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 font-semibold py-2 px-3.5 rounded-xl text-xs flex items-center gap-1.5 active:scale-95 transition-all">
-                    <i data-lucide="log-out" class="w-4 h-4"></i> Đăng xuất
-                </button>
-            </div>
+<aside id="sidebar" class="fixed inset-y-0 left-0 w-60 bg-[#0f172a] flex flex-col z-30 transition-transform duration-300 -translate-x-full lg:translate-x-0">
+    <div class="h-16 flex items-center px-5 border-b border-white/5 flex-shrink-0">
+        <div><p class="font-black tracking-widest text-xs text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300 uppercase">TOOLTX2026</p><p class="text-[10px] text-slate-500 font-semibold mt-0.5">Bảng quản trị hệ thống</p></div>
+    </div>
+    <nav class="flex-1 overflow-y-auto py-3 px-2 space-y-0.5">
+        <p class="text-[10px] font-bold text-slate-600 uppercase tracking-widest px-3 py-2">Tổng quan</p>
+        <a href="/admin" data-path="/admin" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-white/5 hover:text-white transition-all"><i data-lucide="layout-dashboard" class="w-4 h-4 flex-shrink-0"></i><span>Dashboard</span></a>
+        <a href="/admin/transactions" data-path="/admin/transactions" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-white/5 hover:text-white transition-all"><i data-lucide="wallet" class="w-4 h-4 flex-shrink-0"></i><span>Nạp tiền</span></a>
+        <a href="/admin/packages" data-path="/admin/packages" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-white/5 hover:text-white transition-all"><i data-lucide="crown" class="w-4 h-4 flex-shrink-0"></i><span>Trạng thái VIP</span></a>
+        <a href="/admin/package-history" data-path="/admin/package-history" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-white/5 hover:text-white transition-all"><i data-lucide="history" class="w-4 h-4 flex-shrink-0"></i><span>Lịch sử gói</span></a>
+        <a href="/admin/giftcodes" data-path="/admin/giftcodes" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-white/5 hover:text-white transition-all"><i data-lucide="gift" class="w-4 h-4 flex-shrink-0"></i><span>Giftcode</span></a>
+        <p class="text-[10px] font-bold text-slate-600 uppercase tracking-widest px-3 py-2 pt-4">APK & Key</p>
+        <a href="/admin/keys" data-path="/admin/keys" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-white/5 hover:text-white transition-all"><i data-lucide="key" class="w-4 h-4 flex-shrink-0"></i><span>Quản lý Key & APK</span></a>
+    </nav>
+    <div class="p-3 border-t border-white/5 flex-shrink-0">
+        <div class="flex items-center gap-2.5 px-2 py-2 mb-2">
+            <div class="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0"><i data-lucide="shield-check" class="w-4 h-4 text-blue-400"></i></div>
+            <div class="min-w-0"><p id="admin-name" class="text-sm font-bold text-white truncate">Admin</p><p class="text-[11px] text-slate-500">Quản trị viên</p></div>
+        </div>
+        <button onclick="logoutAdmin()" class="w-full flex items-center justify-center gap-2 py-2 px-3 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl text-xs font-semibold transition-colors"><i data-lucide="log-out" class="w-3.5 h-3.5"></i> Đăng xuất</button>
+    </div>
+</aside>
+<div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-20 hidden lg:hidden" onclick="toggleSidebar()"></div>
+
+<div class="lg:ml-60 min-h-screen flex flex-col">
+    <header class="h-16 bg-white border-b border-slate-200 flex items-center px-4 sm:px-6 sticky top-0 z-20 gap-4">
+        <button onclick="toggleSidebar()" class="lg:hidden w-9 h-9 flex items-center justify-center rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors flex-shrink-0"><i data-lucide="menu" class="w-5 h-5"></i></button>
+        <div class="min-w-0">
+            <h2 class="font-bold text-slate-800 text-base leading-tight">Quản lý nạp tiền</h2>
+            <p class="text-xs text-slate-400 hidden sm:block">Phê duyệt & từ chối yêu cầu nạp tiền</p>
         </div>
     </header>
-
-    <!-- Nội dung -->
-    <main class="flex-grow max-w-6xl w-full mx-auto p-4 pb-20">
-        <!-- Navigation Tabs -->
-        <div class="flex border-b border-slate-200 mb-6 gap-1 overflow-x-auto">
-            <a href="/admin" class="whitespace-nowrap px-4 py-3 font-semibold text-sm text-slate-500 transition-all border-b-2 border-transparent hover:text-slate-700 flex items-center gap-2">
-                <i data-lucide="users" class="w-4 h-4"></i> Người dùng
-            </a>
-            <a href="/admin/transactions" class="whitespace-nowrap px-4 py-3 font-bold text-sm transition-all border-b-2 border-primary text-primary flex items-center gap-2">
-                <i data-lucide="wallet" class="w-4 h-4"></i> Nạp tiền
-            </a>
-            <a href="/admin/packages" class="whitespace-nowrap px-4 py-3 font-semibold text-sm text-slate-500 transition-all border-b-2 border-transparent hover:text-slate-700 flex items-center gap-2">
-                <i data-lucide="package" class="w-4 h-4"></i> Trạng thái VIP
-            </a>
-            <a href="/admin/package-history" class="whitespace-nowrap px-4 py-3 font-semibold text-sm text-slate-500 transition-all border-b-2 border-transparent hover:text-slate-700 flex items-center gap-2">
-                <i data-lucide="history" class="w-4 h-4"></i> Lịch sử Mua gói
-            </a>
-            <a href="/admin/giftcodes" class="whitespace-nowrap px-4 py-3 font-semibold text-sm text-slate-500 transition-all border-b-2 border-transparent hover:text-slate-700 flex items-center gap-2">
-                <i data-lucide="ticket" class="w-4 h-4"></i> Giftcode
-            </a>
+    <main class="flex-1 p-4 sm:p-6">
+        <!-- Stats row -->
+        <div class="grid grid-cols-3 gap-4 mb-6">
+            <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm text-center">
+                <p class="text-2xl font-black text-amber-500" id="stat-pending">—</p>
+                <p class="text-xs text-slate-400 mt-1">Chờ duyệt</p>
+            </div>
+            <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm text-center">
+                <p class="text-2xl font-black text-emerald-500" id="stat-approved">—</p>
+                <p class="text-xs text-slate-400 mt-1">Đã duyệt</p>
+            </div>
+            <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm text-center">
+                <p class="text-2xl font-black text-red-500" id="stat-rejected">—</p>
+                <p class="text-xs text-slate-400 mt-1">Từ chối</p>
+            </div>
         </div>
 
-        <!-- Tab 2: Transactions -->
-        <div id="tab-transactions" class="space-y-4">
-            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 overflow-x-auto">
-                <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-6 gap-4 min-w-[600px]">
-                    <div>
-                        <h3 class="font-bold text-lg text-slate-800">Yêu cầu nạp tiền & Lịch sử</h3>
-                        <p class="text-xs text-slate-400">Phê duyệt hoặc từ chối các yêu cầu nạp tiền của thành viên</p>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <select id="filter-tx-status" onchange="filterTxTable()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary">
-                            <option value="all">Tất cả trạng thái</option>
-                            <option value="Chờ duyệt">Chờ duyệt</option>
-                            <option value="Thành công">Thành công</option>
-                            <option value="Từ chối">Từ chối</option>
-                        </select>
-                        <div class="relative w-48">
-                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i data-lucide="search" class="w-4 h-4 text-slate-400"></i>
-                            </span>
-                            <input type="text" id="search-tx-input" oninput="filterTxTable()" class="block w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-primary focus:bg-white" placeholder="Tìm username, số tiền...">
-                        </div>
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-5 border-b border-slate-100">
+                <div>
+                    <h3 class="font-bold text-slate-800">Danh sách giao dịch</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Xem và xử lý các yêu cầu nạp tiền</p>
+                </div>
+                <div class="flex gap-2 flex-wrap">
+                    <select id="filter-status" onchange="filterTx()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary">
+                        <option value="all">Tất cả</option>
+                        <option value="Chờ duyệt">Chờ duyệt</option>
+                        <option value="Thành công">Thành công</option>
+                        <option value="Từ chối">Từ chối</option>
+                    </select>
+                    <div class="relative">
+                        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                        <input type="text" id="search-tx" oninput="filterTx()" placeholder="Tìm..." class="pl-9 pr-4 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary w-44">
                     </div>
                 </div>
-                <table class="w-full text-left border-collapse min-w-[700px]">
-                    <thead>
-                        <tr class="border-b border-slate-100 text-slate-400 text-xs font-bold uppercase tracking-wider">
-                            <th class="pb-3 pt-2">Mã GD</th>
-                            <th class="pb-3 pt-2">Thành viên</th>
-                            <th class="pb-3 pt-2">Loại / Tiêu đề</th>
-                            <th class="pb-3 pt-2 text-right pr-6">Số tiền</th>
-                            <th class="pb-3 pt-2 pl-6">Thời gian</th>
-                            <th class="pb-3 pt-2">Trạng thái</th>
-                            <th class="pb-3 pt-2 text-center">Xử lý</th>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left min-w-[750px]">
+                    <thead class="bg-slate-50 border-b border-slate-100">
+                        <tr class="text-slate-400 text-[11px] font-bold uppercase tracking-wider">
+                            <th class="px-5 py-3">Mã GD</th>
+                            <th class="px-5 py-3">Thành viên</th>
+                            <th class="px-5 py-3">Loại / Tiêu đề</th>
+                            <th class="px-5 py-3 text-right">Số tiền</th>
+                            <th class="px-5 py-3">Thời gian</th>
+                            <th class="px-5 py-3">Trạng thái</th>
+                            <th class="px-5 py-3 text-center">Xử lý</th>
                         </tr>
                     </thead>
-                    <tbody id="tx-table-body" class="divide-y divide-slate-50 text-sm">
-                        <tr>
-                            <td colspan="7" class="py-6 text-center text-slate-400">Đang tải dữ liệu...</td>
-                        </tr>
+                    <tbody id="tx-tbody" class="divide-y divide-slate-50 text-sm">
+                        <tr><td colspan="7" class="py-10 text-center text-slate-400">Đang tải...</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </main>
+</div>
 
-    <!-- Custom Alert Modal -->
-    <div id="alert-modal" class="fixed inset-0 z-[60] hidden">
-        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeAlertModal()"></div>
-        <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
-            <div class="w-full max-w-sm bg-white rounded-3xl p-6 pointer-events-auto shadow-2xl relative">
-                <div class="text-center mb-6">
-                    <div id="alert-modal-icon" class="w-12 h-12 rounded-full bg-blue-50 text-primary flex items-center justify-center mx-auto mb-4">
-                        <i data-lucide="info" class="w-6 h-6"></i>
-                    </div>
-                    <h3 id="alert-modal-title" class="text-lg font-bold text-slate-800 mb-2">Thông báo</h3>
-                    <p id="alert-modal-message" class="text-sm text-slate-500 px-2">...</p>
-                </div>
-                <button onclick="closeAlertModal()" class="w-full py-3 bg-primary hover:bg-blue-600 active:scale-95 text-white font-bold rounded-2xl shadow-lg transition-all">
-                    Đóng
-                </button>
-            </div>
+<div id="confirm-modal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeConfirm()"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+        <div class="w-full max-w-sm bg-white rounded-2xl p-6 pointer-events-auto shadow-2xl">
+            <div class="text-center mb-5"><div class="w-10 h-10 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center mx-auto mb-3"><i data-lucide="alert-triangle" class="w-5 h-5"></i></div><h3 class="font-bold text-slate-800 mb-1">Xác nhận</h3><p id="confirm-msg" class="text-sm text-slate-500"></p></div>
+            <div class="flex gap-2"><button id="confirm-yes" class="flex-1 py-2.5 bg-primary text-white font-bold rounded-xl text-sm active:scale-95 transition-all">Đồng ý</button><button onclick="closeConfirm()" class="py-2.5 px-4 bg-slate-100 text-slate-600 font-semibold rounded-xl text-sm">Hủy</button></div>
         </div>
     </div>
-
-    <!-- Custom Confirm Modal -->
-    <div id="confirm-modal" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeConfirmModal()"></div>
-        <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
-            <div class="w-full max-w-sm bg-white rounded-3xl p-6 pointer-events-auto shadow-2xl relative">
-                <div class="text-center mb-6">
-                    <div class="w-12 h-12 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center mx-auto mb-4">
-                        <i data-lucide="help-circle" class="w-6 h-6"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-slate-800 mb-2">Xác nhận thao tác</h3>
-                    <p id="confirm-modal-message" class="text-sm text-slate-500 px-2">Bạn chắc chắn muốn thực hiện thao tác này?</p>
-                </div>
-                <div class="flex gap-2">
-                    <button id="confirm-modal-yes-btn" class="flex-1 py-3 bg-primary hover:bg-blue-600 active:scale-95 text-white font-bold rounded-2xl shadow-lg transition-all">
-                        Đồng ý
-                    </button>
-                    <button onclick="closeConfirmModal()" class="py-3 px-5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold rounded-2xl transition-colors">
-                        Hủy
-                    </button>
-                </div>
-            </div>
+</div>
+<div id="alert-modal" class="fixed inset-0 z-[60] hidden">
+    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeAlert()"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+        <div class="w-full max-w-sm bg-white rounded-2xl p-6 pointer-events-auto shadow-2xl text-center">
+            <div id="alert-icon" class="w-10 h-10 rounded-full bg-blue-50 text-primary flex items-center justify-center mx-auto mb-3"><i data-lucide="info" class="w-5 h-5"></i></div>
+            <h3 id="alert-title" class="font-bold text-slate-800 mb-1">Thông báo</h3>
+            <p id="alert-msg" class="text-sm text-slate-500 mb-5"></p>
+            <button onclick="closeAlert()" class="w-full py-2.5 bg-primary text-white font-bold rounded-xl text-sm active:scale-95 transition-all">Đóng</button>
         </div>
     </div>
+</div>
 
-    <script>
-        lucide.createIcons();
+<script>
+lucide.createIcons();
+const token = localStorage.getItem('token');
+if (!token || localStorage.getItem('role') !== 'admin') { window.location.href = '/admin/login'; }
+document.getElementById('admin-name').innerText = localStorage.getItem('username') || 'Admin';
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); document.getElementById('sidebar-overlay').classList.toggle('hidden'); }
+document.querySelectorAll('.nav-link').forEach(l => { if(l.dataset.path===window.location.pathname){l.classList.add('bg-blue-600','text-white');l.classList.remove('text-slate-400','hover:bg-white/5','hover:text-white');} });
+function logoutAdmin() { localStorage.clear(); window.location.href = '/admin/login'; }
+let confirmResolve=null;
+function showConfirm(m){document.getElementById('confirm-msg').innerText=m;document.getElementById('confirm-modal').classList.remove('hidden');lucide.createIcons();return new Promise(r=>{confirmResolve=r;});}
+function closeConfirm(){document.getElementById('confirm-modal').classList.add('hidden');if(confirmResolve){confirmResolve(false);confirmResolve=null;}}
+document.getElementById('confirm-yes').addEventListener('click',()=>{document.getElementById('confirm-modal').classList.add('hidden');if(confirmResolve){confirmResolve(true);confirmResolve=null;}});
+let alertResolve=null;
+function alert(m,t='info'){const i=document.getElementById('alert-icon'),ti=document.getElementById('alert-title');document.getElementById('alert-msg').innerText=m;if(t==='success'||m.includes('thành công')||m.includes('Thành công')){i.className='w-10 h-10 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center mx-auto mb-3';i.innerHTML='<i data-lucide="check-circle" class="w-5 h-5"></i>';ti.innerText='Thành công';}else if(t==='error'||m.includes('Lỗi')){i.className='w-10 h-10 rounded-full bg-red-50 text-red-500 flex items-center justify-center mx-auto mb-3';i.innerHTML='<i data-lucide="x-circle" class="w-5 h-5"></i>';ti.innerText='Lỗi';}else{i.className='w-10 h-10 rounded-full bg-blue-50 text-primary flex items-center justify-center mx-auto mb-3';i.innerHTML='<i data-lucide="info" class="w-5 h-5"></i>';ti.innerText='Thông báo';}document.getElementById('alert-modal').classList.remove('hidden');lucide.createIcons();return new Promise(r=>{alertResolve=r;});}
+function closeAlert(){document.getElementById('alert-modal').classList.add('hidden');if(alertResolve){alertResolve();alertResolve=null;}}
+function copyToClipboard(t){navigator.clipboard.writeText(t).catch(()=>{});const toast=document.getElementById('copy-toast');toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1800);}
+function formatMoney(n){return Number(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');}
 
-        let confirmPromiseResolver = null;
-
-        function showConfirmModal(message) {
-            document.getElementById('confirm-modal-message').innerText = message;
-            document.getElementById('confirm-modal').classList.remove('hidden');
-            lucide.createIcons();
-            return new Promise((resolve) => {
-                confirmPromiseResolver = resolve;
-            });
+let allTx=[];
+function renderTx(txs){
+    const tbody=document.getElementById('tx-tbody');
+    if(!txs.length){tbody.innerHTML='<tr><td colspan="7" class="py-10 text-center text-slate-400 text-sm">Không tìm thấy giao dịch.</td></tr>';return;}
+    tbody.innerHTML=txs.map(tx=>{
+        const statusBadge = tx.status==='Chờ duyệt'
+            ? '<span class="px-2 py-1 bg-amber-50 text-amber-600 rounded-lg text-[10px] font-bold">Chờ duyệt</span>'
+            : tx.status==='Thành công'
+            ? '<span class="px-2 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-[10px] font-bold">Thành công</span>'
+            : '<span class="px-2 py-1 bg-red-50 text-red-500 rounded-lg text-[10px] font-bold">Từ chối</span>';
+        const amount = tx.type==='in'
+            ? `<span class="font-bold text-emerald-600">+${formatMoney(tx.amount)}đ</span>`
+            : `<span class="font-bold text-orange-500">-${formatMoney(tx.amount)}đ</span>`;
+        const action = tx.status==='Chờ duyệt'
+            ? `<div class="flex gap-1 justify-center"><button onclick="approveTx('${tx.id}','approve',this)" class="px-2.5 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-[11px] font-bold active:scale-95 transition-all">Duyệt</button><button onclick="approveTx('${tx.id}','reject',this)" class="px-2.5 py-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg text-[11px] font-bold active:scale-95 transition-all">Từ chối</button></div>`
+            : '<span class="text-slate-300 text-sm">—</span>';
+        return `<tr class="hover:bg-slate-50 transition-colors">
+            <td class="px-5 py-3.5"><div class="flex items-center gap-1.5"><span class="font-mono text-xs text-slate-500">${tx.id}</span><button onclick="copyToClipboard('${tx.id}')" class="w-5 h-5 flex items-center justify-center bg-slate-100 hover:bg-blue-50 text-slate-400 hover:text-primary rounded active:scale-90 transition-all"><i data-lucide="copy" class="w-3 h-3"></i></button></div></td>
+            <td class="px-5 py-3.5 font-semibold text-slate-800">${tx.username}</td>
+            <td class="px-5 py-3.5 text-slate-600 text-sm">${tx.title}</td>
+            <td class="px-5 py-3.5 text-right">${amount}</td>
+            <td class="px-5 py-3.5 text-slate-400 text-xs whitespace-nowrap">${tx.time}</td>
+            <td class="px-5 py-3.5">${statusBadge}</td>
+            <td class="px-5 py-3.5">${action}</td>
+        </tr>`;
+    }).join('');
+    lucide.createIcons();
+}
+function filterTx(){
+    const q=document.getElementById('search-tx').value.toLowerCase();
+    const s=document.getElementById('filter-status').value;
+    renderTx(allTx.filter(t=>{
+        const mq=t.username.toLowerCase().includes(q)||t.title.toLowerCase().includes(q)||t.id.toLowerCase().includes(q)||t.amount.toString().includes(q);
+        return mq&&(s==='all'||t.status===s);
+    }));
+}
+async function approveTx(id,action,btn){
+    const txt=action==='approve'?'phê duyệt':'từ chối';
+    if(!await showConfirm(`Xác nhận ${txt} giao dịch ${id}?`))return;
+    const orig=btn.innerHTML; btn.disabled=true; btn.innerHTML='...';
+    try{
+        const r=await fetch('../api/admin_transactions.php',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},body:JSON.stringify({tx_id:id,action})});
+        const d=await r.json(); alert(d.message); if(d.success)fetchTx();
+    }catch(e){alert('Lỗi kết nối.');}finally{btn.disabled=false;btn.innerHTML=orig;}
+}
+async function fetchTx(){
+    try{
+        const r=await fetch('../api/admin_transactions.php',{headers:{'Authorization':`Bearer ${token}`}});
+        const d=await r.json();
+        if(d.success){
+            allTx=d.transactions;
+            renderTx(allTx);
+            document.getElementById('stat-pending').innerText=allTx.filter(t=>t.status==='Chờ duyệt').length;
+            document.getElementById('stat-approved').innerText=allTx.filter(t=>t.status==='Thành công').length;
+            document.getElementById('stat-rejected').innerText=allTx.filter(t=>t.status==='Từ chối').length;
         }
-
-        function closeConfirmModal() {
-            document.getElementById('confirm-modal').classList.add('hidden');
-            if (confirmPromiseResolver) {
-                confirmPromiseResolver(false);
-                confirmPromiseResolver = null;
-            }
-        }
-
-        document.getElementById('confirm-modal-yes-btn').addEventListener('click', () => {
-            document.getElementById('confirm-modal').classList.add('hidden');
-            if (confirmPromiseResolver) {
-                confirmPromiseResolver(true);
-                confirmPromiseResolver = null;
-            }
-        });
-
-        let alertPromiseResolver = null;
-        function alert(message, type = 'info') {
-            document.getElementById('alert-modal-message').innerText = message;
-            
-            const iconDiv = document.getElementById('alert-modal-icon');
-            if (type === 'success' || message.includes('thành công') || message.includes('Thành công')) {
-                iconDiv.className = "w-12 h-12 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center mx-auto mb-4";
-                iconDiv.innerHTML = '<i data-lucide="check-circle" class="w-6 h-6"></i>';
-                document.getElementById('alert-modal-title').innerText = 'Thành công';
-            } else if (type === 'error' || message.includes('Lỗi') || message.includes('không') || message.includes('thất bại')) {
-                iconDiv.className = "w-12 h-12 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center mx-auto mb-4";
-                iconDiv.innerHTML = '<i data-lucide="x-circle" class="w-6 h-6"></i>';
-                document.getElementById('alert-modal-title').innerText = 'Lỗi';
-            } else {
-                iconDiv.className = "w-12 h-12 rounded-full bg-blue-50 text-primary flex items-center justify-center mx-auto mb-4";
-                iconDiv.innerHTML = '<i data-lucide="info" class="w-6 h-6"></i>';
-                document.getElementById('alert-modal-title').innerText = 'Thông báo';
-            }
-            lucide.createIcons();
-            document.getElementById('alert-modal').classList.remove('hidden');
-            
-            return new Promise((resolve) => {
-                alertPromiseResolver = resolve;
-            });
-        }
-
-        function closeAlertModal() {
-            document.getElementById('alert-modal').classList.add('hidden');
-            if (alertPromiseResolver) {
-                alertPromiseResolver();
-                alertPromiseResolver = null;
-            }
-        }
-
-        const token = localStorage.getItem('token');
-        const adminRole = localStorage.getItem('role');
-
-        if (!token || adminRole !== 'admin') {
-            alert('Bạn không có quyền truy cập trang này.');
-            window.location.href = '/admin/login';
-        }
-
-        function showCopyToast() {
-            const t = document.getElementById('copy-toast');
-            t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 1800);
-        }
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => showCopyToast()).catch(() => {
-                const el = document.createElement('textarea');
-                el.value = text; document.body.appendChild(el); el.select();
-                document.execCommand('copy'); document.body.removeChild(el);
-                showCopyToast();
-            });
-        }
-
-        let allTransactions = [];
-
-        function logoutAdmin() {
-            localStorage.clear();
-            window.location.href = '/admin/login';
-        }
-
-        async function fetchTransactions() {
-            try {
-                const response = await fetch('../api/admin_transactions.php', { headers: { 'Authorization': `Bearer ${token}` } });
-                const result = await response.json();
-                if (result.success) {
-                    allTransactions = result.transactions;
-                    renderTransactionsTable(allTransactions);
-                } else {
-                    alert(result.message);
-                }
-            } catch (e) {
-                console.error(e);
-                alert('Không thể tải danh sách giao dịch.');
-            }
-        }
-
-        function formatMoney(n) {
-            return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
-
-        function renderTransactionsTable(transactions) {
-            const tbody = document.getElementById('tx-table-body');
-            tbody.innerHTML = '';
-            if (transactions.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" class="py-6 text-center text-slate-400">Không tìm thấy giao dịch nào.</td></tr>';
-                return;
-            }
-
-            transactions.forEach(tx => {
-                let statusBadge = '';
-                if (tx.status === 'Chờ duyệt') {
-                    statusBadge = '<span class="px-2 py-1 bg-warning/10 text-warning rounded-md font-bold text-[10px] uppercase">Chờ duyệt</span>';
-                } else if (tx.status === 'Thành công') {
-                    statusBadge = '<span class="px-2 py-1 bg-success/10 text-success rounded-md font-bold text-[10px] uppercase">Thành công</span>';
-                } else {
-                    statusBadge = '<span class="px-2 py-1 bg-danger/10 text-danger rounded-md font-bold text-[10px] uppercase">Từ chối</span>';
-                }
-
-                const amountText = tx.type === 'in' 
-                    ? `<span class="text-success font-bold">+${formatMoney(tx.amount)}đ</span>` 
-                    : `<span class="text-danger font-bold">-${formatMoney(tx.amount)}đ</span>`;
-
-                const typeIcon = tx.type === 'in'
-                    ? '<div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-primary"><i data-lucide="arrow-down-to-line" class="w-4 h-4"></i></div>'
-                    : '<div class="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center text-orange-500"><i data-lucide="package" class="w-4 h-4"></i></div>';
-
-                let actionHtml = '-';
-                if (tx.status === 'Chờ duyệt') {
-                    actionHtml = `
-                        <div class="flex items-center justify-center gap-1.5">
-                            <button onclick="approveTx('${tx.id}', 'approve', this)" class="bg-success hover:bg-emerald-600 text-white py-1 px-2.5 rounded-lg text-xs font-bold active:scale-95 transition-all">Duyệt</button>
-                            <button onclick="approveTx('${tx.id}', 'reject', this)" class="bg-danger hover:bg-rose-600 text-white py-1 px-2.5 rounded-lg text-xs font-bold active:scale-95 transition-all">Từ chối</button>
-                        </div>
-                    `;
-                }
-
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50/50";
-                tr.innerHTML = `
-                    <td class="py-4">
-                        <div class="flex items-center gap-1.5">
-                            <span class="font-mono font-semibold text-slate-500 text-xs">${tx.id}</span>
-                            <button onclick="copyToClipboard('${tx.id}')" title="Sao chép mã GD" class="w-6 h-6 flex items-center justify-center bg-slate-100 hover:bg-blue-50 hover:text-primary text-slate-400 rounded active:scale-90 transition-all">
-                                <i data-lucide="copy" class="w-3 h-3"></i>
-                            </button>
-                        </div>
-                    </td>
-                    <td class="py-4 font-bold text-slate-800">${tx.username}</td>
-                    <td class="py-4">
-                        <div class="flex items-center gap-2">
-                            ${typeIcon}
-                            <span class="font-medium text-slate-700">${tx.title}</span>
-                        </div>
-                    </td>
-                    <td class="py-4 text-right text-base pr-6">${amountText}</td>
-                    <td class="py-4 text-slate-500 text-xs pl-6">${tx.time}</td>
-                    <td class="py-4">${statusBadge}</td>
-                    <td class="py-4 text-center">${actionHtml}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-            lucide.createIcons();
-        }
-
-        function filterTxTable() {
-            const query = document.getElementById('search-tx-input').value.toLowerCase().trim();
-            const status = document.getElementById('filter-tx-status').value;
-            const filtered = allTransactions.filter(tx => {
-                const matchQuery = tx.username.toLowerCase().includes(query) || 
-                                   tx.title.toLowerCase().includes(query) || 
-                                   tx.amount.toString().includes(query) ||
-                                   tx.id.toLowerCase().includes(query);
-                const matchStatus = status === 'all' || tx.status === status;
-                return matchQuery && matchStatus;
-            });
-            renderTransactionsTable(filtered);
-        }
-
-        async function approveTx(txId, action, btn) {
-            const actionText = action === 'approve' ? 'phê duyệt' : 'từ chối';
-            const confirmAction = await showConfirmModal(`Bạn chắc chắn muốn ${actionText} giao dịch ${txId}?`);
-            if (!confirmAction) return;
-
-            const originalHtml = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = `<span class="animate-spin text-white">...</span>`;
-
-            try {
-                const response = await fetch('../api/admin_transactions.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                    body: JSON.stringify({
-                        tx_id: txId,
-                        action: action
-                    })
-                });
-                const result = await response.json();
-                if (result.success) {
-                    alert(result.message);
-                    fetchTransactions();
-                } else {
-                    alert(result.message);
-                }
-            } catch (e) {
-                console.error(e);
-                alert('Lỗi kết nối khi phê duyệt.');
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = originalHtml;
-            }
-        }
-
-        fetchTransactions();
-    </script>
+    }catch(e){console.error(e);}
+}
+fetchTx();
+</script>
 </body>
 </html>

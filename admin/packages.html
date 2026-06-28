@@ -3,446 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Trạng Thái VIP Thành Viên - TOOLTX2026 ADMIN</title>
+    <title>Trạng thái VIP - TOOLTX2026 Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#3b82f6',
-                        success: '#10b981',
-                        danger: '#ef4444',
-                        warning: '#f59e0b'
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-    </style>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#3b82f6',success:'#10b981',danger:'#ef4444',warning:'#f59e0b'}}}}</script>
+    <style>::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:#f1f5f9}::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}::-webkit-scrollbar-thumb:hover{background:#94a3b8}</style>
 </head>
-<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
+<body class="bg-slate-50 text-slate-800 font-sans">
 
-    <!-- Header -->
-    <header class="bg-slate-900 text-white shadow-md sticky top-0 z-40">
-        <div class="max-w-6xl mx-auto flex items-center justify-between h-16 px-4">
-            <div class="flex items-center gap-3">
-                <a href="/" class="w-8 h-8 flex items-center justify-center bg-white/10 rounded-lg hover:bg-white/20 active:scale-95 transition-all text-white">
-                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
-                </a>
-                <h1 class="text-xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-200">
-                    TOOLTX2026 ADMIN
-                </h1>
-            </div>
-            <div class="flex items-center gap-4">
-                <div class="text-right hidden sm:block">
-                    <p class="text-xs text-slate-400">Đang đăng nhập</p>
-                    <p class="text-sm font-bold" id="admin-name">Admin</p>
-                </div>
-                <button onclick="logoutAdmin()" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 font-semibold py-2 px-3.5 rounded-xl text-xs flex items-center gap-1.5 active:scale-95 transition-all">
-                    <i data-lucide="log-out" class="w-4 h-4"></i> Đăng xuất
-                </button>
-            </div>
+<aside id="sidebar" class="fixed inset-y-0 left-0 w-60 bg-[#0f172a] flex flex-col z-30 transition-transform duration-300 -translate-x-full lg:translate-x-0">
+    <div class="h-16 flex items-center px-5 border-b border-white/5 flex-shrink-0">
+        <div><p class="font-black tracking-widest text-xs text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300 uppercase">TOOLTX2026</p><p class="text-[10px] text-slate-500 font-semibold mt-0.5">Bảng quản trị hệ thống</p></div>
+    </div>
+    <nav class="flex-1 overflow-y-auto py-3 px-2 space-y-0.5">
+        <p class="text-[10px] font-bold text-slate-600 uppercase tracking-widest px-3 py-2">Tổng quan</p>
+        <a href="/admin" data-path="/admin" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-white/5 hover:text-white transition-all"><i data-lucide="layout-dashboard" class="w-4 h-4 flex-shrink-0"></i><span>Dashboard</span></a>
+        <a href="/admin/transactions" data-path="/admin/transactions" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-white/5 hover:text-white transition-all"><i data-lucide="wallet" class="w-4 h-4 flex-shrink-0"></i><span>Nạp tiền</span></a>
+        <a href="/admin/packages" data-path="/admin/packages" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-white/5 hover:text-white transition-all"><i data-lucide="crown" class="w-4 h-4 flex-shrink-0"></i><span>Trạng thái VIP</span></a>
+        <a href="/admin/package-history" data-path="/admin/package-history" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-white/5 hover:text-white transition-all"><i data-lucide="history" class="w-4 h-4 flex-shrink-0"></i><span>Lịch sử gói</span></a>
+        <a href="/admin/giftcodes" data-path="/admin/giftcodes" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-white/5 hover:text-white transition-all"><i data-lucide="gift" class="w-4 h-4 flex-shrink-0"></i><span>Giftcode</span></a>
+        <p class="text-[10px] font-bold text-slate-600 uppercase tracking-widest px-3 py-2 pt-4">APK & Key</p>
+        <a href="/admin/keys" data-path="/admin/keys" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-white/5 hover:text-white transition-all"><i data-lucide="key" class="w-4 h-4 flex-shrink-0"></i><span>Quản lý Key & APK</span></a>
+    </nav>
+    <div class="p-3 border-t border-white/5 flex-shrink-0">
+        <div class="flex items-center gap-2.5 px-2 py-2 mb-2">
+            <div class="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0"><i data-lucide="shield-check" class="w-4 h-4 text-blue-400"></i></div>
+            <div class="min-w-0"><p id="admin-name" class="text-sm font-bold text-white truncate">Admin</p><p class="text-[11px] text-slate-500">Quản trị viên</p></div>
+        </div>
+        <button onclick="logoutAdmin()" class="w-full flex items-center justify-center gap-2 py-2 px-3 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl text-xs font-semibold transition-colors"><i data-lucide="log-out" class="w-3.5 h-3.5"></i> Đăng xuất</button>
+    </div>
+</aside>
+<div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-20 hidden lg:hidden" onclick="toggleSidebar()"></div>
+
+<div class="lg:ml-60 min-h-screen flex flex-col">
+    <header class="h-16 bg-white border-b border-slate-200 flex items-center px-4 sm:px-6 sticky top-0 z-20 gap-4">
+        <button onclick="toggleSidebar()" class="lg:hidden w-9 h-9 flex items-center justify-center rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors flex-shrink-0"><i data-lucide="menu" class="w-5 h-5"></i></button>
+        <div class="min-w-0">
+            <h2 class="font-bold text-slate-800 text-base leading-tight">Trạng thái VIP</h2>
+            <p class="text-xs text-slate-400 hidden sm:block">Quản lý thời hạn VIP của thành viên</p>
         </div>
     </header>
-
-    <!-- Nội dung -->
-    <main class="flex-grow max-w-6xl w-full mx-auto p-4 pb-20">
-        <!-- Navigation Tabs -->
-        <div class="flex border-b border-slate-200 mb-6 gap-1 overflow-x-auto">
-            <a href="/admin" class="whitespace-nowrap px-4 py-3 font-semibold text-sm text-slate-500 transition-all border-b-2 border-transparent hover:text-slate-700 flex items-center gap-2">
-                <i data-lucide="users" class="w-4 h-4"></i> Người dùng
-            </a>
-            <a href="/admin/transactions" class="whitespace-nowrap px-4 py-3 font-semibold text-sm text-slate-500 transition-all border-b-2 border-transparent hover:text-slate-700 flex items-center gap-2">
-                <i data-lucide="wallet" class="w-4 h-4"></i> Nạp tiền
-            </a>
-            <a href="/admin/packages" class="whitespace-nowrap px-4 py-3 font-bold text-sm transition-all border-b-2 border-primary text-primary flex items-center gap-2">
-                <i data-lucide="package" class="w-4 h-4"></i> Trạng thái VIP
-            </a>
-            <a href="/admin/package-history" class="whitespace-nowrap px-4 py-3 font-semibold text-sm text-slate-500 transition-all border-b-2 border-transparent hover:text-slate-700 flex items-center gap-2">
-                <i data-lucide="history" class="w-4 h-4"></i> Lịch sử Mua gói
-            </a>
-            <a href="/admin/giftcodes" class="whitespace-nowrap px-4 py-3 font-semibold text-sm text-slate-500 transition-all border-b-2 border-transparent hover:text-slate-700 flex items-center gap-2">
-                <i data-lucide="ticket" class="w-4 h-4"></i> Giftcode
-            </a>
-        </div>
-
-        <!-- Tab 3: Packages -->
-        <div id="tab-packages" class="space-y-6">
-            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 overflow-x-auto">
-                <div class="flex justify-between items-center mb-4 min-w-[600px]">
-                    <h3 class="font-bold text-lg text-slate-800">Trạng thái VIP thành viên</h3>
-                    <div class="relative w-64">
-                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i data-lucide="search" class="w-4 h-4 text-slate-400"></i>
-                        </span>
-                        <input type="text" id="search-packages-input" oninput="filterPackagesTable()" class="block w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-primary focus:bg-white" placeholder="Tìm username...">
-                    </div>
+    <main class="flex-1 p-4 sm:p-6">
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-5 border-b border-slate-100">
+                <div>
+                    <h3 class="font-bold text-slate-800">Danh sách thành viên</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Gia hạn hoặc thiết lập VIP trực tiếp</p>
                 </div>
-                <table class="w-full text-left border-collapse min-w-[700px]">
-                    <thead>
-                        <tr class="border-b border-slate-100 text-slate-400 text-xs font-bold uppercase tracking-wider">
-                            <th class="pb-3 pt-2">Username</th>
-                            <th class="pb-3 pt-2">Trạng thái VIP</th>
-                            <th class="pb-3 pt-2 pl-6">Hết hạn vào</th>
-                            <th class="pb-3 pt-2 text-center">Hành động</th>
+                <div class="relative">
+                    <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                    <input type="text" id="search-pkg" oninput="filterPkg()" placeholder="Tìm username..." class="pl-9 pr-4 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary w-56">
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left min-w-[700px]">
+                    <thead class="bg-slate-50 border-b border-slate-100">
+                        <tr class="text-slate-400 text-[11px] font-bold uppercase tracking-wider">
+                            <th class="px-5 py-3">Thành viên</th>
+                            <th class="px-5 py-3">Số dư</th>
+                            <th class="px-5 py-3">Trạng thái VIP</th>
+                            <th class="px-5 py-3">Hết hạn</th>
+                            <th class="px-5 py-3 text-center">Gia hạn nhanh</th>
+                            <th class="px-5 py-3 text-center">Đặt ngày</th>
                         </tr>
                     </thead>
-                    <tbody id="packages-table-body" class="divide-y divide-slate-50 text-sm">
-                        <tr>
-                            <td colspan="5" class="py-6 text-center text-slate-400">Đang tải dữ liệu...</td>
-                        </tr>
+                    <tbody id="pkg-tbody" class="divide-y divide-slate-50 text-sm">
+                        <tr><td colspan="6" class="py-10 text-center text-slate-400">Đang tải...</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </main>
+</div>
 
-    <!-- Custom Alert Modal -->
-    <div id="alert-modal" class="fixed inset-0 z-[60] hidden">
-        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeAlertModal()"></div>
-        <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
-            <div class="w-full max-w-sm bg-white rounded-3xl p-6 pointer-events-auto shadow-2xl relative">
-                <div class="text-center mb-6">
-                    <div id="alert-modal-icon" class="w-12 h-12 rounded-full bg-blue-50 text-primary flex items-center justify-center mx-auto mb-4">
-                        <i data-lucide="info" class="w-6 h-6"></i>
-                    </div>
-                    <h3 id="alert-modal-title" class="text-lg font-bold text-slate-800 mb-2">Thông báo</h3>
-                    <p id="alert-modal-message" class="text-sm text-slate-500 px-2">...</p>
-                </div>
-                <button onclick="closeAlertModal()" class="w-full py-3 bg-primary hover:bg-blue-600 active:scale-95 text-white font-bold rounded-2xl shadow-lg transition-all">
-                    Đóng
-                </button>
+<!-- VIP date modal -->
+<div id="vip-modal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeVipModal()"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+        <div class="w-full max-w-sm bg-white rounded-2xl p-6 pointer-events-auto shadow-2xl">
+            <h3 class="font-bold text-slate-800 mb-1">Thiết lập VIP</h3>
+            <p class="text-xs text-slate-400 mb-4">Tài khoản: <span id="vip-target" class="font-bold text-slate-700"></span></p>
+            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Ngày hết hạn</label>
+            <input type="datetime-local" id="vip-date" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary mb-4">
+            <div class="flex gap-2">
+                <button onclick="saveVipDate()" class="flex-1 py-2.5 bg-primary text-white font-bold rounded-xl text-sm active:scale-95 transition-all">Lưu</button>
+                <button onclick="closeVipModal()" class="py-2.5 px-4 bg-slate-100 text-slate-600 font-semibold rounded-xl text-sm">Hủy</button>
             </div>
         </div>
     </div>
-
-    <!-- Custom Confirm Modal -->
-    <div id="confirm-modal" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeConfirmModal()"></div>
-        <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
-            <div class="w-full max-w-sm bg-white rounded-3xl p-6 pointer-events-auto shadow-2xl relative">
-                <div class="text-center mb-6">
-                    <div class="w-12 h-12 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center mx-auto mb-4">
-                        <i data-lucide="help-circle" class="w-6 h-6"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-slate-800 mb-2">Xác nhận thao tác</h3>
-                    <p id="confirm-modal-message" class="text-sm text-slate-500 px-2">Bạn chắc chắn muốn thực hiện thao tác này?</p>
-                </div>
-                <div class="flex gap-2">
-                    <button id="confirm-modal-yes-btn" class="flex-1 py-3 bg-primary hover:bg-blue-600 active:scale-95 text-white font-bold rounded-2xl shadow-lg transition-all">
-                        Đồng ý
-                    </button>
-                    <button onclick="closeConfirmModal()" class="py-3 px-5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold rounded-2xl transition-colors">
-                        Hủy
-                    </button>
-                </div>
-            </div>
+</div>
+<div id="confirm-modal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeConfirm()"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+        <div class="w-full max-w-sm bg-white rounded-2xl p-6 pointer-events-auto shadow-2xl">
+            <div class="text-center mb-5"><div class="w-10 h-10 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center mx-auto mb-3"><i data-lucide="alert-triangle" class="w-5 h-5"></i></div><h3 class="font-bold text-slate-800 mb-1">Xác nhận</h3><p id="confirm-msg" class="text-sm text-slate-500"></p></div>
+            <div class="flex gap-2"><button id="confirm-yes" class="flex-1 py-2.5 bg-primary text-white font-bold rounded-xl text-sm active:scale-95 transition-all">Đồng ý</button><button onclick="closeConfirm()" class="py-2.5 px-4 bg-slate-100 text-slate-600 font-semibold rounded-xl text-sm">Hủy</button></div>
         </div>
     </div>
-
-    <!-- Modal sửa thời hạn VIP -->
-    <div id="vip-modal" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeVipModal()"></div>
-        <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
-            <div class="w-full max-w-sm bg-white rounded-3xl p-6 pointer-events-auto shadow-2xl relative">
-                <h3 class="text-lg font-bold text-slate-800 mb-2">Gia hạn / Sửa VIP</h3>
-                <p class="text-xs text-slate-500 mb-4">Điều chỉnh VIP cho tài khoản: <span id="vip-target-user" class="font-bold text-slate-800">...</span></p>
-                
-                <div class="space-y-4 mb-6">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Chọn nhanh số ngày gia hạn</label>
-                        <div class="grid grid-cols-3 gap-2">
-                            <button onclick="setVipDays(1)" class="py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-xs rounded-xl border border-slate-200 transition-colors">+1 Ngày</button>
-                            <button onclick="setVipDays(7)" class="py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-xs rounded-xl border border-slate-200 transition-colors">+7 Ngày</button>
-                            <button onclick="setVipDays(30)" class="py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-xs rounded-xl border border-slate-200 transition-colors">+30 Ngày</button>
-                        </div>
-                    </div>
-
-                    <div class="border-t border-slate-100 pt-3">
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Hoặc chỉnh thời gian cụ thể</label>
-                        <input type="datetime-local" id="vip-date-input" class="block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
-                    </div>
-
-                    <button onclick="clearVip()" class="w-full py-2 bg-red-50 hover:bg-red-100 text-red-600 font-semibold text-xs rounded-xl transition-colors">Hủy kích hoạt VIP (Đặt về không hoạt động)</button>
-                </div>
-
-                <div class="flex gap-2">
-                    <button onclick="saveVip()" class="flex-1 py-3 bg-primary hover:bg-blue-600 active:scale-95 text-white font-bold rounded-2xl shadow-lg transition-all">
-                        Lưu thay đổi
-                    </button>
-                    <button onclick="closeVipModal()" class="py-3 px-5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold rounded-2xl transition-colors">
-                        Hủy
-                    </button>
-                </div>
-            </div>
+</div>
+<div id="alert-modal" class="fixed inset-0 z-[60] hidden">
+    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeAlert()"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+        <div class="w-full max-w-sm bg-white rounded-2xl p-6 pointer-events-auto shadow-2xl text-center">
+            <div id="alert-icon" class="w-10 h-10 rounded-full bg-blue-50 text-primary flex items-center justify-center mx-auto mb-3"><i data-lucide="info" class="w-5 h-5"></i></div>
+            <h3 id="alert-title" class="font-bold text-slate-800 mb-1">Thông báo</h3>
+            <p id="alert-msg" class="text-sm text-slate-500 mb-5"></p>
+            <button onclick="closeAlert()" class="w-full py-2.5 bg-primary text-white font-bold rounded-xl text-sm active:scale-95 transition-all">Đóng</button>
         </div>
     </div>
+</div>
 
-    <script>
-        lucide.createIcons();
+<script>
+lucide.createIcons();
+const token=localStorage.getItem('token');
+if(!token||localStorage.getItem('role')!=='admin'){window.location.href='/admin/login';}
+document.getElementById('admin-name').innerText=localStorage.getItem('username')||'Admin';
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('-translate-x-full');document.getElementById('sidebar-overlay').classList.toggle('hidden');}
+document.querySelectorAll('.nav-link').forEach(l=>{if(l.dataset.path===window.location.pathname){l.classList.add('bg-blue-600','text-white');l.classList.remove('text-slate-400','hover:bg-white/5','hover:text-white');}});
+function logoutAdmin(){localStorage.clear();window.location.href='/admin/login';}
+let confirmResolve=null;
+function showConfirm(m){document.getElementById('confirm-msg').innerText=m;document.getElementById('confirm-modal').classList.remove('hidden');lucide.createIcons();return new Promise(r=>{confirmResolve=r;});}
+function closeConfirm(){document.getElementById('confirm-modal').classList.add('hidden');if(confirmResolve){confirmResolve(false);confirmResolve=null;}}
+document.getElementById('confirm-yes').addEventListener('click',()=>{document.getElementById('confirm-modal').classList.add('hidden');if(confirmResolve){confirmResolve(true);confirmResolve=null;}});
+let alertResolve=null;
+function alert(m,t='info'){const i=document.getElementById('alert-icon'),ti=document.getElementById('alert-title');document.getElementById('alert-msg').innerText=m;if(t==='success'||m.includes('thành công')||m.includes('Thành công')){i.className='w-10 h-10 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center mx-auto mb-3';i.innerHTML='<i data-lucide="check-circle" class="w-5 h-5"></i>';ti.innerText='Thành công';}else if(t==='error'||m.includes('Lỗi')){i.className='w-10 h-10 rounded-full bg-red-50 text-red-500 flex items-center justify-center mx-auto mb-3';i.innerHTML='<i data-lucide="x-circle" class="w-5 h-5"></i>';ti.innerText='Lỗi';}else{i.className='w-10 h-10 rounded-full bg-blue-50 text-primary flex items-center justify-center mx-auto mb-3';i.innerHTML='<i data-lucide="info" class="w-5 h-5"></i>';ti.innerText='Thông báo';}document.getElementById('alert-modal').classList.remove('hidden');lucide.createIcons();return new Promise(r=>{alertResolve=r;});}
+function closeAlert(){document.getElementById('alert-modal').classList.add('hidden');if(alertResolve){alertResolve();alertResolve=null;}}
+function formatMoney(n){return Number(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');}
 
-        let confirmPromiseResolver = null;
+let allUsers=[], vipTarget='';
 
-        function showConfirmModal(message) {
-            document.getElementById('confirm-modal-message').innerText = message;
-            document.getElementById('confirm-modal').classList.remove('hidden');
-            lucide.createIcons();
-            return new Promise((resolve) => {
-                confirmPromiseResolver = resolve;
-            });
-        }
+async function extendVip(u,days){
+    if(!await showConfirm(`Gia hạn VIP ${days} ngày cho "${u}"?`))return;
+    try{
+        const now=Date.now()/1000;
+        const user=allUsers.find(x=>x.username===u);
+        const cur=user&&user.vip_expire&&user.vip_expire>now?user.vip_expire:now;
+        const newExp=Math.floor(cur+days*86400);
+        const r=await fetch('../api/admin_users.php',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},body:JSON.stringify({action:'update_vip',target_username:u,vip_expire:newExp})});
+        const d=await r.json(); alert(d.message); if(d.success)fetchUsers();
+    }catch(e){alert('Lỗi kết nối.');}
+}
 
-        function closeConfirmModal() {
-            document.getElementById('confirm-modal').classList.add('hidden');
-            if (confirmPromiseResolver) {
-                confirmPromiseResolver(false);
-                confirmPromiseResolver = null;
-            }
-        }
+function openVipModal(u){
+    vipTarget=u;
+    document.getElementById('vip-target').innerText=u;
+    const user=allUsers.find(x=>x.username===u);
+    if(user&&user.vip_expire&&user.vip_expire>Date.now()/1000){
+        const d=new Date(user.vip_expire*1000);
+        d.setMinutes(d.getMinutes()-d.getTimezoneOffset());
+        document.getElementById('vip-date').value=d.toISOString().slice(0,16);
+    } else {
+        document.getElementById('vip-date').value='';
+    }
+    document.getElementById('vip-modal').classList.remove('hidden');
+}
+function closeVipModal(){document.getElementById('vip-modal').classList.add('hidden');}
+async function saveVipDate(){
+    const val=document.getElementById('vip-date').value;
+    if(!val){alert('Vui lòng chọn ngày hết hạn.');return;}
+    const ts=Math.floor(new Date(val).getTime()/1000);
+    try{
+        const r=await fetch('../api/admin_users.php',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},body:JSON.stringify({action:'update_vip',target_username:vipTarget,vip_expire:ts})});
+        const d=await r.json(); alert(d.message); if(d.success){closeVipModal();fetchUsers();}
+    }catch(e){alert('Lỗi kết nối.');}
+}
 
-        document.getElementById('confirm-modal-yes-btn').addEventListener('click', () => {
-            document.getElementById('confirm-modal').classList.add('hidden');
-            if (confirmPromiseResolver) {
-                confirmPromiseResolver(true);
-                confirmPromiseResolver = null;
-            }
-        });
-
-        let alertPromiseResolver = null;
-        function alert(message, type = 'info') {
-            document.getElementById('alert-modal-message').innerText = message;
-            
-            const iconDiv = document.getElementById('alert-modal-icon');
-            if (type === 'success' || message.includes('thành công') || message.includes('Thành công')) {
-                iconDiv.className = "w-12 h-12 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center mx-auto mb-4";
-                iconDiv.innerHTML = '<i data-lucide="check-circle" class="w-6 h-6"></i>';
-                document.getElementById('alert-modal-title').innerText = 'Thành công';
-            } else if (type === 'error' || message.includes('Lỗi') || message.includes('không') || message.includes('thất bại')) {
-                iconDiv.className = "w-12 h-12 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center mx-auto mb-4";
-                iconDiv.innerHTML = '<i data-lucide="x-circle" class="w-6 h-6"></i>';
-                document.getElementById('alert-modal-title').innerText = 'Lỗi';
-            } else {
-                iconDiv.className = "w-12 h-12 rounded-full bg-blue-50 text-primary flex items-center justify-center mx-auto mb-4";
-                iconDiv.innerHTML = '<i data-lucide="info" class="w-6 h-6"></i>';
-                document.getElementById('alert-modal-title').innerText = 'Thông báo';
-            }
-            lucide.createIcons();
-            document.getElementById('alert-modal').classList.remove('hidden');
-            
-            return new Promise((resolve) => {
-                alertPromiseResolver = resolve;
-            });
-        }
-
-        function closeAlertModal() {
-            document.getElementById('alert-modal').classList.add('hidden');
-            if (alertPromiseResolver) {
-                alertPromiseResolver();
-                alertPromiseResolver = null;
-            }
-        }
-
-        const token = localStorage.getItem('token');
-        const adminRole = localStorage.getItem('role');
-
-        if (!token || adminRole !== 'admin') {
-            alert('Bạn không có quyền truy cập trang này.');
-            window.location.href = '/admin/login';
-        }
-
-        let allUsers = [];
-        let vipTargetUser = '';
-
-        function logoutAdmin() {
-            localStorage.clear();
-            window.location.href = '/admin/login';
-        }
-
-        async function fetchPackagesData() {
-            try {
-                // Tải danh sách user
-                const userRes = await fetch('../api/admin_users.php', { headers: { 'Authorization': `Bearer ${token}` } });
-                const userResult = await userRes.json();
-                if (userResult.success) {
-                    allUsers = userResult.users;
-                    renderPackagesTable(allUsers);
-                } else {
-                    alert(userResult.message);
-                }
-            } catch (e) {
-                console.error(e);
-                alert('Không thể tải dữ liệu gói VIP.');
-            }
-        }
-
-        function formatMoney(n) {
-            return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
-
-        function renderPackagesTable(users) {
-            const tbody = document.getElementById('packages-table-body');
-            tbody.innerHTML = '';
-            if (users.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" class="py-6 text-center text-slate-400">Không tìm thấy người dùng.</td></tr>';
-                return;
-            }
-
-            users.forEach(u => {
-                const now = Math.floor(Date.now() / 1000);
-                const isVip = u.vip_expire > now;
-                const statusBadge = isVip
-                    ? `<span class="px-2 py-1 bg-success/10 text-success rounded-md font-bold text-[10px] uppercase">Đang Hoạt Động</span>`
-                    : `<span class="px-2 py-1 bg-slate-100 text-slate-400 rounded-md font-medium text-[10px] uppercase">Không Hoạt Động</span>`;
-
-                let expireText = 'Chưa kích hoạt';
-                if (u.vip_expire > 0) {
-                    const d = new Date(u.vip_expire * 1000);
-                    expireText = d.toLocaleString('vi-VN');
-                }
-
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50/50";
-                tr.innerHTML = `
-                    <td class="py-4">
-                        <p class="font-bold text-slate-800">${u.username}</p>
-                        <p class="text-xs text-slate-400">ID: ${u.user_id}</p>
-                    </td>
-                    <td class="py-4">${statusBadge}</td>
-                    <td class="py-4 pl-6 text-slate-500 text-xs">${expireText}</td>
-                    <td class="py-4 text-center">
-                        <button onclick="openVipModal('${u.username}', ${u.vip_expire})" class="bg-blue-50 hover:bg-blue-100 text-primary py-1.5 px-3 rounded-lg text-xs font-bold inline-flex items-center gap-1 active:scale-95 transition-all">
-                            <i data-lucide="edit" class="w-3.5 h-3.5"></i> Gia hạn VIP
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-            lucide.createIcons();
-        }
-
-        function filterPackagesTable() {
-            const query = document.getElementById('search-packages-input').value.toLowerCase().trim();
-            const filtered = allUsers.filter(u => 
-                u.username.toLowerCase().includes(query) || 
-                u.user_id.includes(query)
-            );
-            renderPackagesTable(filtered);
-        }
-
-        function openVipModal(username, currentExpire) {
-            vipTargetUser = username;
-            document.getElementById('vip-target-user').innerText = username;
-            
-            const input = document.getElementById('vip-date-input');
-            if (currentExpire > 0) {
-                const d = new Date(currentExpire * 1000);
-                const year = d.getFullYear();
-                const month = String(d.getMonth() + 1).padStart(2, '0');
-                const day = String(d.getDate()).padStart(2, '0');
-                const hours = String(d.getHours()).padStart(2, '0');
-                const minutes = String(d.getMinutes()).padStart(2, '0');
-                input.value = `${year}-${month}-${day}T${hours}:${minutes}`;
-            } else {
-                input.value = '';
-            }
-            document.getElementById('vip-modal').classList.remove('hidden');
-        }
-
-        function closeVipModal() {
-            document.getElementById('vip-modal').classList.add('hidden');
-        }
-
-        function setVipDays(days) {
-            const input = document.getElementById('vip-date-input');
-            let baseDate = new Date();
-            const currentVal = input.value;
-            if (currentVal) {
-                const parsed = new Date(currentVal);
-                if (parsed > new Date()) {
-                    baseDate = parsed;
-                }
-            }
-            baseDate.setDate(baseDate.getDate() + days);
-            
-            const year = baseDate.getFullYear();
-            const month = String(baseDate.getMonth() + 1).padStart(2, '0');
-            const day = String(baseDate.getDate()).padStart(2, '0');
-            const hours = String(baseDate.getHours()).padStart(2, '0');
-            const minutes = String(baseDate.getMinutes()).padStart(2, '0');
-            input.value = `${year}-${month}-${day}T${hours}:${minutes}`;
-        }
-
-        async function clearVip() {
-            // Đóng VIP modal trước để confirm hiện rõ phía trên
-            closeVipModal();
-            const confirmClear = await showConfirmModal(`Bạn có chắc muốn hủy trạng thái VIP của tài khoản ${vipTargetUser}?`);
-            if (!confirmClear) return;
-            
-            try {
-                const response = await fetch('../api/admin_users.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                        action: 'update_vip',
-                        target_username: vipTargetUser,
-                        vip_expire: 0
-                    })
-                });
-                const result = await response.json();
-                await alert(result.message);
-                if (result.success) fetchPackagesData();
-            } catch (e) {
-                console.error(e);
-                await alert('Có lỗi xảy ra khi hủy VIP.');
-            }
-        }
-
-        async function saveVip() {
-            const inputVal = document.getElementById('vip-date-input').value;
-            if (!inputVal) {
-                await alert('Vui lòng chọn hoặc thiết lập thời gian hết hạn.');
-                return;
-            }
-            
-            const timestamp = Math.floor(new Date(inputVal).getTime() / 1000);
-            try {
-                const response = await fetch('../api/admin_users.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                        action: 'update_vip',
-                        target_username: vipTargetUser,
-                        vip_expire: timestamp
-                    })
-                });
-                const result = await response.json();
-                if (result.success) {
-                    closeVipModal();
-                    await alert(result.message);
-                    fetchPackagesData();
-                } else {
-                    await alert(result.message);
-                }
-            } catch (e) {
-                console.error(e);
-                await alert('Có lỗi xảy ra khi lưu thông tin VIP.');
-            }
-        }
-
-        fetchPackagesData();
-    </script>
+function renderPkg(users){
+    const tbody=document.getElementById('pkg-tbody');
+    const now=Date.now()/1000;
+    if(!users.length){tbody.innerHTML='<tr><td colspan="6" class="py-10 text-center text-slate-400 text-sm">Không có thành viên.</td></tr>';return;}
+    tbody.innerHTML=users.map(u=>{
+        const isVip=u.vip_expire&&u.vip_expire>now;
+        const expDate=u.vip_expire&&u.vip_expire>0?new Date(u.vip_expire*1000).toLocaleDateString('vi'):'—';
+        return `<tr class="hover:bg-slate-50 transition-colors">
+            <td class="px-5 py-3.5"><p class="font-semibold text-slate-800">${u.username}</p><p class="text-[11px] text-slate-400">ID: ${u.user_id}</p></td>
+            <td class="px-5 py-3.5 font-bold text-primary">${formatMoney(u.balance)}đ</td>
+            <td class="px-5 py-3.5">${isVip?'<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-purple-50 text-purple-600 rounded-lg text-[11px] font-bold"><i data-lucide="crown" class="w-3 h-3"></i>VIP Active</span>':'<span class="px-2.5 py-1 bg-slate-100 text-slate-400 rounded-lg text-[11px] font-medium">Thường</span>'}</td>
+            <td class="px-5 py-3.5 text-sm text-slate-600">${expDate}</td>
+            <td class="px-5 py-3.5">
+                <div class="flex gap-1 justify-center">
+                    <button onclick="extendVip('${u.username}',1)" class="px-2.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg text-[11px] font-bold active:scale-95 transition-all">+1 ngày</button>
+                    <button onclick="extendVip('${u.username}',7)" class="px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg text-[11px] font-bold active:scale-95 transition-all">+7 ngày</button>
+                    <button onclick="extendVip('${u.username}',30)" class="px-2.5 py-1.5 bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-lg text-[11px] font-bold active:scale-95 transition-all">+30 ngày</button>
+                </div>
+            </td>
+            <td class="px-5 py-3.5 text-center"><button onclick="openVipModal('${u.username}')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-[11px] font-semibold active:scale-95 transition-all flex items-center gap-1 mx-auto"><i data-lucide="calendar" class="w-3.5 h-3.5"></i>Đặt ngày</button></td>
+        </tr>`;
+    }).join('');
+    lucide.createIcons();
+}
+function filterPkg(){const q=document.getElementById('search-pkg').value.toLowerCase();renderPkg(allUsers.filter(u=>u.username.toLowerCase().includes(q)));}
+async function fetchUsers(){
+    try{const r=await fetch('../api/admin_users.php',{headers:{'Authorization':`Bearer ${token}`}});const d=await r.json();if(d.success){allUsers=d.users;renderPkg(allUsers);}}catch(e){console.error(e);}
+}
+fetchUsers();
+</script>
 </body>
 </html>

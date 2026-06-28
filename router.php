@@ -26,6 +26,7 @@ $routes = [
     '/admin/packages'        => 'admin/packages.html',
     '/admin/package-history' => 'admin/package_history.html',
     '/admin/giftcodes'       => 'admin/giftcodes.html',
+    '/admin/keys'            => 'admin/keys.html',
 ];
 
 // Khớp route chính xác
