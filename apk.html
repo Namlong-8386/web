@@ -108,8 +108,8 @@
             </div>
 
             <!-- Nút tải -->
-            <a href="#" id="apk-download-btn" onclick="handleApkDownload(event)" class="w-full bg-gradient-to-r from-primary to-blue-700 text-white font-black py-4 rounded-2xl shadow-lg shadow-blue-500/30 active:scale-[0.98] transition-transform flex items-center justify-center gap-2 text-base">
-                <i data-lucide="download" class="w-5 h-5"></i> Tải APK ngay
+            <a href="/apk/TOOLTX2026.apk" download="TOOLTX2026.apk" class="w-full bg-gradient-to-r from-primary to-blue-700 text-white font-black py-4 rounded-2xl shadow-lg shadow-blue-500/30 active:scale-[0.98] transition-transform flex items-center justify-center gap-2 text-base">
+                <i data-lucide="download" class="w-5 h-5"></i> Tải APK ngay (25 MB)
             </a>
         </div>
 
@@ -390,11 +390,6 @@
             document.getElementById('tab-' + tab).className = 'tab-active flex-1 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 flex items-center justify-center gap-1.5';
             lucide.createIcons();
             if (tab === 'freekey') initFreeKey();
-        }
-
-        function handleApkDownload(e) {
-            e.preventDefault();
-            showToast('⚠️ Liên hệ admin để nhận link tải APK');
         }
 
         function selectKeyPackage(el, pkg, price) {
