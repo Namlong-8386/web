@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nhận Key Free - TOOLTX2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>tailwind.config = { theme: { extend: { colors: { primary: '#3b82f6' } } } }</script>
+    <style>
+        body { -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+        ::-webkit-scrollbar { display: none; }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.8; }
+            100% { transform: scale(1.4); opacity: 0; }
+        }
+        .pulse-ring::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 9999px;
+            background: currentColor;
+            animation: pulse-ring 1.5s ease-out infinite;
+        }
+        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        .float-anim { animation: float 3s ease-in-out infinite; }
+        .key-box {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border: 1px solid rgba(59,130,246,0.3);
+        }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        .shimmer-text {
+            background: linear-gradient(90deg, #60a5fa 0%, #a5f3fc 50%, #60a5fa 100%);
+            background-size: 200% 100%;
+            animation: shimmer 2s linear infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-white font-sans min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-slate-900/80 backdrop-blur-sm border-b border-slate-800 sticky top-0 z-40">
+        <div class="flex items-center justify-between h-14 px-4 max-w-3xl mx-auto w-full">
+            <a href="/apk" class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-white rounded-full transition-colors">
+                <i data-lucide="chevron-left" class="w-6 h-6"></i>
+            </a>
+            <h1 class="text-base font-bold text-white">Nhận Key Free</h1>
+            <div class="w-8"></div>
+        </div>
+    </header>
+
+    <main class="flex-grow flex flex-col items-center justify-center p-5 pb-16 max-w-sm mx-auto w-full">
+
+        <!-- TRẠNG THÁI: ĐANG XỬ LÝ -->
+        <div id="state-loading" class="w-full flex flex-col items-center py-10">
+            <div class="relative w-20 h-20 mb-6">
+                <div class="w-20 h-20 rounded-full border-4 border-blue-500/20 border-t-blue-500 animate-spin"></div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <i data-lucide="key" class="w-7 h-7 text-blue-400"></i>
+                </div>
+            </div>
+            <p class="text-slate-300 font-semibold text-lg mb-1">Đang xác thực...</p>
+            <p class="text-slate-500 text-sm text-center">Vui lòng đợi trong giây lát</p>
+        </div>
+
+        <!-- TRẠNG THÁI: THÀNH CÔNG -->
+        <div id="state-success" class="hidden w-full flex flex-col items-center">
+            <!-- Icon thành công -->
+            <div class="relative w-24 h-24 mb-6 float-anim">
+                <div class="w-24 h-24 rounded-full bg-emerald-500/20 flex items-center justify-center relative pulse-ring text-emerald-500/30">
+                    <div class="w-24 h-24 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                        <i data-lucide="check-circle" class="w-12 h-12 text-emerald-400"></i>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="text-2xl font-black mb-2 text-center shimmer-text">Nhận Key Thành Công!</h2>
+            <p class="text-slate-400 text-sm text-center mb-6">Đây là key kích hoạt của bạn. Hãy sao chép và nhập vào ứng dụng.</p>
+
+            <!-- Key box -->
+            <div class="key-box w-full rounded-2xl p-5 mb-4 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full -mr-10 -mt-10 blur-xl pointer-events-none"></div>
+                <div class="relative z-10">
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="w-7 h-7 bg-amber-400/20 rounded-lg flex items-center justify-center">
+                            <i data-lucide="key" class="w-4 h-4 text-amber-400"></i>
+                        </div>
+                        <p class="text-slate-400 text-xs font-medium uppercase tracking-widest">Key của bạn</p>
+                    </div>
+                    <p id="key-value" class="font-mono font-black text-xl text-white tracking-widest text-center py-3 break-all select-all"></p>
+                    <div class="w-full h-px bg-slate-700/60 my-3"></div>
+                    <div class="flex items-center justify-between text-xs">
+                        <div class="flex items-center gap-1.5 text-slate-500">
+                            <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                            <span>Hết hạn: <span id="key-expiry" class="text-slate-300 font-medium"></span></span>
+                        </div>
+                        <span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase">Chưa dùng</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nút sao chép -->
+            <button onclick="copyKey()" id="copy-btn" class="w-full bg-gradient-to-r from-primary to-blue-700 text-white font-black py-4 rounded-2xl shadow-lg shadow-blue-500/30 active:scale-[0.98] transition-transform flex items-center justify-center gap-2 text-base mb-3">
+                <i data-lucide="copy" class="w-5 h-5"></i> Sao chép Key
+            </button>
+
+            <!-- Hướng dẫn sử dụng -->
+            <div class="w-full bg-slate-800/60 border border-slate-700/50 rounded-2xl p-4 mb-4">
+                <p class="text-slate-300 font-bold text-sm mb-3 flex items-center gap-2">
+                    <i data-lucide="book-open" class="w-4 h-4 text-primary"></i> Cách sử dụng key
+                </p>
+                <ol class="space-y-2">
+                    <li class="flex items-start gap-2.5 text-sm text-slate-400">
+                        <span class="w-5 h-5 rounded-full bg-slate-700 text-slate-300 text-[10px] font-black flex items-center justify-center flex-shrink-0 mt-0.5">1</span>
+                        <span>Tải và cài đặt APK TOOLTX2026 vào điện thoại</span>
+                    </li>
+                    <li class="flex items-start gap-2.5 text-sm text-slate-400">
+                        <span class="w-5 h-5 rounded-full bg-slate-700 text-slate-300 text-[10px] font-black flex items-center justify-center flex-shrink-0 mt-0.5">2</span>
+                        <span>Mở ứng dụng, nhập key vào ô kích hoạt</span>
+                    </li>
+                    <li class="flex items-start gap-2.5 text-sm text-slate-400">
+                        <span class="w-5 h-5 rounded-full bg-slate-700 text-slate-300 text-[10px] font-black flex items-center justify-center flex-shrink-0 mt-0.5">3</span>
+                        <span>Key sẽ tự động liên kết với thiết bị của bạn</span>
+                    </li>
+                </ol>
+            </div>
+
+            <a href="/apk" class="w-full text-center text-slate-500 text-sm py-2 hover:text-slate-300 transition-colors flex items-center justify-center gap-1">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Quay về trang APK
+            </a>
+        </div>
+
+        <!-- TRẠNG THÁI: LỖI -->
+        <div id="state-error" class="hidden w-full flex flex-col items-center">
+            <div class="w-24 h-24 rounded-full bg-rose-500/10 flex items-center justify-center mb-6">
+                <i data-lucide="x-circle" class="w-12 h-12 text-rose-400"></i>
+            </div>
+            <h2 class="text-xl font-black mb-2 text-white text-center">Không thể nhận key</h2>
+            <p id="error-message" class="text-slate-400 text-sm text-center mb-6 px-4 leading-relaxed"></p>
+
+            <a href="/apk" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 active:scale-[0.98] transition-all mb-3">
+                <i data-lucide="refresh-cw" class="w-5 h-5"></i> Thử lại
+            </a>
+            <a href="/support" class="w-full text-center text-slate-500 text-sm py-2 hover:text-slate-300 transition-colors flex items-center justify-center gap-1">
+                <i data-lucide="headphones" class="w-4 h-4"></i> Liên hệ hỗ trợ
+            </a>
+        </div>
+
+    </main>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] bg-emerald-500 text-white text-sm font-bold px-5 py-3 rounded-full shadow-lg shadow-emerald-500/30 opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-2">
+        <i data-lucide="check" class="w-4 h-4"></i> <span id="toast-text"></span>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        let keyValue = '';
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-text').innerText = msg;
+            t.style.opacity = '1';
+            t.style.transform = 'translateX(-50%) translateY(-6px)';
+            setTimeout(() => {
+                t.style.opacity = '0';
+                t.style.transform = 'translateX(-50%) translateY(0)';
+            }, 2500);
+        }
+
+        function showState(state) {
+            ['loading','success','error'].forEach(s => {
+                const el = document.getElementById('state-' + s);
+                el.classList.add('hidden');
+                el.classList.remove('flex');
+            });
+            const target = document.getElementById('state-' + state);
+            target.classList.remove('hidden');
+            target.classList.add('flex');
+            target.style.flexDirection = 'column';
+            lucide.createIcons();
+        }
+
+        function copyKey() {
+            if (!keyValue) return;
+            const btn = document.getElementById('copy-btn');
+            navigator.clipboard.writeText(keyValue).then(() => {
+                showToast('Đã sao chép key!');
+                btn.innerHTML = '<i data-lucide="check" class="w-5 h-5"></i> Đã sao chép!';
+                btn.className = btn.className.replace('from-primary to-blue-700', 'from-emerald-500 to-teal-600');
+                lucide.createIcons();
+                setTimeout(() => {
+                    btn.innerHTML = '<i data-lucide="copy" class="w-5 h-5"></i> Sao chép Key';
+                    btn.className = btn.className.replace('from-emerald-500 to-teal-600', 'from-primary to-blue-700');
+                    lucide.createIcons();
+                }, 2500);
+            }).catch(() => {
+                const ta = document.createElement('textarea');
+                ta.value = keyValue;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                showToast('Đã sao chép key!');
+            });
+        }
+
+        async function init() {
+            showState('loading');
+
+            const params = new URLSearchParams(window.location.search);
+            const token  = params.get('t');
+
+            if (!token) {
+                document.getElementById('error-message').innerText = 'Link không hợp lệ. Vui lòng quay lại trang APK và tạo link mới.';
+                showState('error');
+                return;
+            }
+
+            try {
+                const res  = await fetch('/api/verify_key_token', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    keyValue = data.key;
+                    document.getElementById('key-value').innerText = data.key;
+
+                    // Format expiry
+                    if (data.expiry) {
+                        const d = new Date(data.expiry.replace(' ', 'T'));
+                        document.getElementById('key-expiry').innerText = d.toLocaleString('vi-VN');
+                    }
+                    showState('success');
+                } else {
+                    document.getElementById('error-message').innerText = data.message || 'Có lỗi xảy ra. Vui lòng thử lại.';
+                    showState('error');
+                }
+            } catch (e) {
+                document.getElementById('error-message').innerText = 'Lỗi kết nối. Vui lòng kiểm tra internet và thử lại.';
+                showState('error');
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
