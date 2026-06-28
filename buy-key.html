@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mua Key - TOOLTX2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>tailwind.config = { theme: { extend: { colors: { primary: '#3b82f6' } } } }</script>
+    <style>
+        body { -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+        ::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <header class="bg-white shadow-sm sticky top-0 z-40 border-b border-slate-100">
+        <div class="flex items-center justify-between h-14 px-4 max-w-3xl mx-auto w-full">
+            <a href="/apk" class="w-8 h-8 flex items-center justify-center text-slate-500 active:bg-slate-100 rounded-full transition-colors">
+                <i data-lucide="chevron-left" class="w-6 h-6"></i>
+            </a>
+            <h1 class="text-base font-bold text-slate-800">Mua Key</h1>
+            <div class="w-8"></div>
+        </div>
+    </header>
+
+    <main class="flex-grow p-4 pb-36 max-w-3xl mx-auto w-full">
+
+        <!-- Banner -->
+        <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-5 mb-5 relative overflow-hidden shadow-xl">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full -mr-10 -mt-10 blur-xl pointer-events-none"></div>
+            <div class="relative z-10 flex items-center gap-4">
+                <div class="w-14 h-14 bg-amber-400/20 rounded-2xl flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="key" class="w-7 h-7 text-amber-400"></i>
+                </div>
+                <div>
+                    <h2 class="text-white font-black text-lg leading-tight">Key kích hoạt</h2>
+                    <p class="text-slate-400 text-xs mt-1">Liên kết với thiết bị · Sử dụng không giới hạn</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Các gói key -->
+        <h3 class="font-bold text-slate-700 mb-3 text-sm px-1">Chọn gói key</h3>
+        <div class="space-y-3 mb-5">
+            <!-- 1 ngày -->
+            <div onclick="selectPkg(this,'1_day','Key 1 Ngày','5,000đ')" class="key-pkg bg-white rounded-2xl p-4 border-2 border-transparent shadow-sm active:scale-[0.98] transition-all cursor-pointer">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center">
+                            <i data-lucide="clock" class="w-5 h-5 text-primary"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-800">Key 1 Ngày</p>
+                            <p class="text-xs text-slate-500">Hết hạn sau 24 giờ</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-black text-primary text-base">5,000đ</p>
+                        <div class="w-5 h-5 rounded-full border-2 border-slate-200 ml-auto mt-1 check-circle flex items-center justify-center"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- 7 ngày -->
+            <div onclick="selectPkg(this,'7_day','Key 7 Ngày','25,000đ')" class="key-pkg bg-white rounded-2xl p-4 border-2 border-transparent shadow-sm active:scale-[0.98] transition-all cursor-pointer relative">
+                <div class="absolute top-2 right-2">
+                    <span class="bg-amber-400 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase">Phổ biến</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center">
+                            <i data-lucide="calendar-days" class="w-5 h-5 text-amber-500"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-800">Key 7 Ngày</p>
+                            <p class="text-xs text-slate-500">Hết hạn sau 7 ngày</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-black text-primary text-base">25,000đ</p>
+                        <div class="w-5 h-5 rounded-full border-2 border-slate-200 ml-auto mt-1 check-circle flex items-center justify-center"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- 30 ngày -->
+            <div onclick="selectPkg(this,'30_day','Key 30 Ngày','80,000đ')" class="key-pkg bg-white rounded-2xl p-4 border-2 border-transparent shadow-sm active:scale-[0.98] transition-all cursor-pointer">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center">
+                            <i data-lucide="calendar-check" class="w-5 h-5 text-emerald-600"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-800">Key 30 Ngày</p>
+                            <p class="text-xs text-slate-500">Hết hạn sau 30 ngày</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-black text-primary text-base">80,000đ</p>
+                        <div class="w-5 h-5 rounded-full border-2 border-slate-200 ml-auto mt-1 check-circle flex items-center justify-center"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Vĩnh viễn -->
+            <div onclick="selectPkg(this,'lifetime','Key Vĩnh Viễn','150,000đ')" class="key-pkg bg-white rounded-2xl p-4 border-2 border-transparent shadow-sm active:scale-[0.98] transition-all cursor-pointer relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-r from-purple-50 to-transparent pointer-events-none"></div>
+                <div class="absolute top-2 right-2">
+                    <span class="bg-purple-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase">Tốt nhất</span>
+                </div>
+                <div class="flex items-center justify-between relative z-10">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center">
+                            <i data-lucide="infinity" class="w-5 h-5 text-purple-600"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-800">Key Vĩnh Viễn</p>
+                            <p class="text-xs text-slate-500">Không giới hạn thời gian</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-black text-primary text-base">150,000đ</p>
+                        <div class="w-5 h-5 rounded-full border-2 border-slate-200 ml-auto mt-1 check-circle flex items-center justify-center"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div id="summary" class="hidden bg-blue-50 border border-blue-100 rounded-2xl p-3 mb-4 flex items-center justify-between">
+            <div>
+                <p class="text-xs text-blue-600 font-medium">Gói đã chọn</p>
+                <p id="sum-name" class="font-bold text-slate-800 text-sm"></p>
+            </div>
+            <p id="sum-price" class="font-black text-primary text-base"></p>
+        </div>
+
+        <button onclick="handleBuy()" class="w-full bg-gradient-to-r from-primary to-blue-700 text-white font-black py-4 rounded-2xl shadow-lg shadow-blue-500/30 active:scale-[0.98] transition-transform flex items-center justify-center gap-2 text-base">
+            <i data-lucide="shopping-cart" class="w-5 h-5"></i> Mua Key ngay
+        </button>
+        <p class="text-center text-xs text-slate-400 mt-2">Liên hệ admin sau khi chọn gói để thanh toán</p>
+
+    </main>
+
+    <!-- Bottom Nav -->
+    <div class="fixed bottom-6 left-0 w-full z-30 px-4 flex justify-center pointer-events-none">
+        <nav class="w-full max-w-sm bg-white/90 backdrop-blur-lg border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.08)] rounded-3xl px-1 py-2 pointer-events-auto flex justify-between items-center">
+            <a href="/" class="flex-1 flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 transition-all">
+                <i data-lucide="home" class="w-5 h-5 mb-1"></i>
+                <span class="text-[9px] font-medium">Trang chủ</span>
+            </a>
+            <a href="/packages" class="flex-1 flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 transition-all">
+                <i data-lucide="package" class="w-5 h-5 mb-1"></i>
+                <span class="text-[9px] font-medium">Mua gói</span>
+            </a>
+            <a href="/apk" class="flex-1 flex flex-col items-center justify-center py-2 rounded-2xl text-primary bg-blue-50/80 transition-all">
+                <i data-lucide="smartphone" class="w-5 h-5 mb-1"></i>
+                <span class="text-[9px] font-semibold">APK & Key</span>
+            </a>
+            <a href="/deposit" class="flex-1 flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 transition-all">
+                <i data-lucide="wallet" class="w-5 h-5 mb-1"></i>
+                <span class="text-[9px] font-medium">Nạp tiền</span>
+            </a>
+            <a href="/account" class="flex-1 flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 transition-all">
+                <i data-lucide="user" class="w-5 h-5 mb-1"></i>
+                <span class="text-[9px] font-medium">Tài khoản</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[100] bg-slate-800 text-white text-xs font-semibold px-4 py-2 rounded-full shadow-lg opacity-0 pointer-events-none transition-opacity duration-200"></div>
+
+    <script>
+        lucide.createIcons();
+        const token = localStorage.getItem('token');
+        let selectedPkg = null;
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg; t.style.opacity = '1';
+            setTimeout(() => { t.style.opacity = '0'; }, 2000);
+        }
+
+        function selectPkg(el, pkg, name, price) {
+            document.querySelectorAll('.key-pkg').forEach(c => {
+                c.classList.remove('border-primary', 'bg-blue-50/30');
+                const cc = c.querySelector('.check-circle');
+                cc.innerHTML = ''; cc.classList.remove('bg-primary', 'border-primary');
+            });
+            el.classList.add('border-primary', 'bg-blue-50/30');
+            const circle = el.querySelector('.check-circle');
+            circle.classList.add('bg-primary', 'border-primary');
+            circle.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>';
+            selectedPkg = pkg;
+            document.getElementById('sum-name').innerText = name;
+            document.getElementById('sum-price').innerText = price;
+            const s = document.getElementById('summary');
+            s.classList.remove('hidden'); s.classList.add('flex');
+        }
+
+        function handleBuy() {
+            if (!selectedPkg) { showToast('Vui lòng chọn gói key'); return; }
+            if (!token) { window.location.href = '/login'; return; }
+            showToast('Vui lòng liên hệ admin để thanh toán và nhận key');
+        }
+    </script>
+</body>
+</html>

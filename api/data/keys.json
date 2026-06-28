@@ -5,5 +5,12 @@
         "type": "free",
         "user_id": "999999",
         "created_at": "2026-06-28 11:07:05"
+    },
+    "FREE-7SRTT-UDGII-ZB9XX": {
+        "hwid": "",
+        "expiry": "2026-06-28 23:45:22",
+        "type": "free",
+        "user_id": "999999",
+        "created_at": "2026-06-28 11:45:22"
     }
 }
