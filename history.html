@@ -42,13 +42,15 @@
                 <button class="filter-btn active whitespace-nowrap px-5 py-2 rounded-full text-sm font-semibold bg-primary text-white active:scale-95" data-filter="all">Tất cả</button>
                 <button class="filter-btn whitespace-nowrap px-5 py-2 rounded-full text-sm font-medium bg-slate-100 text-slate-600 active:scale-95" data-filter="in">Tiền vào</button>
                 <button class="filter-btn whitespace-nowrap px-5 py-2 rounded-full text-sm font-medium bg-slate-100 text-slate-600 active:scale-95" data-filter="out">Tiền ra</button>
+                <button class="filter-btn whitespace-nowrap px-5 py-2 rounded-full text-sm font-medium bg-slate-100 text-slate-600 active:scale-95" data-filter="keys"><i data-lucide="key" class="w-3.5 h-3.5 inline-block mr-1"></i>Key đã mua</button>
             </div>
         </div>
 
-        <div class="px-4 py-4 space-y-6" id="transaction-list-container">
-            <!-- Dynamic data will be loaded here -->
-        </div>
-        
+        <div class="px-4 py-4 space-y-6" id="transaction-list-container"></div>
+
+        <!-- Keys list -->
+        <div class="px-4 py-4 space-y-3 hidden" id="keys-list-container"></div>
+
         <!-- Empty state -->
         <div id="empty-state" class="hidden flex-col items-center justify-center py-12 text-center">
             <div class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mb-4"><i data-lucide="search-x" class="w-10 h-10 text-slate-400"></i></div>
@@ -121,11 +123,17 @@
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.filter-btn').forEach(b => { b.classList.remove('bg-primary', 'text-white', 'font-semibold', 'active'); b.classList.add('bg-slate-100', 'text-slate-600', 'font-medium'); });
-                this.classList.remove('bg-slate-100', 'text-slate-600', 'font-medium'); this.classList.add('bg-primary', 'text-white', 'font-semibold', 'active'); renderTransactions();
+                this.classList.remove('bg-slate-100', 'text-slate-600', 'font-medium'); this.classList.add('bg-primary', 'text-white', 'font-semibold', 'active');
+                if (this.getAttribute('data-filter') === 'keys') {
+                    renderKeys();
+                } else {
+                    renderTransactions();
+                }
             });
         });
 
         let rawTransactions = [];
+        let rawKeys = [];
         let currentUserId = '';
 
         async function fetchCurrentUser() {
@@ -292,7 +300,93 @@
             lucide.createIcons();
         }
 
-        fetchCurrentUser().then(() => fetchTransactions());
+        async function fetchKeys() {
+            try {
+                const res = await fetch('api/my_keys.php', { headers: { 'Authorization': `Bearer ${token}` } });
+                const data = await res.json();
+                if (data.success) rawKeys = data.keys || [];
+            } catch(e) {}
+        }
+
+        function renderKeys() {
+            const txContainer = document.getElementById('transaction-list-container');
+            const keysContainer = document.getElementById('keys-list-container');
+            const emptyState = document.getElementById('empty-state');
+
+            txContainer.classList.add('hidden');
+            keysContainer.classList.remove('hidden');
+            keysContainer.innerHTML = '';
+
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const filtered = rawKeys.filter(k =>
+                k.key.toLowerCase().includes(searchTerm) ||
+                k.label.toLowerCase().includes(searchTerm)
+            );
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+                document.getElementById('empty-title').innerText = 'Chưa có key nào';
+                return;
+            }
+            emptyState.classList.add('hidden');
+            emptyState.classList.remove('flex');
+
+            const typeColors = {
+                '1_day':    { bg: 'bg-blue-50',   text: 'text-primary',    icon: 'clock' },
+                '7_day':    { bg: 'bg-amber-50',   text: 'text-amber-500',  icon: 'calendar-days' },
+                '30_day':   { bg: 'bg-emerald-50', text: 'text-emerald-600',icon: 'calendar-check' },
+                'lifetime': { bg: 'bg-purple-50',  text: 'text-purple-600', icon: 'infinity' },
+                'free':     { bg: 'bg-green-50',   text: 'text-green-600',  icon: 'gift' },
+            };
+
+            filtered.forEach(k => {
+                const color = typeColors[k.type] || { bg: 'bg-slate-50', text: 'text-slate-500', icon: 'key' };
+                const isExpired = k.is_expired;
+                const isLinked = k.hwid !== '';
+
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-2xl shadow-sm border border-slate-100 p-4';
+                card.innerHTML = `
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 ${color.bg} rounded-xl flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="${color.icon}" class="w-5 h-5 ${color.text}"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2">
+                                <p class="font-bold text-slate-800 text-sm">${k.label}</p>
+                                ${isExpired ? '<span class="text-[9px] font-black bg-red-100 text-red-500 px-1.5 py-0.5 rounded-full uppercase">Hết hạn</span>' : '<span class="text-[9px] font-black bg-green-100 text-green-600 px-1.5 py-0.5 rounded-full uppercase">Còn hạn</span>'}
+                            </div>
+                            <p class="text-xs text-slate-400 mt-0.5">Hạn: ${k.expiry}</p>
+                        </div>
+                        <div class="text-right flex-shrink-0">
+                            ${isLinked
+                                ? '<span class="text-[9px] font-semibold bg-blue-50 text-primary px-2 py-0.5 rounded-full flex items-center gap-1"><i data-lucide="smartphone" class="w-3 h-3"></i> Đã liên kết</span>'
+                                : '<span class="text-[9px] font-semibold bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">Chưa dùng</span>'
+                            }
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 rounded-xl px-3 py-2.5 flex items-center justify-between gap-2">
+                        <p class="font-mono text-sm font-bold text-slate-700 tracking-wider truncate">${k.key}</p>
+                        <button onclick="copyText('${k.key}')" class="flex-shrink-0 flex items-center gap-1 text-xs font-bold text-primary bg-blue-50 hover:bg-blue-100 px-2.5 py-1.5 rounded-lg active:scale-95 transition-all">
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Sao chép
+                        </button>
+                    </div>
+                `;
+                keysContainer.appendChild(card);
+            });
+
+            lucide.createIcons();
+        }
+
+        const _origRenderTransactions = renderTransactions;
+        renderTransactions = function() {
+            document.getElementById('transaction-list-container').classList.remove('hidden');
+            document.getElementById('keys-list-container').classList.add('hidden');
+            _origRenderTransactions();
+        };
+
+        fetchCurrentUser().then(() => Promise.all([fetchTransactions(), fetchKeys()]));
     </script>
 </body>
 </html>
