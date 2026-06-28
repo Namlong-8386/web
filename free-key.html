@@ -10,6 +10,8 @@
     <style>
         body { -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
         ::-webkit-scrollbar { display: none; }
+        .tab-active { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; box-shadow: 0 4px 15px rgba(59,130,246,0.4); }
+        .tab-inactive { background: #f1f5f9; color: #64748b; }
     </style>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
@@ -25,6 +27,19 @@
     </header>
 
     <main class="flex-grow p-4 pb-36 max-w-3xl mx-auto w-full">
+
+        <!-- Quick nav -->
+        <div class="flex gap-2 p-1 bg-slate-200/70 rounded-2xl mb-4">
+            <a href="/apk" class="tab-inactive flex-1 py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-1.5">
+                <i data-lucide="download" class="w-4 h-4"></i> Tải APK
+            </a>
+            <a href="/buy-key" class="tab-inactive flex-1 py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-1.5">
+                <i data-lucide="key" class="w-4 h-4"></i> Mua Key
+            </a>
+            <div class="tab-active flex-1 py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-1.5">
+                <i data-lucide="gift" class="w-4 h-4"></i> Key Free
+            </div>
+        </div>
 
         <!-- Banner -->
         <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl p-5 mb-4 relative overflow-hidden shadow-lg shadow-emerald-500/20">

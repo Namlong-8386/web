@@ -1,10 +1,9 @@
 {
-    "b07bc8f281c6eb9a8e2bc6e481c6297b76bbf04b": {
+    "c7cbe79330674446f12c645a1eeed58706dba805": {
         "user_id": "999999",
-        "key": "FREE-7SRTT-UDGII-ZB9XX",
-        "expires_at": 1782625315,
-        "used": true,
-        "created_at": "2026-06-28 11:41:55",
-        "used_at": "2026-06-28 11:45:22"
+        "key": "FREE-H8CTY-337WJ-0O6QQ",
+        "expires_at": 1782637130,
+        "used": false,
+        "created_at": "2026-06-28 14:58:50"
     }
 }

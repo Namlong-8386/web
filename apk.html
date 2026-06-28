@@ -26,6 +26,19 @@
 
     <main class="flex-grow p-4 pb-36 max-w-3xl mx-auto w-full">
 
+        <!-- Quick nav -->
+        <div class="flex gap-2 p-1 bg-slate-200/70 rounded-2xl mb-4">
+            <div class="tab-active flex-1 py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-1.5">
+                <i data-lucide="download" class="w-4 h-4"></i> Tải APK
+            </div>
+            <a href="/buy-key" class="tab-inactive flex-1 py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-1.5">
+                <i data-lucide="key" class="w-4 h-4"></i> Mua Key
+            </a>
+            <a href="/free-key" class="tab-inactive flex-1 py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-1.5">
+                <i data-lucide="gift" class="w-4 h-4"></i> Key Free
+            </a>
+        </div>
+
         <!-- Banner -->
         <div class="relative rounded-3xl overflow-hidden mb-4 bg-gradient-to-br from-primary to-blue-800 p-5 shadow-lg shadow-blue-500/20">
             <div class="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full -mr-16 -mt-16 blur-2xl pointer-events-none"></div>
@@ -92,28 +105,6 @@
             <i data-lucide="download" class="w-5 h-5"></i> Tải APK ngay (25 MB)
         </a>
 
-        <!-- Lấy Key -->
-        <p class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3 px-1">Lấy key kích hoạt</p>
-        <div class="grid grid-cols-2 gap-3">
-            <a href="/buy-key" class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm active:scale-[0.98] transition-all flex flex-col items-center gap-2.5 text-center">
-                <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center">
-                    <i data-lucide="shopping-cart" class="w-6 h-6 text-primary"></i>
-                </div>
-                <div>
-                    <p class="font-bold text-slate-800 text-sm">Mua Key</p>
-                    <p class="text-[11px] text-slate-400 mt-0.5">Từ 5,000đ / ngày</p>
-                </div>
-            </a>
-            <a href="/free-key" class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm active:scale-[0.98] transition-all flex flex-col items-center gap-2.5 text-center">
-                <div class="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center">
-                    <i data-lucide="gift" class="w-6 h-6 text-emerald-600"></i>
-                </div>
-                <div>
-                    <p class="font-bold text-slate-800 text-sm">Key Free</p>
-                    <p class="text-[11px] text-slate-400 mt-0.5">Vượt link · 12 tiếng</p>
-                </div>
-            </a>
-        </div>
 
     </main>
 
