@@ -6,8 +6,10 @@
         "user_id": "999999",
         "balance": 1149999,
         "role": "admin",
-        "token": "addb1da040959566a54120d7e6432a2f",
-        "vip_expire": 0
+        "token": "26b7e6aa4b77e0c810223e8bda2fe5db",
+        "vip_expire": 0,
+        "free_key_claimed": true,
+        "free_key": "FREE-S6WY6-XGYNX-HDG8E"
     },
     {
         "username": "trumhknam",

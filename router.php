@@ -9,6 +9,7 @@ $routes = [
     '/game/sunwin'           => 'games/sunwin.html',
     '/game/baccarat'         => 'games/baccarat.html',
     '/game/baccarat-table'   => 'games/baccarat-table.html',
+    '/apk'                   => 'apk.html',
     '/giftcode'              => 'giftcode.html',
     '/account'               => 'account.html',
     '/deposit'               => 'deposit.html',
