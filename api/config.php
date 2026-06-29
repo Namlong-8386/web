@@ -10,6 +10,7 @@ if (isset($_SERVER['HTTP_ORIGIN'])) {
     $allowed = ['http://' . $host, 'https://' . $host];
     if (in_array($origin, $allowed, true)) {
         header('Access-Control-Allow-Origin: ' . $origin);
+        header('Access-Control-Allow-Credentials: true');
         header('Vary: Origin');
         header('Access-Control-Allow-Headers: Content-Type, Authorization');
         header('Access-Control-Allow-Methods: GET, POST, OPTIONS');

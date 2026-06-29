@@ -8,51 +8,83 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>tailwind.config = { theme: { extend: { colors: { primary: '#3b82f6', primary_dark: '#2563eb' } } } }</script>
     <style>
-        body { background-color: #f8fafc; -webkit-user-select: none; user-select: none; }
+        body { background-color: #f1f5f9; -webkit-user-select: none; user-select: none; }
         .input-group:focus-within .input-icon { color: #3b82f6; }
         .input-group:focus-within { border-color: #3b82f6; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
     </style>
 </head>
-<body class="font-sans min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
+<body class="font-sans min-h-screen flex flex-col items-center justify-center relative overflow-hidden p-4">
 
-    <div class="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-blue-100 to-transparent -z-10"></div>
+    <div class="absolute top-0 left-0 w-full h-72 bg-gradient-to-b from-blue-100 to-transparent -z-10"></div>
     <a href="/" class="absolute top-6 left-6 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-slate-500 hover:text-primary active:scale-95 z-20"><i data-lucide="arrow-left" class="w-5 h-5"></i></a>
 
-    <main class="w-full max-w-md px-6 py-8 relative z-10 flex flex-col h-full justify-center">
-        <div class="text-center mb-10">
-            <div class="w-20 h-20 bg-gradient-to-tr from-primary to-blue-700 rounded-3xl mx-auto flex items-center justify-center mb-6 shadow-lg shadow-blue-500/30 transform rotate-12">
-                <i data-lucide="zap" class="w-10 h-10 text-white transform -rotate-12"></i>
-            </div>
-            <h1 class="text-3xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-800 mb-2">TOOLTX2026</h1>
-            <p class="text-slate-500 font-medium">Đăng nhập để tiếp tục</p>
-        </div>
-
-        <form id="login-form" class="space-y-5" onsubmit="handleLogin(event)">
-            <div class="space-y-1.5">
-                <label class="text-sm font-semibold text-slate-700 pl-1">Tên đăng nhập</label>
-                <div class="input-group relative flex items-center bg-white border-2 border-slate-100 rounded-2xl transition-all duration-300">
-                    <div class="pl-4 pr-3 py-3.5"><i data-lucide="user" class="w-5 h-5 text-slate-400 input-icon transition-colors"></i></div>
-                    <input type="text" id="username" required class="w-full py-3.5 pr-4 bg-transparent border-none focus:outline-none text-slate-800 font-medium" placeholder="Nhập username">
+    <main class="w-full max-w-md relative z-10">
+        <!-- Shared Card Frame -->
+        <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/50 overflow-hidden">
+            <!-- Top Header with Logo -->
+            <div class="pt-8 pb-4 px-8 text-center">
+                <div class="w-16 h-16 bg-gradient-to-tr from-primary to-blue-700 rounded-2xl mx-auto flex items-center justify-center mb-4 shadow-lg shadow-blue-500/30 transform rotate-12">
+                    <i data-lucide="zap" class="w-8 h-8 text-white transform -rotate-12"></i>
                 </div>
+                <h1 class="text-2xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-800">TOOLTX2026</h1>
             </div>
 
-            <div class="space-y-1.5">
-                <label class="text-sm font-semibold text-slate-700 pl-1">Mật khẩu</label>
-                <div class="input-group relative flex items-center bg-white border-2 border-slate-100 rounded-2xl transition-all duration-300">
-                    <div class="pl-4 pr-3 py-3.5"><i data-lucide="lock" class="w-5 h-5 text-slate-400 input-icon transition-colors"></i></div>
-                    <input type="password" id="password" required class="w-full py-3.5 pr-12 bg-transparent border-none focus:outline-none text-slate-800 tracking-wide" placeholder="••••••••">
-                    <button type="button" id="toggle-password" class="absolute right-0 inset-y-0 px-4 flex items-center text-slate-400 focus:outline-none"><i data-lucide="eye" id="eye-icon" class="w-5 h-5"></i></button>
-                </div>
+            <!-- Tabs -->
+            <div class="flex border-b border-slate-100 mx-8">
+                <a href="/login" class="flex-1 pb-3 text-center text-sm font-bold text-primary border-b-2 border-primary">Đăng nhập</a>
+                <a href="/register" class="flex-1 pb-3 text-center text-sm font-semibold text-slate-400 hover:text-slate-600 transition-colors">Đăng ký</a>
             </div>
 
-            <button type="submit" id="submit-btn" class="w-full mt-4 bg-gradient-to-r from-primary to-blue-600 text-white font-bold py-4 rounded-2xl shadow-lg active:scale-[0.98] transition-transform flex justify-center items-center relative">
-                <span id="btn-text">Đăng nhập ngay</span>
-                <i data-lucide="loader-2" id="btn-loader" class="w-5 h-5 animate-spin hidden absolute"></i>
-            </button>
-        </form>
+            <!-- Form Body -->
+            <div class="px-8 pt-6 pb-8">
+                <form id="login-form" class="space-y-5" onsubmit="handleLogin(event)">
+                    <div class="space-y-1.5">
+                        <label class="text-sm font-semibold text-slate-700 pl-1">Tên đăng nhập</label>
+                        <div class="input-group relative flex items-center bg-slate-50 border-2 border-slate-100 rounded-2xl transition-all duration-300">
+                            <div class="pl-4 pr-3 py-3.5"><i data-lucide="user" class="w-5 h-5 text-slate-400 input-icon transition-colors"></i></div>
+                            <input type="text" id="username" required class="w-full py-3.5 pr-4 bg-transparent border-none focus:outline-none text-slate-800 font-medium" placeholder="Nhập username">
+                        </div>
+                    </div>
 
-        <div class="mt-8 text-center text-sm font-medium text-slate-600">
-            Chưa có tài khoản? <a href="/register" class="text-primary font-bold hover:underline ml-1">Đăng ký</a>
+                    <div class="space-y-1.5">
+                        <label class="text-sm font-semibold text-slate-700 pl-1">Mật khẩu</label>
+                        <div class="input-group relative flex items-center bg-slate-50 border-2 border-slate-100 rounded-2xl transition-all duration-300">
+                            <div class="pl-4 pr-3 py-3.5"><i data-lucide="lock" class="w-5 h-5 text-slate-400 input-icon transition-colors"></i></div>
+                            <input type="password" id="password" required class="w-full py-3.5 pr-12 bg-transparent border-none focus:outline-none text-slate-800 tracking-wide" placeholder="••••••••">
+                            <button type="button" id="toggle-password" class="absolute right-0 inset-y-0 px-4 flex items-center text-slate-400 focus:outline-none"><i data-lucide="eye" id="eye-icon" class="w-5 h-5"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Remember me -->
+                    <div class="flex items-center justify-between px-1">
+                        <label class="flex items-center gap-2 cursor-pointer select-none">
+                            <input type="checkbox" id="remember-me" class="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer">
+                            <span class="text-sm text-slate-600 font-medium">Ghi nhớ tài khoản</span>
+                        </label>
+                    </div>
+
+                    <!-- Captcha -->
+                    <div class="space-y-1.5">
+                        <label class="text-sm font-semibold text-slate-700 pl-1">Mã xác minh</label>
+                        <div class="flex gap-3 items-center">
+                            <div class="flex-shrink-0 bg-gradient-to-r from-primary to-blue-600 text-white font-bold text-sm px-4 py-3 rounded-xl select-none shadow-md shadow-blue-500/20 tracking-wider" id="captcha-question">
+                                -- --
+                            </div>
+                            <button type="button" onclick="loadCaptcha()" class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 active:scale-95 transition-all" title="Làm mới mã">
+                                <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                            </button>
+                            <div class="input-group flex-1 relative flex items-center bg-slate-50 border-2 border-slate-100 rounded-2xl transition-all duration-300">
+                                <input type="text" id="captcha-answer" required maxlength="3" class="w-full py-3 px-4 bg-transparent border-none focus:outline-none text-slate-800 font-bold text-center" placeholder="Kết quả">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="submit-btn" class="w-full mt-2 bg-gradient-to-r from-primary to-blue-600 text-white font-bold py-4 rounded-2xl shadow-lg active:scale-[0.98] transition-transform flex justify-center items-center relative">
+                        <span id="btn-text">Đăng nhập ngay</span>
+                        <i data-lucide="loader-2" id="btn-loader" class="w-5 h-5 animate-spin hidden absolute"></i>
+                    </button>
+                </form>
+            </div>
         </div>
     </main>
 
@@ -109,12 +141,49 @@
             const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
             input.setAttribute('type', type); icon.setAttribute('data-lucide', type === 'text' ? 'eye-off' : 'eye'); lucide.createIcons();
         });
-        
+
+        // Load saved credentials
+        function loadSavedCredentials() {
+            const savedUser = localStorage.getItem('saved_username');
+            const savedPass = localStorage.getItem('saved_password');
+            if (savedUser) {
+                document.getElementById('username').value = savedUser;
+            }
+            if (savedPass) {
+                document.getElementById('password').value = savedPass;
+                document.getElementById('remember-me').checked = true;
+            }
+        }
+
+        // Captcha
+        let currentCaptchaId = '';
+        async function loadCaptcha() {
+            try {
+                const res = await fetch('api/captcha.php');
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('captcha-question').innerText = data.question || (data.data && data.data.question);
+                    currentCaptchaId = data.captcha_id || (data.data && data.data.captcha_id) || '';
+                    document.getElementById('captcha-answer').value = '';
+                    document.getElementById('captcha-answer').focus();
+                }
+            } catch (e) {
+                console.error('Captcha load failed', e);
+            }
+        }
+
         async function handleLogin(e) {
             e.preventDefault();
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
-            
+            const captchaAnswer = document.getElementById('captcha-answer').value.trim();
+            const rememberMe = document.getElementById('remember-me').checked;
+
+            if (!captchaAnswer) {
+                await alert('Vui lòng nhập mã xác minh.');
+                return;
+            }
+
             const btnText = document.getElementById('btn-text');
             const btnLoader = document.getElementById('btn-loader');
             const submitBtn = document.getElementById('submit-btn');
@@ -126,40 +195,50 @@
             try {
                 const response = await fetch('api/login.php', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ username, password })
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password, captcha_answer: captchaAnswer, captcha_id: currentCaptchaId })
                 });
                 const result = await response.json();
                 if (result.success) {
-                    localStorage.setItem('token', result.token);
-                    localStorage.setItem('username', result.username);
-                    localStorage.setItem('role', result.role);
-                    
+                    // Save or clear credentials
+                    if (rememberMe) {
+                        localStorage.setItem('saved_username', username);
+                        localStorage.setItem('saved_password', password);
+                    } else {
+                        localStorage.removeItem('saved_username');
+                        localStorage.removeItem('saved_password');
+                    }
+                    localStorage.setItem('token', result.token || (result.data && result.data.token));
+                    localStorage.setItem('username', result.username || (result.data && result.data.username));
+                    localStorage.setItem('role', result.role || (result.data && result.data.role));
                     setTimeout(() => {
-                        if (result.role === 'admin') {
+                        const role = result.role || (result.data && result.data.role);
+                        if (role === 'admin') {
                             window.location.href = '/admin';
                         } else {
-                            window.location.href = "/account";
+                            window.location.href = '/account';
                         }
                     }, 500);
                 } else {
                     await alert(result.message || 'Đăng nhập không thành công.');
-                    document.getElementById('btn-text').classList.remove('opacity-0');
-                    document.getElementById('btn-loader').classList.add('hidden');
-                    document.getElementById('submit-btn').disabled = false;
+                    loadCaptcha();
+                    btnText.classList.remove('opacity-0');
+                    btnLoader.classList.add('hidden');
+                    submitBtn.disabled = false;
                 }
             } catch (error) {
                 console.error(error);
                 await alert('Có lỗi xảy ra trong quá trình kết nối với máy chủ.');
-                document.getElementById('btn-text').classList.remove('opacity-0');
-                document.getElementById('btn-loader').classList.add('hidden');
-                document.getElementById('submit-btn').disabled = false;
+                btnText.classList.remove('opacity-0');
+                btnLoader.classList.add('hidden');
+                submitBtn.disabled = false;
             }
         }
+
+        // Init
+        loadSavedCredentials();
+        loadCaptcha();
     </script>
 </body>
 </html>
-
-
