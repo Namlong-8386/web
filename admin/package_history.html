@@ -6,6 +6,7 @@
     <title>Lịch sử mua gói - TOOLTX2026 Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../assets/js/pagination.js"></script>
     <script>tailwind.config={theme:{extend:{colors:{primary:'#3b82f6',success:'#10b981',danger:'#ef4444',warning:'#f59e0b'}}}}</script>
     <style>::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:#f1f5f9}::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}::-webkit-scrollbar-thumb:hover{background:#94a3b8}</style>
 </head>
@@ -72,6 +73,11 @@
                     </tbody>
                 </table>
             </div>
+            <!-- Pagination -->
+            <div class="flex items-center justify-between px-5 py-3 border-t border-slate-100">
+                <p id="hist-pg-info" class="text-xs text-slate-400"></p>
+                <div id="hist-pg" class="flex items-center gap-1"></div>
+            </div>
         </div>
     </main>
 </div>
@@ -100,7 +106,7 @@ let alertResolve=null;
 function closeAlert(){document.getElementById('alert-modal').classList.add('hidden');if(alertResolve){alertResolve();alertResolve=null;}}
 function formatMoney(n){return Number(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');}
 
-let allHistory=[];
+let allHistory=[], filteredHistory=[];
 function renderHistory(items){
     const tbody=document.getElementById('history-tbody');
     if(!items.length){tbody.innerHTML='<tr><td colspan="6" class="py-10 text-center text-slate-400 text-sm">Chưa có lịch sử mua gói.</td></tr>';return;}
@@ -124,7 +130,8 @@ function renderHistory(items){
 }
 function filterHistory(){
     const q=document.getElementById('search-hist').value.toLowerCase();
-    renderHistory(allHistory.filter(t=>t.username.toLowerCase().includes(q)||t.title.toLowerCase().includes(q)||t.id.toLowerCase().includes(q)));
+    filteredHistory=allHistory.filter(t=>t.username.toLowerCase().includes(q)||t.title.toLowerCase().includes(q)||t.id.toLowerCase().includes(q));
+    initPagination('hist',{itemsPerPage:20,dataArray:filteredHistory,renderFn:renderHistory,containerId:'history-tbody',paginationId:'hist-pg',infoId:'hist-pg-info'});
 }
 async function fetchHistory(){
     try{
@@ -132,7 +139,8 @@ async function fetchHistory(){
         const d=await r.json();
         if(d.success){
             allHistory=d.transactions.filter(t=>t.type==='out');
-            renderHistory(allHistory);
+            filteredHistory=[...allHistory];
+            initPagination('hist',{itemsPerPage:20,dataArray:filteredHistory,renderFn:renderHistory,containerId:'history-tbody',paginationId:'hist-pg',infoId:'hist-pg-info'});
         }
     }catch(e){console.error(e);}
 }

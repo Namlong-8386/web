@@ -6,6 +6,7 @@
     <title>Nạp tiền - TOOLTX2026 Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../assets/js/pagination.js"></script>
     <script>tailwind.config={theme:{extend:{colors:{primary:'#3b82f6',success:'#10b981',danger:'#ef4444',warning:'#f59e0b'}}}}</script>
     <style>
         ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:#f1f5f9}::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}::-webkit-scrollbar-thumb:hover{background:#94a3b8}
@@ -101,6 +102,11 @@
                     </tbody>
                 </table>
             </div>
+            <!-- Pagination -->
+            <div class="flex items-center justify-between px-5 py-3 border-t border-slate-100">
+                <p id="tx-pg-info" class="text-xs text-slate-400"></p>
+                <div id="tx-pg" class="flex items-center gap-1"></div>
+            </div>
         </div>
     </main>
 </div>
@@ -144,7 +150,7 @@ function closeAlert(){document.getElementById('alert-modal').classList.add('hidd
 function copyToClipboard(t){navigator.clipboard.writeText(t).catch(()=>{});const toast=document.getElementById('copy-toast');toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1800);}
 function formatMoney(n){return Number(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');}
 
-let allTx=[];
+let allTx=[], filteredTx=[];
 function renderTx(txs){
     const tbody=document.getElementById('tx-tbody');
     if(!txs.length){tbody.innerHTML='<tr><td colspan="7" class="py-10 text-center text-slate-400 text-sm">Không tìm thấy giao dịch.</td></tr>';return;}
@@ -175,10 +181,11 @@ function renderTx(txs){
 function filterTx(){
     const q=document.getElementById('search-tx').value.toLowerCase();
     const s=document.getElementById('filter-status').value;
-    renderTx(allTx.filter(t=>{
+    filteredTx=allTx.filter(t=>{
         const mq=t.username.toLowerCase().includes(q)||t.title.toLowerCase().includes(q)||t.id.toLowerCase().includes(q)||t.amount.toString().includes(q);
         return mq&&(s==='all'||t.status===s);
-    }));
+    });
+    initPagination('tx',{itemsPerPage:20,dataArray:filteredTx,renderFn:renderTx,containerId:'tx-tbody',paginationId:'tx-pg',infoId:'tx-pg-info'});
 }
 async function approveTx(id,action,btn){
     const txt=action==='approve'?'phê duyệt':'từ chối';
@@ -195,7 +202,8 @@ async function fetchTx(){
         const d=await r.json();
         if(d.success){
             allTx=d.transactions;
-            renderTx(allTx);
+            filteredTx=[...allTx];
+            initPagination('tx',{itemsPerPage:20,dataArray:filteredTx,renderFn:renderTx,containerId:'tx-tbody',paginationId:'tx-pg',infoId:'tx-pg-info'});
             document.getElementById('stat-pending').innerText=allTx.filter(t=>t.status==='Chờ duyệt').length;
             document.getElementById('stat-approved').innerText=allTx.filter(t=>t.status==='Thành công').length;
             document.getElementById('stat-rejected').innerText=allTx.filter(t=>t.status==='Từ chối').length;

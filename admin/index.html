@@ -6,6 +6,7 @@
     <title>Dashboard - TOOLTX2026 Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../assets/js/pagination.js"></script>
     <script>
         tailwind.config = {
             theme: { extend: { colors: { primary: '#3b82f6', success: '#10b981', danger: '#ef4444', warning: '#f59e0b' } } }
@@ -151,6 +152,11 @@
                     </tbody>
                 </table>
             </div>
+            <!-- Pagination -->
+            <div class="flex items-center justify-between px-5 py-3 border-t border-slate-100">
+                <p id="users-pg-info" class="text-xs text-slate-400"></p>
+                <div id="users-pg" class="flex items-center gap-1"></div>
+            </div>
         </div>
     </main>
 </div>
@@ -252,7 +258,7 @@ function copyToClipboard(t) { navigator.clipboard.writeText(t).catch(()=>{}); sh
 function showCopyToast() { const t=document.getElementById('copy-toast'); t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1800); }
 function formatMoney(n) { return Number(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,','); }
 
-let allUsers = [], balanceTarget = '';
+let allUsers = [], filteredUsers = [], balanceTarget = '';
 
 function openBalanceModal(u, bal) {
     balanceTarget = u;
@@ -370,7 +376,8 @@ function renderUsers(users) {
 
 function filterUsers() {
     const q = document.getElementById('search-users').value.toLowerCase();
-    renderUsers(allUsers.filter(u => u.username.toLowerCase().includes(q) || u.user_id.includes(q)));
+    filteredUsers = allUsers.filter(u => u.username.toLowerCase().includes(q) || u.user_id.includes(q));
+    initPagination('users',{itemsPerPage:20,dataArray:filteredUsers,renderFn:renderUsers,containerId:'users-tbody',paginationId:'users-pg',infoId:'users-pg-info'});
 }
 
 async function fetchUsers() {
@@ -379,7 +386,8 @@ async function fetchUsers() {
         const d = await r.json();
         if (d.success) {
             allUsers = d.users;
-            renderUsers(allUsers);
+            filteredUsers = [...allUsers];
+            initPagination('users',{itemsPerPage:20,dataArray:filteredUsers,renderFn:renderUsers,containerId:'users-tbody',paginationId:'users-pg',infoId:'users-pg-info'});
             document.getElementById('stat-users').innerText = allUsers.length;
             const now = Date.now()/1000;
             document.getElementById('stat-vip').innerText = allUsers.filter(u => u.vip_expire && u.vip_expire > now).length;

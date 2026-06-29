@@ -6,6 +6,7 @@
     <title>Quản lý Key & APK - TOOLTX2026 Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../assets/js/pagination.js"></script>
     <script>tailwind.config={theme:{extend:{colors:{primary:'#3b82f6',success:'#10b981',danger:'#ef4444',warning:'#f59e0b'}}}}</script>
     <style>::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:#f1f5f9}::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}::-webkit-scrollbar-thumb:hover{background:#94a3b8}
     .copy-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e293b;color:white;padding:8px 20px;border-radius:99px;font-size:13px;font-weight:600;z-index:9999;opacity:0;transition:opacity .2s;pointer-events:none}.copy-toast.show{opacity:1}</style>
@@ -183,6 +184,11 @@
                     </tbody>
                 </table>
             </div>
+            <!-- Pagination -->
+            <div class="flex items-center justify-between px-5 py-3 border-t border-slate-100">
+                <p id="keys-pg-info" class="text-xs text-slate-400"></p>
+                <div id="keys-pg" class="flex items-center gap-1"></div>
+            </div>
         </div>
     </main>
 </div>
@@ -344,7 +350,7 @@ async function uploadApk(){
 }
 
 // Keys
-let allKeys=[];
+let allKeys=[], filteredKeys=[];
 function openCreateKeyModal(){document.getElementById('create-key-modal').classList.remove('hidden');}
 function closeCreateKeyModal(){document.getElementById('create-key-modal').classList.add('hidden');}
 function closeCreatedModal(){document.getElementById('created-keys-modal').classList.add('hidden');fetchKeys();}
@@ -436,7 +442,7 @@ function filterKeys(){
     const q=document.getElementById('search-keys').value.toLowerCase();
     const type=document.getElementById('filter-key-type').value;
     const status=document.getElementById('filter-key-status').value;
-    renderKeys(allKeys.filter(k=>{
+    filteredKeys=allKeys.filter(k=>{
         const mq=k.key.toLowerCase().includes(q)||(k.username&&k.username.toLowerCase().includes(q));
         const mt=type==='all'||k.type===type;
         let ms=true;
@@ -445,7 +451,8 @@ function filterKeys(){
         else if(status==='linked')ms=k.hwid!=='';
         else if(status==='unused')ms=k.hwid==='';
         return mq&&mt&&ms;
-    }));
+    });
+    initPagination('keys',{itemsPerPage:20,dataArray:filteredKeys,renderFn:renderKeys,containerId:'keys-tbody',paginationId:'keys-pg',infoId:'keys-pg-info'});
 }
 
 async function fetchKeys(){
@@ -454,7 +461,8 @@ async function fetchKeys(){
         const d=await r.json();
         if(d.success){
             allKeys=d.keys;
-            renderKeys(allKeys);
+            filteredKeys=[...allKeys];
+            initPagination('keys',{itemsPerPage:20,dataArray:filteredKeys,renderFn:renderKeys,containerId:'keys-tbody',paginationId:'keys-pg',infoId:'keys-pg-info'});
             document.getElementById('ks-total').innerText=d.stats.total;
             document.getElementById('ks-active').innerText=d.stats.active;
             document.getElementById('ks-expired').innerText=d.stats.expired;
