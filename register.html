@@ -6,7 +6,7 @@
     <title>Đăng Ký - TOOLTX2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LfVOTwtAAAAANieu2ZkmyuwCcpGanwEozUlxM7B" async defer></script>
     <script>tailwind.config = { theme: { extend: { colors: { primary: '#3b82f6', danger: '#ef4444' } } } }</script>
     <style>
         body { background-color: #f1f5f9; -webkit-user-select: none; user-select: none; }
@@ -67,11 +67,6 @@
                             <button type="button" class="toggle-password absolute right-0 inset-y-0 px-4 flex items-center text-slate-400 focus:outline-none" data-target="confirm-password"><i data-lucide="eye" class="w-5 h-5 eye-icon"></i></button>
                         </div>
                         <p id="error-message" class="text-danger text-xs font-medium pl-2 hidden mt-1">Mật khẩu không khớp!</p>
-                    </div>
-
-                    <!-- reCAPTCHA -->
-                    <div class="flex justify-center pt-2">
-                        <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
                     </div>
 
                     <button type="submit" id="submit-btn" class="w-full bg-gradient-to-r from-primary to-blue-600 text-white font-bold py-4 rounded-2xl shadow-lg active:scale-[0.98] transition-transform flex items-center justify-center relative mt-2">
@@ -146,9 +141,8 @@
             const conf = document.getElementById('confirm-password').value;
             const grp = document.getElementById('confirm-group');
 
-            const recaptchaToken = typeof grecaptcha !== 'undefined' ? grecaptcha.getResponse() : '';
-            if (!recaptchaToken) {
-                await alert('Vui lòng tích xác nhận "Tôi không phải robot".');
+            if (typeof grecaptcha === 'undefined') {
+                await alert('Không thể tải reCAPTCHA. Vui lòng tải lại trang.');
                 return;
             }
 
@@ -167,6 +161,7 @@
             submitBtn.disabled = true;
 
             try {
+                const recaptchaToken = await grecaptcha.execute('6LfVOTwtAAAAANieu2ZkmyuwCcpGanwEozUlxM7B', { action: 'register' });
                 const response = await fetch('api/register.php', {
                     method: 'POST',
                     credentials: 'include',
@@ -179,7 +174,6 @@
                     window.location.href = "/login";
                 } else {
                     await alert(result.message || 'Đăng ký thất bại.');
-                    if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
                     btnText.classList.remove('opacity-0');
                     btnLoader.classList.add('hidden');
                     submitBtn.disabled = false;

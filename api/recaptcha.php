@@ -2,15 +2,13 @@
 require_once __DIR__ . '/config.php';
 
 /**
- * Verify Google reCAPTCHA v2 response token.
- * Returns true if verified, false otherwise.
+ * Verify Google reCAPTCHA v3 response token.
+ * Returns true if verified (score >= 0.5), false otherwise.
  *
- * NOTE: Replace test keys with your own from https://www.google.com/recaptcha/admin
+ * NOTE: Configure your keys at https://www.google.com/recaptcha/admin
  */
-function verifyRecaptcha($responseToken) {
-    // Test secret key (for localhost testing)
-    // Replace with your real secret key for production
-    $secret = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe';
+function verifyRecaptcha($responseToken, $expectedAction = '') {
+    $secret = '6LfVOTwtAAAAAAMXgvKXnzCHLMngOsyLjZTy6hO0e';
 
     if (empty($responseToken)) {
         return false;
@@ -40,5 +38,20 @@ function verifyRecaptcha($responseToken) {
     }
 
     $json = json_decode($result, true);
-    return isset($json['success']) && $json['success'] === true;
+    if (!isset($json['success']) || $json['success'] !== true) {
+        return false;
+    }
+
+    // For v3: check score (0.0 - 1.0), allow if >= 0.5
+    $score = isset($json['score']) ? floatval($json['score']) : 1.0;
+    if ($score < 0.5) {
+        return false;
+    }
+
+    // Optional: verify action matches
+    if (!empty($expectedAction) && isset($json['action']) && $json['action'] !== $expectedAction) {
+        return false;
+    }
+
+    return true;
 }
