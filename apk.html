@@ -41,72 +41,88 @@
             </a>
         </div>
 
-        <!-- Banner -->
-        <div class="relative rounded-3xl overflow-hidden mb-4 bg-gradient-to-br from-primary to-blue-800 p-5 shadow-lg shadow-blue-500/20">
-            <div class="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full -mr-16 -mt-16 blur-2xl pointer-events-none"></div>
-            <div class="relative z-10 flex items-center gap-4">
-                <div class="w-16 h-16 bg-white/15 rounded-2xl flex items-center justify-center flex-shrink-0 backdrop-blur-sm border border-white/20">
-                    <i data-lucide="smartphone" class="w-8 h-8 text-white"></i>
-                </div>
-                <div>
-                    <h2 class="text-white font-black text-lg leading-tight">TOOLTX2026</h2>
-                    <p class="text-blue-100 text-xs mt-1">Ứng dụng Android chính thức</p>
-                    <div class="flex items-center gap-2 mt-2">
-                        <span class="bg-white/20 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">v1.0</span>
-                        <span class="bg-emerald-400/30 text-emerald-200 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
-                            <span class="w-1.5 h-1.5 bg-emerald-300 rounded-full"></span> Mới nhất
-                        </span>
+        <!-- Chưa đăng nhập -->
+        <div id="logged-out-view" class="hidden flex-col items-center justify-center py-16 text-center">
+            <div class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mb-5">
+                <i data-lucide="download" class="w-10 h-10 text-primary opacity-60"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800 mb-2">Chưa đăng nhập</h3>
+            <p class="text-slate-500 mb-6 text-sm">Đăng nhập để tải APK và quản lý key kích hoạt.</p>
+            <a href="/login" class="w-full max-w-xs bg-gradient-to-r from-primary to-blue-600 text-white font-bold py-4 rounded-2xl shadow-lg shadow-blue-500/30 active:scale-[0.98] transition-transform flex items-center justify-center gap-2">
+                <i data-lucide="log-in" class="w-5 h-5"></i> Đăng nhập ngay
+            </a>
+        </div>
+
+        <!-- Đã đăng nhập -->
+        <div id="logged-in-content">
+
+            <!-- Banner -->
+            <div class="relative rounded-3xl overflow-hidden mb-4 bg-gradient-to-br from-primary to-blue-800 p-5 shadow-lg shadow-blue-500/20">
+                <div class="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full -mr-16 -mt-16 blur-2xl pointer-events-none"></div>
+                <div class="relative z-10 flex items-center gap-4">
+                    <div class="w-16 h-16 bg-white/15 rounded-2xl flex items-center justify-center flex-shrink-0 backdrop-blur-sm border border-white/20">
+                        <i data-lucide="smartphone" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-white font-black text-lg leading-tight">TOOLTX2026</h2>
+                        <p class="text-blue-100 text-xs mt-1">Ứng dụng Android chính thức</p>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="bg-white/20 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">v1.0</span>
+                            <span class="bg-emerald-400/30 text-emerald-200 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 bg-emerald-300 rounded-full"></span> Mới nhất
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Thông tin APK -->
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 mb-4">
-            <h3 class="font-bold text-slate-700 mb-3 text-sm">Thông tin ứng dụng</h3>
-            <div class="grid grid-cols-2 gap-3">
-                <div class="bg-slate-50 rounded-xl p-3">
-                    <p class="text-[10px] text-slate-400 font-medium uppercase tracking-wide mb-1">Nền tảng</p>
-                    <p class="text-sm font-bold text-slate-700 flex items-center gap-1"><i data-lucide="smartphone" class="w-4 h-4 text-green-500"></i> Android</p>
-                </div>
-                <div class="bg-slate-50 rounded-xl p-3">
-                    <p class="text-[10px] text-slate-400 font-medium uppercase tracking-wide mb-1">Phiên bản</p>
-                    <p class="text-sm font-bold text-slate-700">1.0.0</p>
-                </div>
-                <div class="bg-slate-50 rounded-xl p-3">
-                    <p class="text-[10px] text-slate-400 font-medium uppercase tracking-wide mb-1">Android tối thiểu</p>
-                    <p class="text-sm font-bold text-slate-700">Android 7.0+</p>
-                </div>
-                <div class="bg-slate-50 rounded-xl p-3">
-                    <p class="text-[10px] text-slate-400 font-medium uppercase tracking-wide mb-1">Cần key</p>
-                    <p class="text-sm font-bold text-slate-700 flex items-center gap-1"><i data-lucide="key" class="w-4 h-4 text-amber-500"></i> Bắt buộc</p>
+            <!-- Thông tin APK -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 mb-4">
+                <h3 class="font-bold text-slate-700 mb-3 text-sm">Thông tin ứng dụng</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-slate-50 rounded-xl p-3">
+                        <p class="text-[10px] text-slate-400 font-medium uppercase tracking-wide mb-1">Nền tảng</p>
+                        <p class="text-sm font-bold text-slate-700 flex items-center gap-1"><i data-lucide="smartphone" class="w-4 h-4 text-green-500"></i> Android</p>
+                    </div>
+                    <div class="bg-slate-50 rounded-xl p-3">
+                        <p class="text-[10px] text-slate-400 font-medium uppercase tracking-wide mb-1">Phiên bản</p>
+                        <p class="text-sm font-bold text-slate-700">1.0.0</p>
+                    </div>
+                    <div class="bg-slate-50 rounded-xl p-3">
+                        <p class="text-[10px] text-slate-400 font-medium uppercase tracking-wide mb-1">Android tối thiểu</p>
+                        <p class="text-sm font-bold text-slate-700">Android 7.0+</p>
+                    </div>
+                    <div class="bg-slate-50 rounded-xl p-3">
+                        <p class="text-[10px] text-slate-400 font-medium uppercase tracking-wide mb-1">Cần key</p>
+                        <p class="text-sm font-bold text-slate-700 flex items-center gap-1"><i data-lucide="key" class="w-4 h-4 text-amber-500"></i> Bắt buộc</p>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Hướng dẫn -->
-        <div class="bg-amber-50 border border-amber-100 rounded-2xl p-4 mb-4">
-            <div class="flex items-start gap-3">
-                <div class="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <i data-lucide="info" class="w-4 h-4 text-amber-600"></i>
-                </div>
-                <div>
-                    <p class="text-sm font-bold text-amber-800 mb-1">Hướng dẫn cài đặt</p>
-                    <ol class="text-xs text-amber-700 space-y-1 list-decimal list-inside">
-                        <li>Tải file APK về thiết bị</li>
-                        <li>Bật "Cài đặt từ nguồn không rõ" trong Cài đặt</li>
-                        <li>Mở file APK và tiến hành cài đặt</li>
-                        <li>Mở ứng dụng và nhập Key kích hoạt</li>
-                    </ol>
+            <!-- Hướng dẫn -->
+            <div class="bg-amber-50 border border-amber-100 rounded-2xl p-4 mb-4">
+                <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <i data-lucide="info" class="w-4 h-4 text-amber-600"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-bold text-amber-800 mb-1">Hướng dẫn cài đặt</p>
+                        <ol class="text-xs text-amber-700 space-y-1 list-decimal list-inside">
+                            <li>Tải file APK về thiết bị</li>
+                            <li>Bật "Cài đặt từ nguồn không rõ" trong Cài đặt</li>
+                            <li>Mở file APK và tiến hành cài đặt</li>
+                            <li>Mở ứng dụng và nhập Key kích hoạt</li>
+                        </ol>
+                    </div>
                 </div>
             </div>
+
+            <!-- Nút tải -->
+            <button id="download-btn" onclick="downloadApk()" class="w-full bg-gradient-to-r from-primary to-blue-700 text-white font-black py-4 rounded-2xl shadow-lg shadow-blue-500/30 active:scale-[0.98] transition-transform flex items-center justify-center gap-2 text-base mb-5">
+                <i data-lucide="download" class="w-5 h-5"></i> Tải APK ngay (25 MB)
+            </button>
+
         </div>
-
-        <!-- Nút tải -->
-        <a href="/assets/apk/TOOLTX2026.apk" download="TOOLTX2026.apk" class="w-full bg-gradient-to-r from-primary to-blue-700 text-white font-black py-4 rounded-2xl shadow-lg shadow-blue-500/30 active:scale-[0.98] transition-transform flex items-center justify-center gap-2 text-base mb-5">
-            <i data-lucide="download" class="w-5 h-5"></i> Tải APK ngay (25 MB)
-        </a>
-
 
     </main>
 
@@ -136,6 +152,66 @@
         </nav>
     </div>
 
-    <script>lucide.createIcons();</script>
+    <script>
+        lucide.createIcons();
+        const token = localStorage.getItem('token');
+
+        function showGuestState() {
+            document.getElementById('logged-in-content').classList.add('hidden');
+            const lo = document.getElementById('logged-out-view');
+            lo.classList.remove('hidden');
+            lo.classList.add('flex');
+            lucide.createIcons();
+        }
+
+        async function downloadApk() {
+            if (!token) { window.location.href = '/login'; return; }
+            const btn = document.getElementById('download-btn');
+            const originalHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<svg class="animate-spin w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg> Đang tải...';
+            try {
+                const res = await fetch('/api/download_apk', { headers: { 'Authorization': `Bearer ${token}` } });
+                if (!res.ok) {
+                    const data = await res.json().catch(() => ({}));
+                    alert(data.message || 'Tải thất bại. Vui lòng đăng nhập lại.');
+                    localStorage.clear();
+                    window.location.href = '/login';
+                    return;
+                }
+                const blob = await res.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url; a.download = 'TOOLTX2026.apk';
+                document.body.appendChild(a); a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            } catch (e) {
+                alert('Lỗi kết nối. Vui lòng thử lại.');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+                lucide.createIcons();
+            }
+        }
+
+        if (!token) {
+            showGuestState();
+        } else {
+            // Kiểm tra token hợp lệ đồng bộ với các trang khác
+            fetch('/api/user.php', { headers: { 'Authorization': `Bearer ${token}` } })
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.success) {
+                        localStorage.clear();
+                        showGuestState();
+                    }
+                })
+                .catch(() => {
+                    localStorage.clear();
+                    showGuestState();
+                });
+        }
+    </script>
 </body>
 </html>

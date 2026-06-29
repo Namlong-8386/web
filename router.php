@@ -39,6 +39,13 @@ if (isset($routes[$uri])) {
     }
 }
 
+// Chặn truy cập trực tiếp file APK - bắt buộc tải qua API có xác thực
+if (preg_match('#^/assets/apk/.+\.apk$#i', $uri)) {
+    http_response_code(404);
+    echo '<h1>404 - Không tìm thấy trang</h1>';
+    return true;
+}
+
 // Nếu file/thư mục thực sự tồn tại thì phục vụ trực tiếp
 $file = __DIR__ . $uri;
 if (file_exists($file) && !is_dir($file)) {
