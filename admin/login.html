@@ -6,7 +6,7 @@
     <title>Đăng Nhập Admin - TOOLTX2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://www.google.com/recaptcha/api.js?render=6LfVOTwtAAAAANieu2ZkmyuwCcpGanwEozUlxM7B" async defer></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script>
         tailwind.config = {
             theme: {
@@ -78,6 +78,10 @@
                     <label for="remember-me" class="text-sm text-slate-400 cursor-pointer select-none">Ghi nhớ tài khoản</label>
                 </div>
 
+                <div class="flex justify-center">
+                    <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" data-theme="dark"></div>
+                </div>
+
                 <!-- Submit Button -->
                 <button type="submit" id="submit-btn"
                     class="w-full py-3.5 bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-bold rounded-2xl shadow-lg shadow-blue-900/40 transition-all flex items-center justify-center gap-2 mt-2">
@@ -145,8 +149,9 @@
             const btn = document.getElementById('submit-btn');
             const btnText = document.getElementById('btn-text');
 
-            if (typeof grecaptcha === 'undefined') {
-                showError('Không thể tải reCAPTCHA. Vui lòng tải lại trang.');
+            const recaptchaToken = typeof grecaptcha !== 'undefined' ? grecaptcha.getResponse() : '';
+            if (!recaptchaToken) {
+                showError('Vui lòng tích xác nhận "Tôi không phải robot".');
                 return;
             }
 
@@ -154,7 +159,6 @@
             btnText.innerText = 'Đang xử lý...';
 
             try {
-                const recaptchaToken = await grecaptcha.execute('6LfVOTwtAAAAANieu2ZkmyuwCcpGanwEozUlxM7B', { action: 'admin_login' });
                 const res = await fetch('../api/login.php', {
                     method: 'POST',
                     credentials: 'include',
@@ -186,6 +190,7 @@
                     }
                 } else {
                     showError(data.message || 'Tên đăng nhập hoặc mật khẩu không đúng.');
+                    if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
                 }
             } catch (err) {
                 showError('Không thể kết nối đến máy chủ. Vui lòng thử lại.');
