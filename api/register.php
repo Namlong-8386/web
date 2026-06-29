@@ -9,22 +9,16 @@ $input = get_json_input();
 $username = isset($input['username']) ? trim($input['username']) : '';
 $password = isset($input['password']) ? $input['password'] : '';
 $full_name = $username;
-$captchaAnswer = isset($input['captcha_answer']) ? trim($input['captcha_answer']) : '';
-$captchaId = isset($input['captcha_id']) ? trim($input['captcha_id']) : '';
+$recaptchaToken = isset($input['recaptcha_token']) ? trim($input['recaptcha_token']) : '';
 
-if (empty($username) || empty($password) || $captchaAnswer === '') {
-    json_response(false, 'Vui lòng nhập đầy đủ thông tin và mã xác minh.');
+if (empty($username) || empty($password)) {
+    json_response(false, 'Vui lòng nhập đầy đủ tất cả thông tin.');
 }
 
-// Verify captcha via flat file
-require_once __DIR__ . '/captcha_helper.php';
-$stored = getCaptcha($captchaId);
-if ($stored === null) {
-    json_response(false, 'Mã xác minh đã hết hạn. Vui lòng tải lại trang.');
-}
-deleteCaptcha($captchaId);
-if ($captchaAnswer !== $stored['answer']) {
-    json_response(false, 'Mã xác minh không đúng. Vui lòng thử lại.');
+// Verify reCAPTCHA
+require_once __DIR__ . '/recaptcha.php';
+if (!verifyRecaptcha($recaptchaToken)) {
+    json_response(false, 'Vui lòng xác minh bạn không phải robot.');
 }
 
 if (strlen($username) < 4) {

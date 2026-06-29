@@ -6,6 +6,7 @@
     <title>Đăng Nhập - TOOLTX2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script>tailwind.config = { theme: { extend: { colors: { primary: '#3b82f6', primary_dark: '#2563eb' } } } }</script>
     <style>
         body { background-color: #f1f5f9; -webkit-user-select: none; user-select: none; }
@@ -63,20 +64,9 @@
                         </label>
                     </div>
 
-                    <!-- Captcha -->
-                    <div class="space-y-1.5">
-                        <label class="text-sm font-semibold text-slate-700 pl-1">Mã xác minh</label>
-                        <div class="flex gap-3 items-center">
-                            <div class="flex-shrink-0 bg-gradient-to-r from-primary to-blue-600 text-white font-bold text-sm px-4 py-3 rounded-xl select-none shadow-md shadow-blue-500/20 tracking-wider" id="captcha-question">
-                                -- --
-                            </div>
-                            <button type="button" onclick="loadCaptcha()" class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 active:scale-95 transition-all" title="Làm mới mã">
-                                <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-                            </button>
-                            <div class="input-group flex-1 relative flex items-center bg-slate-50 border-2 border-slate-100 rounded-2xl transition-all duration-300">
-                                <input type="text" id="captcha-answer" required maxlength="3" class="w-full py-3 px-4 bg-transparent border-none focus:outline-none text-slate-800 font-bold text-center" placeholder="Kết quả">
-                            </div>
-                        </div>
+                    <!-- reCAPTCHA -->
+                    <div class="flex justify-center">
+                        <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
                     </div>
 
                     <button type="submit" id="submit-btn" class="w-full mt-2 bg-gradient-to-r from-primary to-blue-600 text-white font-bold py-4 rounded-2xl shadow-lg active:scale-[0.98] transition-transform flex justify-center items-center relative">
@@ -155,32 +145,15 @@
             }
         }
 
-        // Captcha
-        let currentCaptchaId = '';
-        async function loadCaptcha() {
-            try {
-                const res = await fetch('api/captcha.php');
-                const data = await res.json();
-                if (data.success) {
-                    document.getElementById('captcha-question').innerText = data.question || (data.data && data.data.question);
-                    currentCaptchaId = data.captcha_id || (data.data && data.data.captcha_id) || '';
-                    document.getElementById('captcha-answer').value = '';
-                    document.getElementById('captcha-answer').focus();
-                }
-            } catch (e) {
-                console.error('Captcha load failed', e);
-            }
-        }
-
         async function handleLogin(e) {
             e.preventDefault();
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
-            const captchaAnswer = document.getElementById('captcha-answer').value.trim();
             const rememberMe = document.getElementById('remember-me').checked;
 
-            if (!captchaAnswer) {
-                await alert('Vui lòng nhập mã xác minh.');
+            const recaptchaToken = typeof grecaptcha !== 'undefined' ? grecaptcha.getResponse() : '';
+            if (!recaptchaToken) {
+                await alert('Vui lòng tích xác nhận "Tôi không phải robot".');
                 return;
             }
 
@@ -197,7 +170,7 @@
                     method: 'POST',
                     credentials: 'include',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password, captcha_answer: captchaAnswer, captcha_id: currentCaptchaId })
+                    body: JSON.stringify({ username, password, recaptcha_token: recaptchaToken })
                 });
                 const result = await response.json();
                 if (result.success) {
@@ -222,7 +195,7 @@
                     }, 500);
                 } else {
                     await alert(result.message || 'Đăng nhập không thành công.');
-                    loadCaptcha();
+                    if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
                     btnText.classList.remove('opacity-0');
                     btnLoader.classList.add('hidden');
                     submitBtn.disabled = false;
@@ -238,7 +211,6 @@
 
         // Init
         loadSavedCredentials();
-        loadCaptcha();
     </script>
 </body>
 </html>
