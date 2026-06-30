@@ -1,0 +1,1 @@
+- [Storing bearer tokens in JSON data files](security-tokens-in-data-files.md) — `api/data/users.json` keeps plaintext session tokens; migrate to server-side storage and rotate tokens.

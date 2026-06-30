@@ -2,124 +2,335 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>App Trang Chủ - TOOLTX2026</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Chủ - TOOLTX2026</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%233b82f6'/><path d='M50 20 L65 45 L85 45 L60 65 L70 90 L50 72 L30 90 L40 65 L15 45 L35 45 Z' fill='white'/></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         tailwind.config = { theme: { extend: { colors: { primary: '#3b82f6' } } } }
     </script>
     <style>
-        body { -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+        * { -webkit-tap-highlight-color: transparent; }
+        body { -webkit-user-select: none; user-select: none; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
         ::-webkit-scrollbar { display: none; }
+
+        @keyframes blob {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+        .animate-blob { animation: blob 7s infinite; }
+        .animate-blob-delay { animation: blob 9s infinite 2s; }
+        .animate-blob-slow { animation: blob 11s infinite 4s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animate-float-delay { animation: float 5s ease-in-out infinite 1s; }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .shimmer {
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 2.5s infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+            70% { box-shadow: 0 0 0 12px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+        .pulse-ring { animation: pulse-ring 2s infinite; }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .glass-strong {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.65);
+            box-shadow: 0 8px 32px -8px rgba(30, 41, 59, 0.1), 0 2px 8px -2px rgba(30, 41, 59, 0.06);
+        }
+
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -12px rgba(59, 130, 246, 0.18); }
+        .card-hover:active { transform: scale(0.98); }
+
+        .nav-item { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .nav-item.active { background: rgba(59, 130, 246, 0.12); color: #2563eb; }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 50%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 40%, #2563eb 100%);
+        }
+
+        .service-icon {
+            background: linear-gradient(135deg, rgba(59,130,246,0.15) 0%, rgba(6,182,212,0.1) 100%);
+        }
+
+        .shine { position: relative; overflow: hidden; }
+        .shine::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.3) 50%, transparent 60%);
+            transform: rotate(30deg) translateX(-100%);
+            transition: transform 0.6s;
+        }
+        .shine:hover::after { transform: rotate(30deg) translateX(100%); }
+
+        .number-roll { font-variant-numeric: tabular-nums; }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col overflow-x-hidden relative">
+
+    <!-- Animated background blobs -->
+    <div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div class="absolute -top-40 -left-40 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl animate-blob"></div>
+        <div class="absolute top-1/3 -right-20 w-80 h-80 bg-cyan-400/20 rounded-full blur-3xl animate-blob-delay"></div>
+        <div class="absolute -bottom-40 left-1/3 w-[28rem] h-[28rem] bg-indigo-400/15 rounded-full blur-3xl animate-blob-slow"></div>
+    </div>
 
     <!-- Header -->
-    <header class="bg-white shadow-sm sticky top-0 z-40 border-b border-slate-100">
-        <div class="flex items-center justify-between h-14 px-4 max-w-3xl mx-auto w-full">
-            <h1 class="text-xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-800">
-                TOOLTX2026
-            </h1>
-            <div id="admin-shortcut-container"></div>
+    <header class="sticky top-0 z-40">
+        <div class="glass-strong border-b border-white/40">
+            <div class="flex items-center justify-between h-14 px-4 max-w-3xl mx-auto w-full">
+                <a href="/" class="flex items-center gap-2 group">
+                    <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-primary to-blue-700 flex items-center justify-center text-white shadow-lg shadow-blue-500/25 group-hover:scale-105 transition-transform">
+                        <i data-lucide="zap" class="w-4.5 h-4.5"></i>
+                    </div>
+                    <h1 class="text-lg font-black tracking-wide gradient-text">TOOLTX2026</h1>
+                </a>
+                <div id="admin-shortcut-container" class="flex items-center"></div>
+            </div>
         </div>
     </header>
 
-    <!-- Nội dung chính -->
-    <main class="flex-grow p-4 pb-32 max-w-3xl mx-auto w-full">
-        <div class="mb-4 flex justify-between items-center">
-            <div>
-                <h2 id="greeting-title" class="text-xl font-bold text-slate-800 mb-1">Xin chào! 👋</h2>
-                <p class="text-sm text-slate-500">Vui lòng chọn mục dịch vụ bên dưới.</p>
+    <!-- Main content -->
+    <main class="flex-grow p-4 pb-36 max-w-3xl mx-auto w-full">
+
+        <!-- Hero / Greeting -->
+        <section class="hero-gradient rounded-[2rem] p-5 mb-6 text-white relative overflow-hidden shadow-2xl shadow-blue-900/25 animate-float">
+            <div class="absolute inset-0 shimmer opacity-30"></div>
+            <div class="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+            <div class="absolute bottom-0 left-0 w-32 h-32 bg-cyan-400/20 rounded-full -ml-10 -mb-10 blur-xl"></div>
+
+            <div class="relative z-10 flex justify-between items-start">
+                <div class="flex-1">
+                    <p id="greeting-sub" class="text-blue-100 text-sm font-medium mb-1">Chào mừng bạn trở lại</p>
+                    <h2 id="greeting-title" class="text-2xl font-bold mb-3 leading-tight">Xin chào! 👋</h2>
+                    <p class="text-blue-100/90 text-sm leading-relaxed max-w-[85%]">
+                        Khám phá các công cụ hỗ trợ game thông minh và quản lý tài khoản của bạn.
+                    </p>
+                </div>
+                <div id="auth-shortcut" class="flex-shrink-0"></div>
             </div>
-            <div id="auth-shortcut"></div>
-        </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Mục 1 -->
-            <a href="javascript:void(0)" onclick="handleServiceClick('Dịch Vụ Mục 1')" class="block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow active:scale-[0.98] duration-200 border border-slate-100 relative">
-                <div class="relative w-full h-48 sm:h-56">
-                    <img src="https://i.ibb.co/PvrXg25V/x.jpg" alt="Logo Mục 1" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 p-4 w-full flex justify-between items-end">
-                        <div>
-                            <h3 class="text-white font-bold text-lg">Dịch Vụ Mục 1</h3>
-                            <p class="text-white/80 text-xs mt-1">Khám phá các ưu đãi mới</p>
-                        </div>
-                        <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white">
-                            <i data-lucide="chevron-right" class="w-5 h-5"></i>
-                        </div>
+            <!-- Logged-in stats -->
+            <div id="user-stats" class="hidden relative z-10 mt-5 pt-5 border-t border-white/20">
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="bg-white/10 backdrop-blur-md rounded-2xl p-3 border border-white/10">
+                        <p class="text-blue-100 text-[10px] uppercase font-semibold tracking-wider mb-1">Số dư</p>
+                        <p id="stat-balance" class="text-lg font-bold number-roll">0</p>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-md rounded-2xl p-3 border border-white/10">
+                        <p class="text-blue-100 text-[10px] uppercase font-semibold tracking-wider mb-1">VIP</p>
+                        <p id="stat-vip" class="text-sm font-bold text-amber-300">Chưa có</p>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-md rounded-2xl p-3 border border-white/10">
+                        <p class="text-blue-100 text-[10px] uppercase font-semibold tracking-wider mb-1">Dịch vụ</p>
+                        <p class="text-sm font-bold">3 mục</p>
                     </div>
                 </div>
-            </a>
+            </div>
+        </section>
 
-            <!-- Mục 2 -->
-            <a href="javascript:void(0)" onclick="handleServiceClick('Dịch Vụ Mục 2')" class="block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow active:scale-[0.98] duration-200 border border-slate-100 relative">
-                <div class="relative w-full h-48 sm:h-56">
-                    <img src="https://i.ibb.co/Wd3CWsk/x.jpg" alt="Logo Mục 2" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 p-4 w-full flex justify-between items-end">
-                        <div>
-                            <h3 class="text-white font-bold text-lg">Dịch Vụ Mục 2</h3>
-                            <p class="text-white/80 text-xs mt-1">Trải nghiệm tính năng độc quyền</p>
+        <!-- Quick actions -->
+        <section class="mb-6">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider">Truy cập nhanh</h3>
+                <a href="/packages" class="text-xs font-semibold text-primary hover:text-blue-700 transition-colors">Mua gói →</a>
+            </div>
+            <div class="grid grid-cols-4 gap-3">
+                <a href="/packages" class="glass-card rounded-2xl p-3 flex flex-col items-center justify-center gap-2 card-hover shine">
+                    <div class="w-10 h-10 rounded-xl service-icon flex items-center justify-center text-primary">
+                        <i data-lucide="package" class="w-5 h-5"></i>
+                    </div>
+                    <span class="text-[10px] font-semibold text-slate-600 text-center">Mua gói</span>
+                </a>
+                <a href="/apk" class="glass-card rounded-2xl p-3 flex flex-col items-center justify-center gap-2 card-hover shine">
+                    <div class="w-10 h-10 rounded-xl service-icon flex items-center justify-center text-primary">
+                        <i data-lucide="smartphone" class="w-5 h-5"></i>
+                    </div>
+                    <span class="text-[10px] font-semibold text-slate-600 text-center">APK & Key</span>
+                </a>
+                <a href="/deposit" class="glass-card rounded-2xl p-3 flex flex-col items-center justify-center gap-2 card-hover shine">
+                    <div class="w-10 h-10 rounded-xl service-icon flex items-center justify-center text-primary">
+                        <i data-lucide="wallet" class="w-5 h-5"></i>
+                    </div>
+                    <span class="text-[10px] font-semibold text-slate-600 text-center">Nạp tiền</span>
+                </a>
+                <a href="/account" class="glass-card rounded-2xl p-3 flex flex-col items-center justify-center gap-2 card-hover shine">
+                    <div class="w-10 h-10 rounded-xl service-icon flex items-center justify-center text-primary">
+                        <i data-lucide="user" class="w-5 h-5"></i>
+                    </div>
+                    <span class="text-[10px] font-semibold text-slate-600 text-center">Tài khoản</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Services grid -->
+        <section class="mb-6">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider">Dịch vụ chính</h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Sunwin -->
+                <a href="javascript:void(0)" onclick="handleServiceClick('Dịch Vụ Mục 1')" class="group block glass-card rounded-3xl overflow-hidden card-hover shine relative">
+                    <div class="relative h-44">
+                        <img src="https://images.unsplash.com/photo-1596832355245-8933b8cc9e5a?w=600&h=400&fit=crop" alt="Sunwin" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="px-2.5 py-1 rounded-full bg-amber-500/90 text-white text-[10px] font-bold uppercase tracking-wider shadow-lg">VIP</span>
                         </div>
-                        <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white">
-                            <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                        <div class="absolute bottom-0 left-0 p-4 w-full">
+                            <div class="flex items-end justify-between">
+                                <div>
+                                    <h3 class="text-white font-bold text-lg mb-0.5">Dự đoán Sunwin</h3>
+                                    <p class="text-white/75 text-xs">Công cụ dự đoán Tài Xỉu thông minh</p>
+                                </div>
+                                <div class="w-9 h-9 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white group-hover:bg-white/30 transition-colors">
+                                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </a>
+                </a>
 
-            <!-- Mục 3 — Baccarat -->
-            <a href="javascript:void(0)" onclick="handleServiceClick('Dịch Vụ Mục 3')" class="block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow active:scale-[0.98] duration-200 border border-slate-100 relative">
-                <div class="relative w-full h-48 sm:h-56">
-                    <img src="https://i.ibb.co/rGY7cLXY/x.jpg" alt="Logo Baccarat" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 p-4 w-full flex justify-between items-end">
-                        <div>
-                            <h3 class="text-white font-bold text-lg">Dịch Vụ Mục 3</h3>
-                            <p class="text-white/80 text-xs mt-1">Baccarat – Biểu đồ theo bàn trực tiếp</p>
+                <!-- Service 2 -->
+                <a href="javascript:void(0)" onclick="handleServiceClick('Dịch Vụ Mục 2')" class="group block glass-card rounded-3xl overflow-hidden card-hover shine relative">
+                    <div class="relative h-44">
+                        <img src="https://images.unsplash.com/photo-1606167668584-78701c57f13d?w=600&h=400&fit=crop" alt="Service 2" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="px-2.5 py-1 rounded-full bg-amber-500/90 text-white text-[10px] font-bold uppercase tracking-wider shadow-lg">VIP</span>
                         </div>
-                        <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white">
-                            <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                        <div class="absolute bottom-0 left-0 p-4 w-full">
+                            <div class="flex items-end justify-between">
+                                <div>
+                                    <h3 class="text-white font-bold text-lg mb-0.5">Dịch Vụ Mục 2</h3>
+                                    <p class="text-white/75 text-xs">Tính năng độc quyền sắp ra mắt</p>
+                                </div>
+                                <div class="w-9 h-9 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white group-hover:bg-white/30 transition-colors">
+                                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                </a>
+
+                <!-- Baccarat -->
+                <a href="javascript:void(0)" onclick="handleServiceClick('Dịch Vụ Mục 3')" class="group block glass-card rounded-3xl overflow-hidden card-hover shine relative md:col-span-2">
+                    <div class="relative h-44">
+                        <img src="https://images.unsplash.com/photo-1511193311914-0346f16efe90?w=1200&h=400&fit=crop" alt="Baccarat" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="px-2.5 py-1 rounded-full bg-emerald-500/90 text-white text-[10px] font-bold uppercase tracking-wider shadow-lg">Miễn phí</span>
+                        </div>
+                        <div class="absolute bottom-0 left-0 p-4 w-full">
+                            <div class="flex items-end justify-between">
+                                <div>
+                                    <h3 class="text-white font-bold text-lg mb-0.5">Baccarat Table</h3>
+                                    <p class="text-white/75 text-xs">Biểu đồ theo bàn trực tiếp – Không cần VIP</p>
+                                </div>
+                                <div class="w-9 h-9 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white group-hover:bg-white/30 transition-colors">
+                                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Promo / info banner -->
+        <section class="mb-6">
+            <div class="glass-card rounded-2xl p-4 flex items-center gap-4 animate-float-delay">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white shadow-lg shadow-orange-500/25 pulse-ring">
+                    <i data-lucide="crown" class="w-6 h-6"></i>
                 </div>
-            </a>
-        </div>
+                <div class="flex-1">
+                    <h4 class="font-bold text-slate-800 text-sm">Nâng cấp VIP ngay</h4>
+                    <p class="text-xs text-slate-500 mt-0.5">Mở khóa toàn bộ công cụ dự đoán và tính năng độc quyền.</p>
+                </div>
+                <a href="/packages" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold py-2 px-4 rounded-xl active:scale-95 transition-all">
+                    Mua gói
+                </a>
+            </div>
+        </section>
     </main>
 
-    <!-- Thanh Điều Hướng Dưới Cùng -->
-    <div class="fixed bottom-6 left-0 w-full z-50 px-4 flex justify-center pointer-events-none">
-        <nav class="w-full max-w-sm bg-white/90 backdrop-blur-lg border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.08)] rounded-3xl px-1 py-2 pointer-events-auto flex justify-between items-center relative transition-all">
-            <a href="/" class="flex-1 flex flex-col items-center justify-center py-2 rounded-2xl text-primary bg-blue-50/80 transition-all duration-300">
-                <i data-lucide="home" class="w-5 h-5 mb-1 active:scale-75 transition-transform"></i>
+    <!-- Bottom navigation -->
+    <div class="fixed bottom-5 left-0 w-full z-50 px-4 flex justify-center pointer-events-none">
+        <nav class="glass-strong rounded-[2rem] px-2 py-2.5 pointer-events-auto flex justify-between items-center w-full max-w-sm shadow-[0_8px_40px_-12px_rgba(0,0,0,0.15)]">
+            <a href="/" class="nav-item active flex-1 flex flex-col items-center justify-center py-2 rounded-2xl">
+                <i data-lucide="home" class="w-5 h-5 mb-1"></i>
                 <span class="text-[9px] font-semibold">Trang chủ</span>
             </a>
-            <a href="/packages" class="flex-1 flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 hover:text-slate-600 transition-all duration-300">
-                <i data-lucide="package" class="w-5 h-5 mb-1 active:scale-75 transition-transform"></i>
+            <a href="/packages" class="nav-item flex-1 flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 hover:text-slate-700">
+                <i data-lucide="package" class="w-5 h-5 mb-1"></i>
                 <span class="text-[9px] font-medium">Mua gói</span>
             </a>
-            <a href="/apk" class="flex-1 flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 hover:text-slate-600 transition-all duration-300">
-                <i data-lucide="smartphone" class="w-5 h-5 mb-1 active:scale-75 transition-transform"></i>
+            <a href="/apk" class="nav-item flex-1 flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 hover:text-slate-700">
+                <i data-lucide="smartphone" class="w-5 h-5 mb-1"></i>
                 <span class="text-[9px] font-medium">APK & Key</span>
             </a>
-            <a href="/deposit" class="flex-1 flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 hover:text-slate-600 transition-all duration-300">
-                <i data-lucide="wallet" class="w-5 h-5 mb-1 active:scale-75 transition-transform"></i>
+            <a href="/deposit" class="nav-item flex-1 flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 hover:text-slate-700">
+                <i data-lucide="wallet" class="w-5 h-5 mb-1"></i>
                 <span class="text-[9px] font-medium">Nạp tiền</span>
             </a>
-            <a href="/account" class="flex-1 flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 hover:text-slate-600 transition-all duration-300">
-                <i data-lucide="user" class="w-5 h-5 mb-1 active:scale-75 transition-transform"></i>
+            <a href="/account" class="nav-item flex-1 flex flex-col items-center justify-center py-2 rounded-2xl text-slate-400 hover:text-slate-700">
+                <i data-lucide="user" class="w-5 h-5 mb-1"></i>
                 <span class="text-[9px] font-medium">Tài khoản</span>
             </a>
         </nav>
     </div>
-    <!-- Custom Alert Modal -->
+
+    <!-- Alert modal -->
     <div id="alert-modal" class="fixed inset-0 z-[60] hidden">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeAlertModal()"></div>
         <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
-            <div class="w-full max-w-sm bg-white rounded-3xl p-6 pointer-events-auto shadow-2xl relative">
+            <div class="w-full max-w-sm glass-strong rounded-3xl p-6 pointer-events-auto shadow-2xl relative">
                 <div class="text-center mb-6">
                     <div id="alert-modal-icon" class="w-12 h-12 rounded-full bg-blue-50 text-primary flex items-center justify-center mx-auto mb-4">
                         <i data-lucide="info" class="w-6 h-6"></i>
@@ -162,9 +373,9 @@
             document.getElementById('alert-modal').classList.add('hidden');
             if (alertPromiseResolver) { alertPromiseResolver(); alertPromiseResolver = null; }
         }
-        
+
         const token = localStorage.getItem('token');
-        
+
         async function initPage() {
             if (token) {
                 try {
@@ -173,11 +384,23 @@
                     if (result.success) {
                         const now = Math.floor(Date.now() / 1000);
                         const isVip = result.vip_expire && result.vip_expire > now;
+
+                        // Greeting
                         let greetingHtml = `Xin chào, ${result.full_name || result.username}! 👋`;
                         if (isVip) {
                             greetingHtml += ` <span class="inline-flex items-center gap-0.5 px-2 py-0.5 bg-amber-500 text-white text-[10px] font-black rounded-full shadow-sm ml-1 uppercase"><i data-lucide="crown" class="w-3 h-3"></i> VIP</span>`;
                         }
                         document.getElementById('greeting-title').innerHTML = greetingHtml;
+                        document.getElementById('greeting-sub').innerText = 'Chào mừng bạn trở lại';
+
+                        // Stats
+                        document.getElementById('user-stats').classList.remove('hidden');
+                        document.getElementById('stat-balance').innerText = Number(result.balance || 0).toLocaleString('vi-VN') + ' đ';
+                        document.getElementById('stat-vip').innerHTML = isVip
+                            ? '<span class="inline-flex items-center gap-0.5"><i data-lucide="crown" class="w-3 h-3"></i> Đang hoạt động</span>'
+                            : 'Chưa có';
+
+                        // Admin shortcut
                         if (result.role === 'admin') {
                             document.getElementById('admin-shortcut-container').innerHTML = `
                                 <a href="/admin" class="flex items-center gap-1 bg-red-500/10 hover:bg-red-500/20 text-red-600 text-xs font-bold py-1.5 px-3 rounded-xl transition-colors">
@@ -200,8 +423,9 @@
         }
 
         function showLoginButton() {
+            document.getElementById('greeting-sub').innerText = 'Bạn chưa đăng nhập';
             document.getElementById('auth-shortcut').innerHTML = `
-                <a href="/login" class="bg-primary text-white text-xs font-bold py-2 px-4 rounded-xl shadow-md active:scale-95 transition-all">
+                <a href="/login" class="bg-white text-primary text-xs font-bold py-2 px-4 rounded-xl shadow-md active:scale-95 transition-all hover:bg-blue-50">
                     Đăng nhập
                 </a>
             `;
@@ -214,13 +438,11 @@
                 return;
             }
 
-            // Dịch Vụ Mục 3 (Baccarat): chỉ cần đăng nhập, không cần VIP
             if (serviceName === 'Dịch Vụ Mục 3') {
                 window.location.href = '/game/baccarat';
                 return;
             }
 
-            // Các dịch vụ khác: kiểm tra VIP
             try {
                 const res = await fetch('api/user.php', { headers: { 'Authorization': `Bearer ${token}` } });
                 const data = await res.json();
@@ -250,5 +472,3 @@
     </script>
 </body>
 </html>
-
-
