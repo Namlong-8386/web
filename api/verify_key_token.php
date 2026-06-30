@@ -5,6 +5,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     json_response(false, 'Phương thức không hợp lệ.', 405);
 }
 
+check_rate_limit('verify_key_token', 30, 60);
+
 $input = get_json_input();
 $token = isset($input['token']) ? trim($input['token']) : '';
 

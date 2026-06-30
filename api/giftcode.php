@@ -12,6 +12,7 @@ if ($method === 'GET') {
         json_response(true, ['codes' => $codes]);
     }
 
+    require_login();
     json_response(false, 'Hành động không hợp lệ.', 400);
 }
 

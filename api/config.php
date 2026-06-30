@@ -100,7 +100,7 @@ function get_auth_user() {
 }
 
 // ── Rate Limiting: Chống brute force và spam ─────────────────────────────────
-function check_rate_limit($action, $max_requests = 5, $window_seconds = 60) {
+function check_rate_limit($action, $max_requests = 30, $window_seconds = 60) {
     $limits_file = 'rate_limits.json';
     $limits = read_json($limits_file);
     $now = time();
