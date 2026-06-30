@@ -13,6 +13,7 @@
         .input-group:focus-within .input-icon { color: #3b82f6; }
         .input-group:focus-within { border-color: #3b82f6; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
     </style>
+<script src="/assets/js/anti-devtools.js"></script>
 </head>
 <body class="font-sans min-h-screen flex flex-col items-center justify-center relative overflow-hidden p-4">
 

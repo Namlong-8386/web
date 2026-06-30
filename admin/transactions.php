@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Giftcode - TOOLTX2026 Admin</title>
+    <title>Nạp tiền - TOOLTX2026 Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="../assets/js/pagination.js"></script>
     <script>tailwind.config={theme:{extend:{colors:{primary:'#3b82f6',success:'#10b981',danger:'#ef4444',warning:'#f59e0b'}}}}</script>
-    <style>::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:#f1f5f9}::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}::-webkit-scrollbar-thumb:hover{background:#94a3b8}
-    .copy-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e293b;color:white;padding:8px 20px;border-radius:99px;font-size:13px;font-weight:600;z-index:9999;opacity:0;transition:opacity .2s;pointer-events:none}.copy-toast.show{opacity:1}</style>
+    <style>
+        ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:#f1f5f9}::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}::-webkit-scrollbar-thumb:hover{background:#94a3b8}
+        .copy-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e293b;color:white;padding:8px 20px;border-radius:99px;font-size:13px;font-weight:600;z-index:9999;opacity:0;transition:opacity .2s;pointer-events:none}.copy-toast.show{opacity:1}
+    </style>
+<script src="/assets/js/anti-devtools.js"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans">
 <div id="copy-toast" class="copy-toast">Đã sao chép!</div>
@@ -42,77 +45,73 @@
     <header class="h-16 bg-white border-b border-slate-200 flex items-center px-4 sm:px-6 sticky top-0 z-20 gap-4">
         <button onclick="toggleSidebar()" class="lg:hidden w-9 h-9 flex items-center justify-center rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors flex-shrink-0"><i data-lucide="menu" class="w-5 h-5"></i></button>
         <div class="min-w-0">
-            <h2 class="font-bold text-slate-800 text-base leading-tight">Giftcode</h2>
-            <p class="text-xs text-slate-400 hidden sm:block">Tạo và quản lý mã giftcode</p>
-        </div>
-        <div class="ml-auto">
-            <button onclick="openCreateModal()" class="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-blue-600 text-white rounded-xl text-sm font-bold active:scale-95 transition-all">
-                <i data-lucide="plus" class="w-4 h-4"></i><span class="hidden sm:inline">Tạo Giftcode</span>
-            </button>
+            <h2 class="font-bold text-slate-800 text-base leading-tight">Quản lý nạp tiền</h2>
+            <p class="text-xs text-slate-400 hidden sm:block">Phê duyệt & từ chối yêu cầu nạp tiền</p>
         </div>
     </header>
     <main class="flex-1 p-4 sm:p-6">
+        <!-- Stats row -->
+        <div class="grid grid-cols-3 gap-4 mb-6">
+            <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm text-center">
+                <p class="text-2xl font-black text-amber-500" id="stat-pending">—</p>
+                <p class="text-xs text-slate-400 mt-1">Chờ duyệt</p>
+            </div>
+            <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm text-center">
+                <p class="text-2xl font-black text-emerald-500" id="stat-approved">—</p>
+                <p class="text-xs text-slate-400 mt-1">Đã duyệt</p>
+            </div>
+            <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm text-center">
+                <p class="text-2xl font-black text-red-500" id="stat-rejected">—</p>
+                <p class="text-xs text-slate-400 mt-1">Từ chối</p>
+            </div>
+        </div>
+
         <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-            <div class="p-5 border-b border-slate-100">
-                <h3 class="font-bold text-slate-800">Danh sách Giftcode</h3>
-                <p class="text-xs text-slate-400 mt-0.5">Quản lý mã khuyến mãi và theo dõi lượt sử dụng</p>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-5 border-b border-slate-100">
+                <div>
+                    <h3 class="font-bold text-slate-800">Danh sách giao dịch</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Xem và xử lý các yêu cầu nạp tiền</p>
+                </div>
+                <div class="flex gap-2 flex-wrap">
+                    <select id="filter-status" onchange="filterTx()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary">
+                        <option value="all">Tất cả</option>
+                        <option value="Chờ duyệt">Chờ duyệt</option>
+                        <option value="Thành công">Thành công</option>
+                        <option value="Từ chối">Từ chối</option>
+                    </select>
+                    <div class="relative">
+                        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                        <input type="text" id="search-tx" oninput="filterTx()" placeholder="Tìm..." class="pl-9 pr-4 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary w-44">
+                    </div>
+                </div>
             </div>
             <div class="overflow-x-auto">
-                <table class="w-full text-left min-w-[640px]">
+                <table class="w-full text-left min-w-[750px]">
                     <thead class="bg-slate-50 border-b border-slate-100">
                         <tr class="text-slate-400 text-[11px] font-bold uppercase tracking-wider">
-                            <th class="px-5 py-3">Mã code</th>
-                            <th class="px-5 py-3">Thưởng VIP</th>
-                            <th class="px-5 py-3">Sử dụng</th>
-                            <th class="px-5 py-3">Giới hạn</th>
-                            <th class="px-5 py-3 text-center">Thao tác</th>
+                            <th class="px-5 py-3">Mã GD</th>
+                            <th class="px-5 py-3">Thành viên</th>
+                            <th class="px-5 py-3">Loại / Tiêu đề</th>
+                            <th class="px-5 py-3 text-right">Số tiền</th>
+                            <th class="px-5 py-3">Thời gian</th>
+                            <th class="px-5 py-3">Trạng thái</th>
+                            <th class="px-5 py-3 text-center">Xử lý</th>
                         </tr>
                     </thead>
-                    <tbody id="gc-tbody" class="divide-y divide-slate-50 text-sm">
-                        <tr><td colspan="5" class="py-10 text-center text-slate-400">Đang tải...</td></tr>
+                    <tbody id="tx-tbody" class="divide-y divide-slate-50 text-sm">
+                        <tr><td colspan="7" class="py-10 text-center text-slate-400">Đang tải...</td></tr>
                     </tbody>
                 </table>
             </div>
             <!-- Pagination -->
             <div class="flex items-center justify-between px-5 py-3 border-t border-slate-100">
-                <p id="gc-pg-info" class="text-xs text-slate-400"></p>
-                <div id="gc-pg" class="flex items-center gap-1"></div>
+                <p id="tx-pg-info" class="text-xs text-slate-400"></p>
+                <div id="tx-pg" class="flex items-center gap-1"></div>
             </div>
         </div>
     </main>
 </div>
 
-<!-- Create Modal -->
-<div id="create-modal" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeCreateModal()"></div>
-    <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
-        <div class="w-full max-w-sm bg-white rounded-2xl p-6 pointer-events-auto shadow-2xl">
-            <h3 class="font-bold text-slate-800 mb-4">Tạo Giftcode mới</h3>
-            <div class="space-y-3">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Tiền tố (prefix)</label>
-                    <input type="text" id="gc-prefix" placeholder="VD: SUMMER, FREE, VIP..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary uppercase">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Thưởng VIP (ngày)</label>
-                    <input type="number" id="gc-days" min="1" max="365" value="7" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Giới hạn sử dụng</label>
-                    <input type="number" id="gc-limit" min="1" max="10000" value="1" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Số lượng mã</label>
-                    <input type="number" id="gc-qty" min="1" max="20" value="1" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary">
-                </div>
-            </div>
-            <div class="flex gap-2 mt-5">
-                <button onclick="createGiftcodes()" class="flex-1 py-2.5 bg-primary text-white font-bold rounded-xl text-sm active:scale-95 transition-all">Tạo mã</button>
-                <button onclick="closeCreateModal()" class="py-2.5 px-4 bg-slate-100 text-slate-600 font-semibold rounded-xl text-sm">Hủy</button>
-            </div>
-        </div>
-    </div>
-</div>
 <div id="confirm-modal" class="fixed inset-0 z-50 hidden">
     <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeConfirm()"></div>
     <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
@@ -136,12 +135,12 @@
 
 <script>
 lucide.createIcons();
-const token=localStorage.getItem('token');
-if(!token||localStorage.getItem('role')!=='admin'){window.location.href='/admin/login';}
-document.getElementById('admin-name').innerText=localStorage.getItem('username')||'Admin';
-function toggleSidebar(){document.getElementById('sidebar').classList.toggle('-translate-x-full');document.getElementById('sidebar-overlay').classList.toggle('hidden');}
-document.querySelectorAll('.nav-link').forEach(l=>{if(l.dataset.path===window.location.pathname){l.classList.add('bg-blue-600','text-white');l.classList.remove('text-slate-400','hover:bg-white/5','hover:text-white');}});
-function logoutAdmin(){localStorage.clear();window.location.href='/admin/login';}
+const token = localStorage.getItem('token');
+if (!token || localStorage.getItem('role') !== 'admin') { window.location.href = '/admin/login'; }
+document.getElementById('admin-name').innerText = localStorage.getItem('username') || 'Admin';
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); document.getElementById('sidebar-overlay').classList.toggle('hidden'); }
+document.querySelectorAll('.nav-link').forEach(l => { if(l.dataset.path===window.location.pathname){l.classList.add('bg-blue-600','text-white');l.classList.remove('text-slate-400','hover:bg-white/5','hover:text-white');} });
+function logoutAdmin() { localStorage.clear(); window.location.href = '/admin/login'; }
 let confirmResolve=null;
 function showConfirm(m){document.getElementById('confirm-msg').innerText=m;document.getElementById('confirm-modal').classList.remove('hidden');lucide.createIcons();return new Promise(r=>{confirmResolve=r;});}
 function closeConfirm(){document.getElementById('confirm-modal').classList.add('hidden');if(confirmResolve){confirmResolve(false);confirmResolve=null;}}
@@ -150,63 +149,69 @@ let alertResolve=null;
 function alert(m,t='info'){const i=document.getElementById('alert-icon'),ti=document.getElementById('alert-title');document.getElementById('alert-msg').innerText=m;if(t==='success'||m.includes('thành công')||m.includes('Thành công')){i.className='w-10 h-10 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center mx-auto mb-3';i.innerHTML='<i data-lucide="check-circle" class="w-5 h-5"></i>';ti.innerText='Thành công';}else if(t==='error'||m.includes('Lỗi')){i.className='w-10 h-10 rounded-full bg-red-50 text-red-500 flex items-center justify-center mx-auto mb-3';i.innerHTML='<i data-lucide="x-circle" class="w-5 h-5"></i>';ti.innerText='Lỗi';}else{i.className='w-10 h-10 rounded-full bg-blue-50 text-primary flex items-center justify-center mx-auto mb-3';i.innerHTML='<i data-lucide="info" class="w-5 h-5"></i>';ti.innerText='Thông báo';}document.getElementById('alert-modal').classList.remove('hidden');lucide.createIcons();return new Promise(r=>{alertResolve=r;});}
 function closeAlert(){document.getElementById('alert-modal').classList.add('hidden');if(alertResolve){alertResolve();alertResolve=null;}}
 function copyToClipboard(t){navigator.clipboard.writeText(t).catch(()=>{});const toast=document.getElementById('copy-toast');toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1800);}
-function openCreateModal(){document.getElementById('create-modal').classList.remove('hidden');}
-function closeCreateModal(){document.getElementById('create-modal').classList.add('hidden');}
+function formatMoney(n){return Number(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');}
 
-let allGc=[], filteredGc=[];
-function renderGiftcodes(gcs){
-    const tbody=document.getElementById('gc-tbody');
-    if(!gcs.length){tbody.innerHTML='<tr><td colspan="5" class="py-10 text-center text-slate-400 text-sm">Chưa có giftcode nào.</td></tr>';return;}
-    tbody.innerHTML=gcs.map(gc=>{
-        const used=gc.quantity_used||0;
-        const max=gc.quantity||1;
-        const pct=Math.round((used/max)*100);
-        const isFull=used>=max||gc.status==='expired';
+let allTx=[], filteredTx=[];
+function renderTx(txs){
+    const tbody=document.getElementById('tx-tbody');
+    if(!txs.length){tbody.innerHTML='<tr><td colspan="7" class="py-10 text-center text-slate-400 text-sm">Không tìm thấy giao dịch.</td></tr>';return;}
+    tbody.innerHTML=txs.map(tx=>{
+        const statusBadge = tx.status==='Chờ duyệt'
+            ? '<span class="px-2 py-1 bg-amber-50 text-amber-600 rounded-lg text-[10px] font-bold">Chờ duyệt</span>'
+            : tx.status==='Thành công'
+            ? '<span class="px-2 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-[10px] font-bold">Thành công</span>'
+            : '<span class="px-2 py-1 bg-red-50 text-red-500 rounded-lg text-[10px] font-bold">Từ chối</span>';
+        const amount = tx.type==='in'
+            ? `<span class="font-bold text-emerald-600">+${formatMoney(tx.amount)}đ</span>`
+            : `<span class="font-bold text-orange-500">-${formatMoney(tx.amount)}đ</span>`;
+        const action = tx.status==='Chờ duyệt'
+            ? `<div class="flex gap-1 justify-center"><button onclick="approveTx('${tx.id}','approve',this)" class="px-2.5 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-[11px] font-bold active:scale-95 transition-all">Duyệt</button><button onclick="approveTx('${tx.id}','reject',this)" class="px-2.5 py-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg text-[11px] font-bold active:scale-95 transition-all">Từ chối</button></div>`
+            : '<span class="text-slate-300 text-sm">—</span>';
         return `<tr class="hover:bg-slate-50 transition-colors">
-            <td class="px-5 py-3.5">
-                <div class="flex items-center gap-2">
-                    <span class="font-mono font-bold text-slate-800 tracking-wider">${gc.code}</span>
-                    <button onclick="copyToClipboard('${gc.code}')" class="w-6 h-6 flex items-center justify-center bg-slate-100 hover:bg-blue-50 text-slate-400 hover:text-primary rounded transition-all active:scale-90"><i data-lucide="copy" class="w-3 h-3"></i></button>
-                </div>
-            </td>
-            <td class="px-5 py-3.5"><span class="px-2.5 py-1 bg-purple-50 text-purple-600 rounded-lg text-[11px] font-bold">+${gc.days} ngày VIP</span></td>
-            <td class="px-5 py-3.5">
-                <div class="flex items-center gap-2">
-                    <span class="text-sm font-semibold text-slate-700">${used}/${max}</span>
-                    <div class="flex-1 max-w-[80px] bg-slate-100 rounded-full h-1.5"><div class="h-1.5 rounded-full ${isFull?'bg-red-400':'bg-emerald-400'}" style="width:${pct}%"></div></div>
-                </div>
-            </td>
-            <td class="px-5 py-3.5">${isFull?'<span class="px-2 py-1 bg-red-50 text-red-500 rounded-lg text-[10px] font-bold">Hết lượt</span>':'<span class="px-2 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-[10px] font-bold">Còn dùng</span>'}</td>
-            <td class="px-5 py-3.5 text-center">
-                <button onclick="deleteGiftcode('${gc.code}')" class="flex items-center gap-1 px-2.5 py-1.5 bg-red-50 hover:bg-red-100 text-red-500 rounded-lg text-[11px] font-bold active:scale-95 transition-all mx-auto"><i data-lucide="trash-2" class="w-3 h-3"></i>Xóa</button>
-            </td>
+            <td class="px-5 py-3.5"><div class="flex items-center gap-1.5"><span class="font-mono text-xs text-slate-500">${tx.id}</span><button onclick="copyToClipboard('${tx.id}')" class="w-5 h-5 flex items-center justify-center bg-slate-100 hover:bg-blue-50 text-slate-400 hover:text-primary rounded active:scale-90 transition-all"><i data-lucide="copy" class="w-3 h-3"></i></button></div></td>
+            <td class="px-5 py-3.5 font-semibold text-slate-800">${tx.username}</td>
+            <td class="px-5 py-3.5 text-slate-600 text-sm">${tx.title}</td>
+            <td class="px-5 py-3.5 text-right">${amount}</td>
+            <td class="px-5 py-3.5 text-slate-400 text-xs whitespace-nowrap">${tx.time}</td>
+            <td class="px-5 py-3.5">${statusBadge}</td>
+            <td class="px-5 py-3.5">${action}</td>
         </tr>`;
     }).join('');
     lucide.createIcons();
 }
-
-async function fetchGiftcodes(){
-    try{const r=await fetch('../api/giftcode.php?action=admin_list',{headers:{'Authorization':`Bearer ${token}`}});const d=await r.json();if(d.success){allGc=d.codes||[];filteredGc=[...allGc];initPagination('gc',{itemsPerPage:20,dataArray:filteredGc,renderFn:renderGiftcodes,containerId:'gc-tbody',paginationId:'gc-pg',infoId:'gc-pg-info'});}}catch(e){console.error(e);}
+function filterTx(){
+    const q=document.getElementById('search-tx').value.toLowerCase();
+    const s=document.getElementById('filter-status').value;
+    filteredTx=allTx.filter(t=>{
+        const mq=t.username.toLowerCase().includes(q)||t.title.toLowerCase().includes(q)||t.id.toLowerCase().includes(q)||t.amount.toString().includes(q);
+        return mq&&(s==='all'||t.status===s);
+    });
+    initPagination('tx',{itemsPerPage:20,dataArray:filteredTx,renderFn:renderTx,containerId:'tx-tbody',paginationId:'tx-pg',infoId:'tx-pg-info'});
 }
-async function createGiftcodes(){
-    const prefix=(document.getElementById('gc-prefix').value.trim()||'GC').toUpperCase();
-    const days=parseInt(document.getElementById('gc-days').value)||7;
-    const quantity=parseInt(document.getElementById('gc-limit').value)||1;
-    const count=parseInt(document.getElementById('gc-qty').value)||1;
+async function approveTx(id,action,btn){
+    const txt=action==='approve'?'phê duyệt':'từ chối';
+    if(!await showConfirm(`Xác nhận ${txt} giao dịch ${id}?`))return;
+    const orig=btn.innerHTML; btn.disabled=true; btn.innerHTML='...';
     try{
-        const r=await fetch('../api/giftcode.php',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},body:JSON.stringify({action:'admin_create',prefix,days,quantity,count})});
-        const d=await r.json(); alert(d.message); if(d.success){closeCreateModal();fetchGiftcodes();}
-    }catch(e){alert('Lỗi kết nối.');}
+        const r=await fetch('../api/admin_transactions.php',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},body:JSON.stringify({tx_id:id,action})});
+        const d=await r.json(); alert(d.message); if(d.success)fetchTx();
+    }catch(e){alert('Lỗi kết nối.');}finally{btn.disabled=false;btn.innerHTML=orig;}
 }
-async function deleteGiftcode(code){
-    if(!await showConfirm(`Xóa giftcode "${code}"?`))return;
+async function fetchTx(){
     try{
-        const r=await fetch('../api/giftcode.php',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},body:JSON.stringify({action:'admin_delete',code})});
-        const d=await r.json(); alert(d.message); if(d.success)fetchGiftcodes();
-    }catch(e){alert('Lỗi kết nối.');}
+        const r=await fetch('../api/admin_transactions.php',{headers:{'Authorization':`Bearer ${token}`}});
+        const d=await r.json();
+        if(d.success){
+            allTx=d.transactions;
+            filteredTx=[...allTx];
+            initPagination('tx',{itemsPerPage:20,dataArray:filteredTx,renderFn:renderTx,containerId:'tx-tbody',paginationId:'tx-pg',infoId:'tx-pg-info'});
+            document.getElementById('stat-pending').innerText=allTx.filter(t=>t.status==='Chờ duyệt').length;
+            document.getElementById('stat-approved').innerText=allTx.filter(t=>t.status==='Thành công').length;
+            document.getElementById('stat-rejected').innerText=allTx.filter(t=>t.status==='Từ chối').length;
+        }
+    }catch(e){console.error(e);}
 }
-document.getElementById('gc-prefix').addEventListener('input',function(){this.value=this.value.toUpperCase();});
-fetchGiftcodes();
+fetchTx();
 </script>
 </body>
 </html>

@@ -19,6 +19,7 @@
         .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -12px rgba(0,0,0,0.1); }
         .card-hover:active { transform: scale(0.98); }
     </style>
+<script src="/assets/js/anti-devtools.js"></script>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col relative overflow-x-hidden">
 

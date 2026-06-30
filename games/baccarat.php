@@ -165,6 +165,7 @@
         .vip-modal-btn-primary:active { opacity: 0.85; }
         .vip-modal-btn-secondary:active { opacity: 0.7; }
     </style>
+<script src="/assets/js/anti-devtools.js"></script>
 </head>
 <body>
 

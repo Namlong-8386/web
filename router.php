@@ -2,39 +2,46 @@
 $uri = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 
 $routes = [
-    '/'                      => 'index.html',
-    '/login'                 => 'login.html',
-    '/register'              => 'register.html',
-    '/packages'              => 'packages.html',
-    '/game/sunwin'           => 'games/sunwin.html',
-    '/game/baccarat'         => 'games/baccarat.html',
-    '/game/baccarat-table'   => 'games/baccarat-table.html',
-    '/apk'                   => 'apk.html',
-    '/buy-key'               => 'buy-key.html',
-    '/free-key'              => 'free-key.html',
-    '/apk-key'               => 'apk-key.html',
-    '/giftcode'              => 'giftcode.html',
-    '/account'               => 'account.html',
-    '/deposit'               => 'deposit.html',
-    '/history'               => 'history.html',
-    '/support'               => 'support.html',
-    '/payment-qr'            => 'payment-qr.html',
-    '/admin'                 => 'admin/index.html',
-    '/admin/'                => 'admin/index.html',
-    '/admin/login'           => 'admin/login.html',
-    '/admin/transactions'    => 'admin/transactions.html',
-    '/admin/packages'        => 'admin/packages.html',
-    '/admin/package-history' => 'admin/package_history.html',
-    '/admin/giftcodes'       => 'admin/giftcodes.html',
-    '/admin/keys'            => 'admin/keys.html',
+    '/'                      => 'index.php',
+    '/login'                 => 'login.php',
+    '/register'              => 'register.php',
+    '/packages'              => 'packages.php',
+    '/game/sunwin'           => 'games/sunwin.php',
+    '/game/baccarat'         => 'games/baccarat.php',
+    '/game/baccarat-table'   => 'games/baccarat-table.php',
+    '/apk'                   => 'apk.php',
+    '/buy-key'               => 'buy-key.php',
+    '/free-key'              => 'free-key.php',
+    '/apk-key'               => 'apk-key.php',
+    '/giftcode'              => 'giftcode.php',
+    '/account'               => 'account.php',
+    '/deposit'               => 'deposit.php',
+    '/history'               => 'history.php',
+    '/support'               => 'support.php',
+    '/payment-qr'            => 'payment-qr.php',
+    '/admin'                 => 'admin/index.php',
+    '/admin/'                => 'admin/index.php',
+    '/admin/login'           => 'admin/login.php',
+    '/admin/transactions'    => 'admin/transactions.php',
+    '/admin/packages'        => 'admin/packages.php',
+    '/admin/package-history' => 'admin/package_history.php',
+    '/admin/giftcodes'       => 'admin/giftcodes.php',
+    '/admin/keys'            => 'admin/keys.php',
 ];
+
+// Chặn truy cập trực tiếp file PHP
+if (preg_match('#\.php$#i', $uri) && !preg_match('#^/api/#', $uri)) {
+    http_response_code(403);
+    echo '<h1>403 - Truy cập bị từ chối</h1>';
+    return true;
+}
 
 // Khớp route chính xác
 if (isset($routes[$uri])) {
     $file = __DIR__ . '/' . $routes[$uri];
     if (file_exists($file)) {
         header('Content-Type: text/html; charset=utf-8');
-        readfile($file);
+        require $file;
         return true;
     }
 }
@@ -46,9 +53,9 @@ if (preg_match('#^/assets/apk/.+\.apk$#i', $uri)) {
     return true;
 }
 
-// Nếu file/thư mục thực sự tồn tại thì phục vụ trực tiếp
+// Nếu file/thư mục thực sự tồn tại thì phục vụ trực tiếp (trừ .php)
 $file = __DIR__ . $uri;
-if (file_exists($file) && !is_dir($file)) {
+if (file_exists($file) && !is_dir($file) && !preg_match('#\.php$#i', $uri)) {
     return false;
 }
 

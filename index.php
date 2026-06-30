@@ -106,6 +106,7 @@
         .toast-enter-active { opacity: 1; transform: translateX(-50%) translateY(0); transition: all 0.3s ease; }
         .toast-exit { opacity: 0; transform: translateX(-50%) translateY(12px); transition: all 0.3s ease; }
     </style>
+<script src="/assets/js/anti-devtools.js"></script>
 </head>
 <body class="min-h-screen flex flex-col">
 

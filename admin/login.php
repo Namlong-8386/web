@@ -18,6 +18,7 @@
             }
         }
     </script>
+<script src="/assets/js/anti-devtools.js"></script>
 </head>
 <body class="bg-slate-900 min-h-screen flex items-center justify-center p-4">
 

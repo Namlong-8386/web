@@ -11,6 +11,7 @@
         body { -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
         ::-webkit-scrollbar { display: none; }
     </style>
+<script src="/assets/js/anti-devtools.js"></script>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
 

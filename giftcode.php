@@ -15,6 +15,7 @@
         .input-gift { text-transform: uppercase; letter-spacing: 0.08em; }
         .input-gift::placeholder { text-transform: none; letter-spacing: normal; }
     </style>
+<script src="/assets/js/anti-devtools.js"></script>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
 

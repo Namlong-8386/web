@@ -10,6 +10,7 @@
     <script>tailwind.config={theme:{extend:{colors:{primary:'#3b82f6',success:'#10b981',danger:'#ef4444',warning:'#f59e0b'}}}}</script>
     <style>::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:#f1f5f9}::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}::-webkit-scrollbar-thumb:hover{background:#94a3b8}
     .copy-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e293b;color:white;padding:8px 20px;border-radius:99px;font-size:13px;font-weight:600;z-index:9999;opacity:0;transition:opacity .2s;pointer-events:none}.copy-toast.show{opacity:1}</style>
+<script src="/assets/js/anti-devtools.js"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans">
 <div id="copy-toast" class="copy-toast">Đã sao chép!</div>

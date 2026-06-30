@@ -154,6 +154,7 @@
 
         .round-num { color: #475569; font-size: 11px; font-weight: 700; }
     </style>
+<script src="/assets/js/anti-devtools.js"></script>
 </head>
 <body>
 

@@ -13,6 +13,7 @@
         .tab-active { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; box-shadow: 0 4px 15px rgba(59,130,246,0.4); }
         .tab-inactive { background: #f1f5f9; color: #64748b; }
     </style>
+<script src="/assets/js/anti-devtools.js"></script>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
 

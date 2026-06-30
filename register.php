@@ -15,6 +15,7 @@
         .input-error { border-color: #ef4444 !important; box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1) !important; }
         .input-error .input-icon { color: #ef4444 !important; }
     </style>
+<script src="/assets/js/anti-devtools.js"></script>
 </head>
 <body class="font-sans min-h-screen flex flex-col items-center justify-center relative overflow-hidden p-4">
 

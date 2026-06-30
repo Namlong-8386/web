@@ -118,6 +118,7 @@
             text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;
         }
     </style>
+<script src="/assets/js/anti-devtools.js"></script>
 </head>
 <body>
 

@@ -76,6 +76,7 @@
             animation: checkDraw .5s ease-out .2s forwards;
         }
     </style>
+<script src="/assets/js/anti-devtools.js"></script>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
 
