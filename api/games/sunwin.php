@@ -16,15 +16,14 @@ if ($user['role'] !== 'admin' && $vip_expire <= $now) {
 }
 
 // ============================================================
-// Cấu hình riêng của Sunwin
+// Cấu hình API dự đoán Sunwin
 // ============================================================
-$HISTORY_URL = 'http://103.249.117.228:46565/history';
-$SORT_FIELD  = 'Phien';
+$DUDOAN_URL = 'http://103.249.117.228:46565/dudoan';
 // ============================================================
 
-$action = isset($_GET['action']) ? trim($_GET['action']) : 'history';
+$action = isset($_GET['action']) ? trim($_GET['action']) : 'dudoan';
 
-if ($action === 'history') {
+if ($action === 'dudoan') {
     $ctx = stream_context_create([
         'http' => [
             'method'  => 'GET',
@@ -33,24 +32,20 @@ if ($action === 'history') {
         ]
     ]);
 
-    $raw = @file_get_contents($HISTORY_URL, false, $ctx);
+    $raw = @file_get_contents($DUDOAN_URL, false, $ctx);
 
     if ($raw === false) {
-        json_response(false, 'Không thể kết nối đến máy chủ Sunwin. Vui lòng thử lại.', 503);
+        json_response(false, 'Không thể kết nối đến máy chủ dự đoán. Vui lòng thử lại.', 503);
     }
 
     $parsed = json_decode($raw, true);
-    if (!is_array($parsed)) {
+    if (!is_array($parsed) || !isset($parsed['Phien']) || !isset($parsed['du_doan'])) {
         json_response(false, 'Dữ liệu từ máy chủ không hợp lệ.', 502);
     }
 
-    usort($parsed, function($a, $b) use ($SORT_FIELD) {
-        return intval($b[$SORT_FIELD]) - intval($a[$SORT_FIELD]);
-    });
-
     json_response(true, [
         'game'       => 'sunwin',
-        'data'       => array_slice($parsed, 0, 30),
+        'data'       => $parsed,
         'fetched_at' => date('H:i:s d/m/Y')
     ]);
 }
