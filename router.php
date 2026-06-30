@@ -59,15 +59,25 @@ if (file_exists($file) && !is_dir($file) && !preg_match('#\.php$#i', $uri)) {
     return false;
 }
 
-// API routes: /api/xxx -> api/xxx.php
+// API routes: /api/xxx -> api/xxx.php (hỗ trợ cả /api/xxx và /api/xxx.php)
 if (preg_match('#^/api/(.+)$#', $uri, $m)) {
-    $phpFile = __DIR__ . '/api/' . $m[1] . '.php';
+    $apiPath = $m[1];
+    // Nếu đã có đuôi .php, dùng luôn
+    if (preg_match('#\.php$#i', $apiPath)) {
+        $phpFile = __DIR__ . '/api/' . $apiPath;
+    } else {
+        $phpFile = __DIR__ . '/api/' . $apiPath . '.php';
+    }
     if (file_exists($phpFile)) {
         require $phpFile;
         return true;
     }
     // Sub-paths like /api/games/sunwin
-    $phpFile2 = __DIR__ . $uri . '.php';
+    if (preg_match('#\.php$#i', $uri)) {
+        $phpFile2 = __DIR__ . $uri;
+    } else {
+        $phpFile2 = __DIR__ . $uri . '.php';
+    }
     if (file_exists($phpFile2)) {
         require $phpFile2;
         return true;
