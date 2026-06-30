@@ -15,138 +15,70 @@
         body { -webkit-user-select: none; user-select: none; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
         ::-webkit-scrollbar { display: none; }
 
-        @keyframes orb {
-            0%, 100% { transform: translate(0, 0) scale(1); opacity: .35; }
-            33% { transform: translate(40px, -60px) scale(1.15); opacity: .5; }
-            66% { transform: translate(-30px, 30px) scale(.9); opacity: .25; }
-        }
-        .orb-1 { animation: orb 10s ease-in-out infinite; }
-        .orb-2 { animation: orb 12s ease-in-out infinite 3s; }
-        .orb-3 { animation: orb 14s ease-in-out infinite 6s; }
-
-        @keyframes gradient-x {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-        .animate-gradient-x {
-            background-size: 200% 200%;
-            animation: gradient-x 6s ease infinite;
-        }
-
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-6px); }
         }
         .animate-float { animation: float 5s ease-in-out infinite; }
 
-        .text-glow {
-            text-shadow: 0 0 40px rgba(59, 130, 246, 0.35), 0 0 80px rgba(59, 130, 246, 0.15);
+        .card {
+            background: white;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 8px 24px -6px rgba(15, 23, 42, 0.08);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px -8px rgba(59, 130, 246, 0.15), 0 4px 12px -4px rgba(15, 23, 42, 0.08);
+            border-color: rgba(59, 130, 246, 0.25);
+        }
+        .card:active { transform: scale(0.98); }
 
-        .glass {
-            background: rgba(15, 23, 42, 0.65);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+        .card .icon-box {
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease;
         }
-        .glass-card {
-            background: rgba(15, 23, 42, 0.55);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 0 1px rgba(255,255,255,0.03) inset, 0 12px 40px -16px rgba(0, 0, 0, 0.5);
-        }
-
-        .gradient-border {
-            position: relative;
-            border-radius: 1.5rem;
-        }
-        .gradient-border::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            padding: 1px;
-            border-radius: inherit;
-            background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.04));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-        }
-
-        .service-card {
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .service-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 24px 60px -20px rgba(59, 130, 246, 0.25);
-            border-color: rgba(59, 130, 246, 0.4);
-        }
-        .service-card:active { transform: scale(0.98); }
-
-        .service-card .icon-wrap {
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
-        }
-        .service-card:hover .icon-wrap {
-            transform: scale(1.08) rotate(-4deg);
-            box-shadow: 0 0 30px -4px rgba(59, 130, 246, 0.4);
+        .card:hover .icon-box {
+            transform: scale(1.05);
+            background-color: rgba(59, 130, 246, 0.12);
         }
 
         .nav-dock {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 20px 50px -18px rgba(0, 0, 0, 0.6);
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 12px 40px -12px rgba(15, 23, 42, 0.12);
         }
         .nav-item {
             position: relative;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            color: rgba(148, 163, 184, 0.8);
+            transition: all 0.25s ease;
+            color: #94a3b8;
         }
         .nav-item.active {
-            color: #60a5fa;
-        }
-        .nav-item.active::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 16px;
-            height: 3px;
-            border-radius: 99px;
-            background: linear-gradient(90deg, #3b82f6, #06b6d4);
-            box-shadow: 0 0 12px rgba(59, 130, 246, 0.6);
+            color: #2563eb;
+            background: rgba(59, 130, 246, 0.1);
         }
 
-        .btn-glow {
-            position: relative;
-            overflow: hidden;
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+            transition: all 0.2s ease;
         }
-        .btn-glow::after {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.6s ease;
-        }
-        .btn-glow:hover::after { transform: translateX(100%); }
+        .btn-primary:hover { background: #2563eb; }
+        .btn-primary:active { transform: scale(0.97); }
 
         .gradient-text {
-            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #22d3ee 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .mesh-bg {
+        .subtle-bg {
             background:
-                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.18) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.14) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.14) 0px, transparent 50%),
-                radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.1) 0px, transparent 50%);
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.06) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.04) 0px, transparent 50%),
+                #f8fafc;
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -158,27 +90,18 @@
         }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col overflow-x-hidden relative">
-
-    <!-- Animated background -->
-    <div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none mesh-bg">
-        <div class="absolute -top-40 -right-20 w-[32rem] h-[32rem] bg-blue-600/20 rounded-full blur-[100px] orb-1"></div>
-        <div class="absolute top-1/2 -left-32 w-[28rem] h-[28rem] bg-cyan-500/15 rounded-full blur-[100px] orb-2"></div>
-        <div class="absolute -bottom-48 right-1/4 w-[36rem] h-[36rem] bg-indigo-600/15 rounded-full blur-[100px] orb-3"></div>
-    </div>
+<body class="subtle-bg text-slate-800 font-sans min-h-screen flex flex-col overflow-x-hidden relative">
 
     <!-- Header -->
-    <header class="sticky top-0 z-40">
-        <div class="glass border-b border-white/[0.06]">
-            <div class="flex items-center justify-between h-16 px-5 max-w-3xl mx-auto w-full">
-                <a href="/" class="flex items-center gap-2.5 group">
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-white shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform">
-                        <i data-lucide="zap" class="w-5 h-5"></i>
-                    </div>
-                    <h1 class="text-lg font-black tracking-wide gradient-text">TOOLTX2026</h1>
-                </a>
-                <div id="admin-shortcut-container" class="flex items-center"></div>
-            </div>
+    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-200/80">
+        <div class="flex items-center justify-between h-14 px-5 max-w-3xl mx-auto w-full">
+            <a href="/" class="flex items-center gap-2.5 group">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
+                    <i data-lucide="zap" class="w-4.5 h-4.5"></i>
+                </div>
+                <h1 class="text-lg font-black tracking-wide gradient-text">TOOLTX2026</h1>
+            </a>
+            <div id="admin-shortcut-container" class="flex items-center"></div>
         </div>
     </header>
 
@@ -186,145 +109,121 @@
     <main class="flex-grow p-5 pb-36 max-w-3xl mx-auto w-full">
 
         <!-- Hero -->
-        <section class="mb-8 pt-2">
+        <section class="mb-7 pt-1">
             <div class="flex items-start justify-between gap-4">
                 <div class="flex-1">
-                    <p id="greeting-sub" class="text-sm font-medium text-slate-400 mb-1">Chào mừng bạn trở lại</p>
-                    <h2 id="greeting-title" class="text-3xl sm:text-4xl font-bold text-white leading-tight mb-3 text-glow">
+                    <p id="greeting-sub" class="text-sm font-medium text-slate-500 mb-1">Chào mừng bạn trở lại</p>
+                    <h2 id="greeting-title" class="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight mb-2">
                         Xin chào! 👋
                     </h2>
-                    <p class="text-slate-400 text-sm leading-relaxed max-w-md">
-                        Trải nghiệm công cụ hỗ trợ game thông minh và quản lý tài khoản của bạn.
+                    <p class="text-slate-600 text-sm leading-relaxed max-w-md">
+                        Công cụ hỗ trợ game và quản lý tài khoản của bạn.
                     </p>
                 </div>
                 <div id="auth-shortcut" class="flex-shrink-0 pt-1"></div>
             </div>
-
-            <!-- Highlight card -->
-            <div class="mt-6 glass-card rounded-3xl p-5 relative overflow-hidden animate-float">
-                <div class="absolute top-0 right-0 w-48 h-48 bg-gradient-to-br from-blue-500/20 to-cyan-400/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
-                <div class="relative z-10 flex items-center gap-4">
-                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-white shadow-lg shadow-blue-500/25">
-                        <i data-lucide="sparkles" class="w-7 h-7"></i>
-                    </div>
-                    <div class="flex-1">
-                        <h3 class="font-bold text-white text-lg">Baccarat Table</h3>
-                        <p class="text-slate-400 text-sm mt-0.5">Truy cập miễn phí, không cần VIP.</p>
-                    </div>
-                    <a href="/game/baccarat" class="bg-blue-500 hover:bg-blue-400 text-white text-xs font-bold py-2.5 px-4 rounded-xl shadow-lg shadow-blue-500/25 active:scale-95 transition-all btn-glow">
-                        Chơi ngay
-                    </a>
-                </div>
-            </div>
         </section>
 
+        <!-- Featured: Baccarat -->
+        <a href="/game/baccarat" class="card block rounded-2xl p-5 mb-5 animate-float group">
+            <div class="flex items-center gap-4">
+                <div class="icon-box w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="layout-grid" class="w-7 h-7"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2 mb-0.5">
+                        <h3 class="font-bold text-slate-900 text-lg">Baccarat Table</h3>
+                        <span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-wide border border-emerald-100">Miễn phí</span>
+                    </div>
+                    <p class="text-slate-600 text-sm truncate">Biểu đồ theo bàn trực tiếp, không cần VIP.</p>
+                </div>
+                <div class="w-9 h-9 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all flex-shrink-0">
+                    <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-0.5"></i>
+                </div>
+            </div>
+        </a>
+
         <!-- Services -->
-        <section class="mb-6">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider">Dịch vụ</h3>
-                <span class="text-xs text-slate-500">Các tính năng</span>
+        <section class="mb-5">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="text-sm font-bold text-slate-600 uppercase tracking-wider">Dịch vụ</h3>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <!-- Sunwin -->
-                <a href="javascript:void(0)" onclick="handleServiceClick('Dịch Vụ Mục 1')" class="service-card glass-card gradient-border rounded-3xl p-5 block group">
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="icon-wrap w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white shadow-lg shadow-orange-500/25">
-                            <i data-lucide="dice-5" class="w-7 h-7"></i>
-                        </div>
-                        <span class="px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-400 text-[10px] font-bold uppercase tracking-wider border border-amber-500/20">VIP</span>
+                <a href="javascript:void(0)" onclick="handleServiceClick('Dịch Vụ Mục 1')" class="card rounded-2xl p-5 block group">
+                    <div class="icon-box w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4">
+                        <i data-lucide="dice-5" class="w-6 h-6"></i>
                     </div>
-                    <h4 class="text-white font-bold text-lg mb-1">Dự đoán Sunwin</h4>
-                    <p class="text-slate-400 text-sm leading-relaxed">Công cụ dự đoán Tài Xỉu thông minh, cập nhật theo phiên.</p>
-                    <div class="mt-4 flex items-center gap-1 text-blue-400 text-xs font-semibold group-hover:text-blue-300 transition-colors">
-                        Truy cập <i data-lucide="arrow-right" class="w-3.5 h-3.5 transition-transform group-hover:translate-x-1"></i>
+                    <div class="flex items-center justify-between mb-1">
+                        <h4 class="text-slate-900 font-bold text-base">Dự đoán Sunwin</h4>
+                        <span class="px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 text-[10px] font-bold uppercase tracking-wide border border-amber-100">VIP</span>
                     </div>
+                    <p class="text-slate-600 text-sm leading-relaxed">Dự đoán Tài Xỉu theo từng phiên.</p>
                 </a>
 
                 <!-- Service 2 -->
-                <a href="javascript:void(0)" onclick="handleServiceClick('Dịch Vụ Mục 2')" class="service-card glass-card gradient-border rounded-3xl p-5 block group">
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="icon-wrap w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white shadow-lg shadow-violet-500/25">
-                            <i data-lucide="rocket" class="w-7 h-7"></i>
-                        </div>
-                        <span class="px-2.5 py-1 rounded-full bg-violet-500/15 text-violet-400 text-[10px] font-bold uppercase tracking-wider border border-violet-500/20">Sắp ra mắt</span>
+                <a href="javascript:void(0)" onclick="handleServiceClick('Dịch Vụ Mục 2')" class="card rounded-2xl p-5 block group">
+                    <div class="icon-box w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4">
+                        <i data-lucide="rocket" class="w-6 h-6"></i>
                     </div>
-                    <h4 class="text-white font-bold text-lg mb-1">Dịch Vụ Mục 2</h4>
-                    <p class="text-slate-400 text-sm leading-relaxed">Tính năng độc quyền dành cho thành viên VIP.</p>
-                    <div class="mt-4 flex items-center gap-1 text-violet-400 text-xs font-semibold group-hover:text-violet-300 transition-colors">
-                        Xem trước <i data-lucide="arrow-right" class="w-3.5 h-3.5 transition-transform group-hover:translate-x-1"></i>
+                    <div class="flex items-center justify-between mb-1">
+                        <h4 class="text-slate-900 font-bold text-base">Dịch Vụ Mục 2</h4>
+                        <span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold uppercase tracking-wide border border-slate-200">Sắp ra mắt</span>
                     </div>
-                </a>
-
-                <!-- Baccarat -->
-                <a href="/game/baccarat" class="service-card glass-card gradient-border rounded-3xl p-5 block group sm:col-span-2">
-                    <div class="flex items-center gap-4">
-                        <div class="icon-wrap w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/25">
-                            <i data-lucide="layout-grid" class="w-7 h-7"></i>
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex items-center gap-2 mb-1">
-                                <h4 class="text-white font-bold text-lg">Baccarat Table</h4>
-                                <span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 text-[10px] font-bold uppercase tracking-wider border border-emerald-500/20">Miễn phí</span>
-                            </div>
-                            <p class="text-slate-400 text-sm leading-relaxed">Biểu đồ theo bàn trực tiếp, hỗ trợ đa bàn chơi.</p>
-                        </div>
-                        <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-300 group-hover:bg-blue-500/20 group-hover:text-blue-400 transition-all">
-                            <i data-lucide="arrow-right" class="w-5 h-5 transition-transform group-hover:translate-x-1"></i>
-                        </div>
-                    </div>
+                    <p class="text-slate-600 text-sm leading-relaxed">Tính năng độc quyền dành cho VIP.</p>
                 </a>
             </div>
         </section>
 
         <!-- Tip -->
-        <div class="glass-card rounded-2xl p-4 flex items-center gap-3">
-            <i data-lucide="info" class="w-5 h-5 text-blue-400 flex-shrink-0"></i>
-            <p class="text-slate-400 text-xs leading-relaxed">
-                Mua gói VIP để mở khóa công cụ dự đoán Sunwin và các tính năng độc quyền khác.
+        <div class="card rounded-2xl p-4 flex items-center gap-3">
+            <i data-lucide="info" class="w-5 h-5 text-blue-500 flex-shrink-0"></i>
+<p class="text-slate-600 text-sm leading-relaxed">
+                Mua gói VIP để mở khóa công cụ dự đoán Sunwin và các tính năng độc quyền.
             </p>
         </div>
     </main>
 
     <!-- Bottom navigation -->
     <div class="fixed bottom-5 left-0 w-full z-50 px-5 flex justify-center pointer-events-none">
-        <nav class="nav-dock rounded-[2rem] px-2 py-2 pointer-events-auto flex justify-between items-center w-full max-w-sm">
-            <a href="/" class="nav-item active flex-1 flex flex-col items-center justify-center py-2.5 rounded-2xl">
+        <nav class="nav-dock rounded-[1.5rem] px-2 py-2 pointer-events-auto flex justify-between items-center w-full max-w-sm">
+            <a href="/" class="nav-item active flex-1 flex flex-col items-center justify-center py-2.5 rounded-xl">
                 <i data-lucide="home" class="w-5 h-5 mb-1"></i>
-                <span class="text-[10px] font-semibold">Trang chủ</span>
+                <span class="text-xs font-semibold">Trang chủ</span>
             </a>
-            <a href="/packages" class="nav-item flex-1 flex flex-col items-center justify-center py-2.5 rounded-2xl hover:text-slate-200">
+            <a href="/packages" class="nav-item flex-1 flex flex-col items-center justify-center py-2.5 rounded-xl hover:text-slate-600">
                 <i data-lucide="package" class="w-5 h-5 mb-1"></i>
-                <span class="text-[10px] font-medium">Mua gói</span>
+                <span class="text-xs font-medium">Mua gói</span>
             </a>
-            <a href="/apk" class="nav-item flex-1 flex flex-col items-center justify-center py-2.5 rounded-2xl hover:text-slate-200">
+            <a href="/apk" class="nav-item flex-1 flex flex-col items-center justify-center py-2.5 rounded-xl hover:text-slate-600">
                 <i data-lucide="smartphone" class="w-5 h-5 mb-1"></i>
-                <span class="text-[10px] font-medium">APK & Key</span>
+                <span class="text-xs font-medium">APK & Key</span>
             </a>
-            <a href="/deposit" class="nav-item flex-1 flex flex-col items-center justify-center py-2.5 rounded-2xl hover:text-slate-200">
+            <a href="/deposit" class="nav-item flex-1 flex flex-col items-center justify-center py-2.5 rounded-xl hover:text-slate-600">
                 <i data-lucide="wallet" class="w-5 h-5 mb-1"></i>
-                <span class="text-[10px] font-medium">Nạp tiền</span>
+                <span class="text-xs font-medium">Nạp tiền</span>
             </a>
-            <a href="/account" class="nav-item flex-1 flex flex-col items-center justify-center py-2.5 rounded-2xl hover:text-slate-200">
+            <a href="/account" class="nav-item flex-1 flex flex-col items-center justify-center py-2.5 rounded-xl hover:text-slate-600">
                 <i data-lucide="user" class="w-5 h-5 mb-1"></i>
-                <span class="text-[10px] font-medium">Tài khoản</span>
+                <span class="text-xs font-medium">Tài khoản</span>
             </a>
         </nav>
     </div>
 
     <!-- Alert modal -->
     <div id="alert-modal" class="fixed inset-0 z-[60] hidden">
-        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeAlertModal()"></div>
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeAlertModal()"></div>
         <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
-            <div class="w-full max-w-sm glass rounded-3xl p-6 pointer-events-auto shadow-2xl relative border border-white/[0.06]">
+            <div class="w-full max-w-sm bg-white rounded-2xl p-6 pointer-events-auto shadow-2xl relative border border-slate-100">
                 <div class="text-center mb-6">
-                    <div id="alert-modal-icon" class="w-12 h-12 rounded-full bg-blue-500/15 text-blue-400 flex items-center justify-center mx-auto mb-4">
+                    <div id="alert-modal-icon" class="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-4">
                         <i data-lucide="info" class="w-6 h-6"></i>
                     </div>
-                    <h3 id="alert-modal-title" class="text-lg font-bold text-white mb-2">Thông báo</h3>
-                    <p id="alert-modal-message" class="text-sm text-slate-400 px-2">...</p>
+                    <h3 id="alert-modal-title" class="text-lg font-bold text-slate-900 mb-2">Thông báo</h3>
+                    <p id="alert-modal-message" class="text-sm text-slate-500 px-2">...</p>
                 </div>
-                <button onclick="closeAlertModal()" class="w-full py-3 bg-blue-500 hover:bg-blue-400 active:scale-95 text-white font-bold rounded-2xl shadow-lg shadow-blue-500/25 transition-all">
+                <button onclick="closeAlertModal()" class="w-full py-3 btn-primary font-bold rounded-xl shadow-lg shadow-blue-500/20 transition-all">
                     Đóng
                 </button>
             </div>
@@ -339,15 +238,15 @@
             document.getElementById('alert-modal-message').innerText = message;
             const iconDiv = document.getElementById('alert-modal-icon');
             if (type === 'success' || message.includes('thành công') || message.includes('Thành công')) {
-                iconDiv.className = "w-12 h-12 rounded-full bg-emerald-500/15 text-emerald-400 flex items-center justify-center mx-auto mb-4";
+                iconDiv.className = "w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto mb-4";
                 iconDiv.innerHTML = '<i data-lucide="check-circle" class="w-6 h-6"></i>';
                 document.getElementById('alert-modal-title').innerText = 'Thành công';
             } else if (type === 'error' || message.includes('Lỗi') || message.includes('không') || message.includes('thất bại')) {
-                iconDiv.className = "w-12 h-12 rounded-full bg-rose-500/15 text-rose-400 flex items-center justify-center mx-auto mb-4";
+                iconDiv.className = "w-12 h-12 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-4";
                 iconDiv.innerHTML = '<i data-lucide="x-circle" class="w-6 h-6"></i>';
                 document.getElementById('alert-modal-title').innerText = 'Lỗi';
             } else {
-                iconDiv.className = "w-12 h-12 rounded-full bg-blue-500/15 text-blue-400 flex items-center justify-center mx-auto mb-4";
+                iconDiv.className = "w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-4";
                 iconDiv.innerHTML = '<i data-lucide="info" class="w-6 h-6"></i>';
                 document.getElementById('alert-modal-title').innerText = 'Thông báo';
             }
@@ -380,7 +279,7 @@
 
                         if (result.role === 'admin') {
                             document.getElementById('admin-shortcut-container').innerHTML = `
-                                <a href="/admin" class="flex items-center gap-1 bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs font-bold py-1.5 px-3 rounded-xl transition-colors border border-red-500/10">
+                                <a href="/admin" class="flex items-center gap-1 bg-red-50 hover:bg-red-100 text-red-600 text-xs font-bold py-1.5 px-3 rounded-lg transition-colors border border-red-100">
                                     <i data-lucide="shield" class="w-3.5 h-3.5"></i> Admin
                                 </a>
                             `;
@@ -402,7 +301,7 @@
         function showLoginButton() {
             document.getElementById('greeting-sub').innerText = 'Bạn chưa đăng nhập';
             document.getElementById('auth-shortcut').innerHTML = `
-                <a href="/login" class="bg-blue-500 hover:bg-blue-400 text-white text-xs font-bold py-2.5 px-4 rounded-xl shadow-lg shadow-blue-500/25 active:scale-95 transition-all btn-glow">
+                <a href="/login" class="btn-primary text-xs font-bold py-2 px-4 rounded-xl shadow-md shadow-blue-500/20">
                     Đăng nhập
                 </a>
             `;
