@@ -148,23 +148,25 @@ function require_admin() {
     return $user;
 }
 
-// Tự động khởi tạo tài khoản admin cố định
+// Admin cố định, không thể bị xóa hoặc hạ quyền bởi admin khác
 function init_admin_if_empty() {
     $users = read_json('users.json');
     $admin_username = 'Nam1411';
     $admin_password = 'Nam14112009';
 
-    $admin_index = -1;
+    $master_index = -1;
     for ($i = 0; $i < count($users); $i++) {
-        if (isset($users[$i]['role']) && $users[$i]['role'] === 'admin') {
-            $admin_index = $i;
+        if ($users[$i]['username'] === $admin_username) {
+            $master_index = $i;
             break;
         }
     }
 
-    if ($admin_index === -1) {
-        // Chưa có admin, tạo mới
-        $admin = [
+    $changed = false;
+
+    if ($master_index === -1) {
+        // Chưa có admin cố định, tạo mới
+        $users[] = [
             'username' => $admin_username,
             'password' => password_hash($admin_password, PASSWORD_DEFAULT),
             'full_name' => 'Quản trị viên',
@@ -173,13 +175,22 @@ function init_admin_if_empty() {
             'role' => 'admin',
             'token' => ''
         ];
-        $users[] = $admin;
-        write_json('users.json', $users);
-    } elseif ($users[$admin_index]['username'] !== $admin_username) {
-        // Cập nhật username và password admin về cố định
-        $users[$admin_index]['username'] = $admin_username;
-        $users[$admin_index]['password'] = password_hash($admin_password, PASSWORD_DEFAULT);
-        $users[$admin_index]['token'] = '';
+        $changed = true;
+    } else {
+        $u = &$users[$master_index];
+        // Đảm bảo quyền admin
+        if (!isset($u['role']) || $u['role'] !== 'admin') {
+            $u['role'] = 'admin';
+            $changed = true;
+        }
+        // Đảm bảo mật khẩu đúng, nhưng giữ nguyên token hiện tại
+        if (!isset($u['password']) || !password_verify($admin_password, $u['password'])) {
+            $u['password'] = password_hash($admin_password, PASSWORD_DEFAULT);
+            $changed = true;
+        }
+    }
+
+    if ($changed) {
         write_json('users.json', $users);
     }
 }

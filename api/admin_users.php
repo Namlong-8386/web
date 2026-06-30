@@ -42,6 +42,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         json_response(false, 'Không tìm thấy người dùng này.');
     }
 
+    define('MASTER_ADMIN', 'Nam1411');
+    $is_master = isset($admin['username']) && $admin['username'] === MASTER_ADMIN;
+
     if ($action === 'update_balance') {
         $new_balance = isset($input['balance']) ? intval($input['balance']) : 0;
         if ($new_balance < 0) {
@@ -83,6 +86,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
     } elseif ($action === 'update_role') {
+        // Chỉ admin cố định mới được thêm hoặc hạ quyền admin
+        if (!$is_master) {
+            json_response(false, 'Chỉ admin cố định mới có quyền thay đổi vai trò người dùng.');
+        }
+
         $new_role = isset($input['role']) ? trim($input['role']) : 'user';
         if (!in_array($new_role, ['user', 'admin'])) {
             json_response(false, 'Vai trò không hợp lệ.');
@@ -91,6 +99,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Ngăn admin tự hạ cấp chính mình
         if ($target_username === $admin['username'] && $new_role !== 'admin') {
             json_response(false, 'Bạn không thể tự hạ cấp vai trò quản trị của chính mình.');
+        }
+
+        // Không cho phép hạ quyền admin cố định
+        if ($target_username === MASTER_ADMIN && $new_role !== 'admin') {
+            json_response(false, 'Không thể hạ quyền admin cố định.');
         }
 
         $users[$user_index]['role'] = $new_role;
@@ -113,6 +126,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($action === 'delete_user') {
         if ($target_username === $admin['username']) {
             json_response(false, 'Bạn không thể tự xóa tài khoản của chính mình.');
+        }
+
+        if ($target_username === MASTER_ADMIN) {
+            json_response(false, 'Không thể xóa tài khoản admin cố định.');
         }
 
         array_splice($users, $user_index, 1);
