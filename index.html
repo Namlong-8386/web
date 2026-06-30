@@ -77,33 +77,6 @@
             100% { transform: translateY(-120%) scale(1); opacity: 0; }
         }
 
-        /* Service cards */
-        .service-card {
-            position: relative;
-            border-radius: 20px;
-            overflow: hidden;
-            background: white;
-            box-shadow: 0 4px 20px rgba(15,23,42,0.06), 0 1px 3px rgba(0,0,0,0.04);
-            transition: transform 0.25s ease, box-shadow 0.25s ease;
-            border: 1px solid rgba(226,232,240,0.8);
-        }
-        .service-card:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 16px 40px rgba(15,23,42,0.12); }
-        .service-card:active { transform: translateY(0) scale(0.98); }
-        .service-card .shine {
-            position: absolute; inset: 0; pointer-events: none;
-            background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.25) 45%, transparent 50%);
-            transform: translateX(-100%);
-            transition: transform 0.6s ease;
-        }
-        .service-card:hover .shine { transform: translateX(100%); }
-        .service-card .badge {
-            position: absolute; top: 12px; right: 12px; z-index: 10;
-            background: rgba(15,23,42,0.65); backdrop-filter: blur(8px);
-            border: 1px solid rgba(255,255,255,0.15);
-            color: white; font-size: 9px; font-weight: 800; padding: 4px 8px; border-radius: 20px;
-            text-transform: uppercase; letter-spacing: 0.5px;
-        }
-
         /* Reveal animation */
         .reveal {
             opacity: 0; transform: translateY(24px);
@@ -187,60 +160,58 @@
             </div>
         </section>
 
-        <!-- Quick stats / welcome info -->
-        <section class="mb-6 reveal" style="transition-delay: 160ms;">
-            <div class="flex items-center justify-between mb-3">
-                <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wide">Dịch vụ</h3>
-                <span class="text-xs text-slate-400 font-medium">Chạm để sử dụng</span>
-            </div>
-        </section>
-
-        <!-- Services grid -->
-        <section class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <!-- Service 1 -->
-            <a href="javascript:void(0)" onclick="handleServiceClick('Dịch Vụ Mục 1')" class="service-card reveal block group" style="transition-delay: 240ms;">
-                <div class="shine"></div>
-                <div class="relative h-52">
-                    <img src="https://i.ibb.co/PvrXg25V/x.jpg" alt="Sunwin" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent"></div>
-                    <div class="absolute inset-0 p-4 flex flex-col justify-end">
-                        <h3 class="text-white font-black text-lg mb-1">Dịch Vụ Mục 1</h3>
-                        <p class="text-white/75 text-xs font-medium line-clamp-2">Dự đoán Sunwin chính xác, cập nhật real-time.</p>
-                    </div>
-                </div>
-            </a>
-
-            <!-- Service 2 -->
-            <a href="javascript:void(0)" onclick="handleServiceClick('Dịch Vụ Mục 2')" class="service-card reveal block group" style="transition-delay: 320ms;">
-                <div class="shine"></div>
-                <div class="relative h-52">
-                    <img src="https://i.ibb.co/Wd3CWsk/x.jpg" alt="Service 2" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent"></div>
-                    <div class="absolute inset-0 p-4 flex flex-col justify-end">
-                        <h3 class="text-white font-black text-lg mb-1">Dịch Vụ Mục 2</h3>
-                        <p class="text-white/75 text-xs font-medium line-clamp-2">Tính năng độc quyền đang được phát triển.</p>
-                    </div>
-                </div>
-            </a>
-
-            <!-- Service 3 Baccarat -->
-            <a href="javascript:void(0)" onclick="handleServiceClick('Dịch Vụ Mục 3')" class="service-card reveal block group sm:col-span-2" style="transition-delay: 400ms;">
-                <div class="shine"></div>
-                <div class="relative h-48 sm:h-44">
-                    <img src="https://i.ibb.co/rGY7cLXY/x.jpg" alt="Baccarat" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                    <div class="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/70 to-transparent"></div>
-                    <div class="absolute inset-0 p-4 flex items-center justify-between">
-                        <div class="max-w-[60%]">
-                            <h3 class="text-white font-black text-lg mb-1">Dịch Vụ Mục 3</h3>
-                            <p class="text-white/75 text-xs font-medium">Baccarat – biểu đồ theo bàn trực tiếp, không cần VIP.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Mục 1 -->
+            <a href="javascript:void(0)" onclick="handleServiceClick('Dịch Vụ Mục 1')" class="block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow active:scale-[0.98] duration-200 border border-slate-100 relative">
+                <div class="relative w-full h-48 sm:h-56">
+                    <img src="https://i.ibb.co/PvrXg25V/x.jpg" alt="Logo Mục 1" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-4 w-full flex justify-between items-end">
+                        <div>
+                            <h3 class="text-white font-bold text-lg">Dịch Vụ Mục 1</h3>
+                            <p class="text-white/80 text-xs mt-1">Khám phá các ưu đãi mới</p>
                         </div>
-                        <div class="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white group-hover:bg-white/20 transition-colors">
-                            <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                        <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white">
+                            <i data-lucide="chevron-right" class="w-5 h-5"></i>
                         </div>
                     </div>
                 </div>
             </a>
-        </section>
+
+            <!-- Mục 2 -->
+            <a href="javascript:void(0)" onclick="handleServiceClick('Dịch Vụ Mục 2')" class="block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow active:scale-[0.98] duration-200 border border-slate-100 relative">
+                <div class="relative w-full h-48 sm:h-56">
+                    <img src="https://i.ibb.co/Wd3CWsk/x.jpg" alt="Logo Mục 2" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-4 w-full flex justify-between items-end">
+                        <div>
+                            <h3 class="text-white font-bold text-lg">Dịch Vụ Mục 2</h3>
+                            <p class="text-white/80 text-xs mt-1">Trải nghiệm tính năng độc quyền</p>
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white">
+                            <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Mục 3 — Baccarat -->
+            <a href="javascript:void(0)" onclick="handleServiceClick('Dịch Vụ Mục 3')" class="block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow active:scale-[0.98] duration-200 border border-slate-100 relative">
+                <div class="relative w-full h-48 sm:h-56">
+                    <img src="https://i.ibb.co/rGY7cLXY/x.jpg" alt="Logo Baccarat" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-4 w-full flex justify-between items-end">
+                        <div>
+                            <h3 class="text-white font-bold text-lg">Dịch Vụ Mục 3</h3>
+                            <p class="text-white/80 text-xs mt-1">Baccarat – Biểu đồ theo bàn trực tiếp</p>
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white">
+                            <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
 
     </main>
 
