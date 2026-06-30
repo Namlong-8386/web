@@ -86,14 +86,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
     } elseif ($action === 'update_role') {
-        // Chỉ admin cố định mới được thêm hoặc hạ quyền admin
-        if (!$is_master) {
-            json_response(false, 'Chỉ admin cố định mới có quyền thay đổi vai trò người dùng.');
-        }
-
         $new_role = isset($input['role']) ? trim($input['role']) : 'user';
         if (!in_array($new_role, ['user', 'admin'])) {
             json_response(false, 'Vai trò không hợp lệ.');
+        }
+
+        $target_is_admin = isset($users[$user_index]['role']) && $users[$user_index]['role'] === 'admin';
+
+        // Chỉ admin cố định mới được hạ quyền admin khác
+        if ($target_is_admin && $new_role !== 'admin' && !$is_master) {
+            json_response(false, 'Chỉ admin cố định mới có quyền hạ quyền admin khác.');
         }
         
         // Ngăn admin tự hạ cấp chính mình
@@ -126,6 +128,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($action === 'delete_user') {
         if ($target_username === $admin['username']) {
             json_response(false, 'Bạn không thể tự xóa tài khoản của chính mình.');
+        }
+
+        $target_is_admin = isset($users[$user_index]['role']) && $users[$user_index]['role'] === 'admin';
+
+        if ($target_is_admin && !$is_master) {
+            json_response(false, 'Chỉ admin cố định mới có quyền xóa admin khác.');
         }
 
         if ($target_username === MASTER_ADMIN) {
