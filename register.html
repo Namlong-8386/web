@@ -138,6 +138,12 @@
             });
         });
 
+        function setRegisterBtnLoading(isLoading) {
+            document.getElementById('btn-text').classList.toggle('opacity-0', isLoading);
+            document.getElementById('btn-loader').classList.toggle('hidden', !isLoading);
+            document.getElementById('submit-btn').disabled = isLoading;
+        }
+
         async function handleRegister(e) {
             e.preventDefault();
             const username = document.getElementById('username').value.trim();
@@ -157,13 +163,7 @@
                 return;
             }
 
-            const btnText = document.getElementById('btn-text');
-            const btnLoader = document.getElementById('btn-loader');
-            const submitBtn = document.getElementById('submit-btn');
-
-            btnText.classList.add('opacity-0');
-            btnLoader.classList.remove('hidden');
-            submitBtn.disabled = true;
+            setRegisterBtnLoading(true);
 
             try {
                 const response = await fetch('api/register.php', {
@@ -179,16 +179,12 @@
                 } else {
                     await alert(result.message || 'Đăng ký thất bại.');
                     if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
-                    btnText.classList.remove('opacity-0');
-                    btnLoader.classList.add('hidden');
-                    submitBtn.disabled = false;
+                    setRegisterBtnLoading(false);
                 }
             } catch (error) {
                 console.error(error);
                 await alert('Có lỗi xảy ra trong quá trình kết nối với máy chủ.');
-                btnText.classList.remove('opacity-0');
-                btnLoader.classList.add('hidden');
-                submitBtn.disabled = false;
+                setRegisterBtnLoading(false);
             }
         }
         document.getElementById('confirm-password').addEventListener('input', () => { document.getElementById('confirm-group').classList.remove('input-error'); document.getElementById('error-message').classList.add('hidden'); });

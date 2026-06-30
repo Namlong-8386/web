@@ -144,6 +144,12 @@
             }
         }
 
+        function setLoginBtnLoading(isLoading) {
+            document.getElementById('btn-text').classList.toggle('opacity-0', isLoading);
+            document.getElementById('btn-loader').classList.toggle('hidden', !isLoading);
+            document.getElementById('submit-btn').disabled = isLoading;
+        }
+
         async function handleLogin(e) {
             e.preventDefault();
             const username = document.getElementById('username').value.trim();
@@ -156,13 +162,7 @@
                 return;
             }
 
-            const btnText = document.getElementById('btn-text');
-            const btnLoader = document.getElementById('btn-loader');
-            const submitBtn = document.getElementById('submit-btn');
-
-            btnText.classList.add('opacity-0');
-            btnLoader.classList.remove('hidden');
-            submitBtn.disabled = true;
+            setLoginBtnLoading(true);
 
             try {
                 const response = await fetch('api/login.php', {
@@ -194,16 +194,12 @@
                 } else {
                     await alert(result.message || 'Đăng nhập không thành công.');
                     if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
-                    btnText.classList.remove('opacity-0');
-                    btnLoader.classList.add('hidden');
-                    submitBtn.disabled = false;
+                    setLoginBtnLoading(false);
                 }
             } catch (error) {
                 console.error(error);
                 await alert('Có lỗi xảy ra trong quá trình kết nối với máy chủ.');
-                btnText.classList.remove('opacity-0');
-                btnLoader.classList.add('hidden');
-                submitBtn.disabled = false;
+                setLoginBtnLoading(false);
             }
         }
 
